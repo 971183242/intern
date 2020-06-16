@@ -1,4 +1,10 @@
 package com.oocl.workshop.intern.domain.profile.entity;
 
-public class Intern  extends  User{
+import com.oocl.workshop.intern.domain.profile.entity.valueobject.InternPeriod;
+import lombok.Data;
+
+@Data
+public class Intern extends User {
+
+    private InternPeriod period;
 }

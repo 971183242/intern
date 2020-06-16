@@ -1,32 +1,27 @@
 package com.oocl.workshop.intern.domain.profile.repository.facade;
 
 import com.oocl.workshop.intern.domain.profile.entity.valueobject.InternPeriod;
-import com.oocl.workshop.intern.domain.profile.repository.po.BaseUserPo;
-import com.oocl.workshop.intern.domain.profile.repository.po.HRPo;
-import com.oocl.workshop.intern.domain.profile.repository.po.InternPo;
-import com.oocl.workshop.intern.domain.profile.repository.po.SuperAdminPo;
-import com.oocl.workshop.intern.domain.profile.repository.po.TeamLeaderPo;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import com.oocl.workshop.intern.domain.profile.repository.po.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
+
 @DataJpaTest
 @TestPropertySource("classpath:application-test.properties")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserRepoTest {
     static Logger logger = LoggerFactory.getLogger(UserRepoTest.class);
 
@@ -34,27 +29,27 @@ public class UserRepoTest {
     UserRepo userRepo;
 
     @Autowired
-    private TestEntityManager entityManager;
+    TeamLeaderRepo teamLeaderRepo;
 
-    @Before
+    @BeforeAll
     public void before() {
         SuperAdminPo superAdmin = new SuperAdminPo();
         superAdmin.setDomainId("superadmin");
         superAdmin.setEmail("superadmin@oocl.com");
         superAdmin.setName("超级管理员");
-        this.entityManager.persist(superAdmin);
+        userRepo.save(superAdmin);
 
         HRPo hr = new HRPo();
         hr.setDomainId("hr");
         hr.setEmail("hr@oocl.com");
         hr.setName("人事经理");
-        this.entityManager.persist(hr);
+        userRepo.save(hr);
 
         TeamLeaderPo teamLeaderPo = new TeamLeaderPo();
         teamLeaderPo.setDomainId("teamLeader");
         teamLeaderPo.setEmail("teamLeader@oocl.com");
         teamLeaderPo.setName("XX项目负责人");
-        this.entityManager.persist(teamLeaderPo);
+        userRepo.save(teamLeaderPo);
 
         InternPo internPo0 = new InternPo();
         internPo0.setDomainId("intern_0");
@@ -64,7 +59,7 @@ public class UserRepoTest {
         period0.setDateFrom(new Date(120, 0, 1));
         period0.setDateTo(new Date(120, 5, 1));
         internPo0.setPeriod(period0);
-        this.entityManager.persist(internPo0);
+        userRepo.save(internPo0);
 
         InternPo internPo1 = new InternPo();
         internPo1.setDomainId("intern_1");
@@ -74,7 +69,7 @@ public class UserRepoTest {
         period1.setDateFrom(new Date(120, 3, 1));
         period1.setDateTo(new Date(120, 5, 1));
         internPo1.setPeriod(period1);
-        this.entityManager.persist(internPo1);
+        userRepo.save(internPo1);
     }
 
     @Test
@@ -102,13 +97,37 @@ public class UserRepoTest {
     }
 
     @Test
+    public void testUpdateIntern() {
+        InternPo intern0 = userRepo.findInternByDomainId("intern_0");
+        intern0.getPeriod().setDateTo(new Date(120, 6, 1));
+        intern0.setName("实习生甲+");
+
+        userRepo.save(intern0);
+
+        assertEquals(5, userRepo.count());
+        BaseUserPo user = userRepo.findUserByDomainId("intern_0");
+        logger.info("email:" + user.getEmail());
+        logger.info("name:" + user.getName());
+        logger.info("period from:" + ((InternPo)user).getPeriod().getDateFrom());
+        logger.info("period to:" + ((InternPo)user).getPeriod().getDateTo());
+        assertEquals("实习生甲+", user.getName());
+        assertEquals(new Date(120, 6, 1), ((InternPo)user).getPeriod().getDateTo());
+    }
+
+    @Test
+    public void testTeamLeaders() {
+        List<TeamLeaderPo> leaderPos = teamLeaderRepo.findAll();
+        assertEquals(1, leaderPos.size());
+    }
+
+    @Test
     public void testFindByUserId() {
-        BaseUserPo admin = userRepo.findByUserId(1L);
-        logger.info("domainId:" + admin.getDomainId());
-        logger.info("email:" + admin.getEmail());
-        logger.info("name:" + admin.getName());
-        assertNotNull(admin.getEmail());
-        assertNotNull(admin.getName());
-        assertNotNull(admin.getDomainId());
+        Optional<BaseUserPo> user = userRepo.findById(1L);
+        logger.info("domainId:" + user.get().getDomainId());
+        logger.info("email:" + user.get().getEmail());
+        logger.info("name:" + user.get().getName());
+        assertNotNull(user.get().getDomainId());
+        assertNotNull(user.get().getEmail());
+        assertNotNull(user.get().getName());
     }
 }

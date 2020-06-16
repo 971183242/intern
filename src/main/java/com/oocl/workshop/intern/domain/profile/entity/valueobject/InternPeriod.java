@@ -12,7 +12,7 @@ import java.util.Date;
 public class InternPeriod {
     @Temporal(TemporalType.DATE)
     private Date dateFrom;
-    
+
     @Temporal(TemporalType.DATE)
     private Date dateTo;
 }
