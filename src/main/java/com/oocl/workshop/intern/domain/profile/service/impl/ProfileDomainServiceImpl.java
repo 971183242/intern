@@ -2,7 +2,7 @@ package com.oocl.workshop.intern.domain.profile.service.impl;
 
 import com.oocl.workshop.intern.domain.profile.entity.Intern;
 import com.oocl.workshop.intern.domain.profile.repository.facade.UserRepo;
-import com.oocl.workshop.intern.domain.profile.repository.po.UserPo;
+import com.oocl.workshop.intern.domain.profile.repository.po.BaseUserPo;
 import com.oocl.workshop.intern.domain.profile.service.ProfileDomainService;
 import com.oocl.workshop.intern.domain.profile.service.ProfileFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class ProfileDomainServiceImpl implements ProfileDomainService {
 
     @Override
     public Intern createIntern(Intern intern) {
-        UserPo internPo = profileFactory.createPo(intern);
+        BaseUserPo internPo = profileFactory.createPo(intern);
         userRepo.save(internPo);
         return intern;
     }
