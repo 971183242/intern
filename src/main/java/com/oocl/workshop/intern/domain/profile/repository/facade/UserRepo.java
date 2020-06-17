@@ -1,11 +1,13 @@
 package com.oocl.workshop.intern.domain.profile.repository.facade;
 
-import com.oocl.workshop.intern.domain.profile.repository.po.BaseUserPo;
-import com.oocl.workshop.intern.domain.profile.repository.po.InternPo;
+import com.oocl.workshop.intern.domain.profile.entity.UserType;
+import com.oocl.workshop.intern.domain.profile.repository.po.UserPo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepo extends JpaRepository<BaseUserPo, Long> {
-    BaseUserPo findUserByDomainId(String domainId);
+import java.util.List;
 
-    InternPo findInternByDomainId(String domainId);
+public interface UserRepo extends JpaRepository<UserPo, Long> {
+    UserPo findUserByDomainId(String domainId);
+
+    List<UserPo> findByUserType(UserType userType);
 }

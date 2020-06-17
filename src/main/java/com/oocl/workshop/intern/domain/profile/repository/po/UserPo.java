@@ -1,6 +1,8 @@
 package com.oocl.workshop.intern.domain.profile.repository.po;
 
 import com.oocl.workshop.intern.domain.common.BasePo;
+import com.oocl.workshop.intern.domain.profile.entity.UserType;
+import com.oocl.workshop.intern.domain.profile.entity.valueobject.InternPeriod;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -8,9 +10,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "T_USER")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "USER_TYPE")
-public abstract class BaseUserPo extends BasePo {
+public class UserPo extends BasePo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
@@ -21,6 +21,12 @@ public abstract class BaseUserPo extends BasePo {
     private String name;
 
     private String email;
+
+    @Enumerated(EnumType.STRING)
+    private UserType userType;
+
+    @Embedded
+    private InternPeriod internPeriod;
 
 
 }
