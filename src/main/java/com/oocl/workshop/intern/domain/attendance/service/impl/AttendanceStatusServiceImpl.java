@@ -1,6 +1,6 @@
 package com.oocl.workshop.intern.domain.attendance.service.impl;
 
-import com.oocl.workshop.intern.domain.attendance.domainobject.Attendance;
+import com.oocl.workshop.intern.domain.attendance.entity.Attendance;
 import com.oocl.workshop.intern.domain.attendance.service.AttendanceStatusService;
 
 import java.util.Date;
