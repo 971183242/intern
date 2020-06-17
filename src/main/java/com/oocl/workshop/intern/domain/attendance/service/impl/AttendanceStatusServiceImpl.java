@@ -11,4 +11,9 @@ public class AttendanceStatusServiceImpl implements AttendanceStatusService {
     public List<Attendance> findAttendancesByInternIdAndDate(Long internId, Date dateFrom, Date dateTo) {
         return null;
     }
+
+    @Override
+    public Attendance createUpdateAttendance(Attendance attendance) {
+        return null;
+    }
 }

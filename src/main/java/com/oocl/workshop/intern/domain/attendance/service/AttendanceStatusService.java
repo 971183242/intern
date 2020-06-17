@@ -7,4 +7,7 @@ import java.util.List;
 
 public interface AttendanceStatusService {
     List<Attendance> findAttendancesByInternIdAndDate(Long internId, Date dateFrom, Date dateTo);
+
+    Attendance createUpdateAttendance(Attendance attendance);
+
 }
