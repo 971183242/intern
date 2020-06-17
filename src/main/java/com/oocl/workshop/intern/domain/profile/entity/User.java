@@ -1,8 +1,11 @@
 package com.oocl.workshop.intern.domain.profile.entity;
 
-public abstract  class User {
+import lombok.Data;
+
+@Data
+public abstract class User {
+    private Long userId;
     private String domainId;
     private String email;
-    private String firstName;
-    private String lastName;
+    private String userName;
 }
