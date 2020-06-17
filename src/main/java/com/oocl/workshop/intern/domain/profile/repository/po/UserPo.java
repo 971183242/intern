@@ -28,5 +28,7 @@ public class UserPo extends BasePo {
     @Embedded
     private InternPeriod internPeriod;
 
-
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "team_id")
+    private TeamPo team;
 }

@@ -55,11 +55,19 @@ public class ProfileFactory {
         return null;
     }
 
+    public Intern getIntern(UserPo userPo) {
+        if (UserType.Intern.equals(userPo.getUserType())) {
+            return createIntern(userPo);
+        }
+        return null;
+    }
+
     private void setCommonUserProperty(User user, UserPo userPo) {
         user.setUserId(userPo.getUserId());
         user.setDomainId(userPo.getDomainId());
         user.setUserName(userPo.getName());
         user.setEmail(userPo.getEmail());
+        user.setTeam(createTeam(userPo.getTeam()));
     }
 
     private Intern createIntern(UserPo userPo) {
@@ -72,6 +80,7 @@ public class ProfileFactory {
     private TeamLeader createTeamLeader(UserPo userPo) {
         TeamLeader teamLeader = new TeamLeader();
         setCommonUserProperty(teamLeader, userPo);
+        teamLeader.setTeam(createTeam(userPo.getTeam()));
         return teamLeader;
     }
 
@@ -87,4 +96,11 @@ public class ProfileFactory {
         return superAdmin;
     }
 
+    public Team createTeam(TeamPo teamPo) {
+        Team team = new Team();
+        team.setTeamId(teamPo.getTeamId());
+        team.setName(teamPo.getName());
+        team.setTeamLeader(null); //todo
+        return team;
+    }
 }
