@@ -1,9 +1,8 @@
 package com.oocl.workshop.intern.domain.profile.repository.facade;
 
-import com.oocl.workshop.intern.domain.profile.entity.User;
 import com.oocl.workshop.intern.domain.profile.entity.UserType;
 import com.oocl.workshop.intern.domain.profile.entity.valueobject.InternPeriod;
-import com.oocl.workshop.intern.domain.profile.repository.po.*;
+import com.oocl.workshop.intern.domain.profile.repository.po.UserPo;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -15,9 +14,8 @@ import org.springframework.test.context.TestPropertySource;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @DataJpaTest
@@ -83,7 +81,7 @@ public class UserRepoTest {
 
     @Test
     public void testSuperAdmin() {
-        UserPo admin = userRepo.findUserByDomainId("superadmin");
+        UserPo admin = userRepo.findById("superadmin").get();
         assertEquals("superadmin@oocl.com", admin.getEmail());
         assertEquals("超级管理员", admin.getName());
         assertEquals("superadmin", admin.getDomainId());
@@ -92,7 +90,7 @@ public class UserRepoTest {
 
     @Test
     public void testTeamLeader() {
-        UserPo admin = userRepo.findUserByDomainId("teamLeader");
+        UserPo admin = userRepo.findById("teamLeader").get();
         assertEquals("teamLeader@oocl.com", admin.getEmail());
         assertEquals("XX项目负责人", admin.getName());
         assertEquals("teamLeader", admin.getDomainId());
@@ -101,14 +99,14 @@ public class UserRepoTest {
 
     @Test
     public void testUpdateIntern() {
-        UserPo intern0 = userRepo.findUserByDomainId("intern_0");
+        UserPo intern0 = userRepo.findById("intern_0").get();
         intern0.getInternPeriod().setDateTo(new Date(120, 6, 1));
         intern0.setName("实习生甲+");
 
         userRepo.save(intern0);
 
         assertEquals(5, userRepo.count());
-        UserPo user = userRepo.findUserByDomainId("intern_0");
+        UserPo user = userRepo.findById("intern_0").get();
         logger.info("email:" + user.getEmail());
         logger.info("name:" + user.getName());
         logger.info("period from:" + user.getInternPeriod().getDateFrom());
@@ -123,15 +121,4 @@ public class UserRepoTest {
         assertEquals(1, leaders.size());
     }
 
-    @Test
-    public void testFindByUserId() {
-        Optional<UserPo> user = userRepo.findById(1L);
-        logger.info("domainId:" + user.get().getDomainId());
-        logger.info("email:" + user.get().getEmail());
-        logger.info("name:" + user.get().getName());
-        logger.info("userType:" + user.get().getUserType());
-        assertNotNull(user.get().getDomainId());
-        assertNotNull(user.get().getEmail());
-        assertNotNull(user.get().getName());
-    }
 }

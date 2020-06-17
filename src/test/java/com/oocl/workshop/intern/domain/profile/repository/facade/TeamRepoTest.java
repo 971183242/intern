@@ -24,25 +24,27 @@ class TeamRepoTest {
     @BeforeAll
     public void before() {
         TeamPo team0 = new TeamPo();
+        team0.setTeamId("team_00");
         team0.setName("项目组甲");
-        team0.setTeamLeaderId(1L);
+        team0.setTeamLeaderId("test_user_01");
         teamRepo.save(team0);
 
         TeamPo team1 = new TeamPo();
+        team1.setTeamId("team_01");
         team1.setName("项目组乙");
-        team1.setTeamLeaderId(2L);
+        team1.setTeamLeaderId("test_user_02");
         teamRepo.save(team1);
-    }
 
-    @Test
-    void findByName() {
-        Optional<TeamPo> team = teamRepo.findByName("项目组甲");
-        assertTrue(team.isPresent());
+        TeamPo team2 = new TeamPo();
+        team2.setTeamId("team_02");
+        team2.setName("项目组丙");
+        team2.setTeamLeaderId("test_user_02");
+        teamRepo.save(team2);
     }
 
     @Test
     void findByTeamLeaderId() {
-        Optional<TeamPo> team = teamRepo.findByTeamLeaderId(2L);
+        Optional<TeamPo> team = teamRepo.findFirstByTeamLeaderId("test_user_02");
         assertTrue(team.isPresent());
         assertEquals("项目组乙", team.get().getName());
     }

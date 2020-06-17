@@ -13,11 +13,10 @@ import javax.persistence.Table;
 @Table(name = "T_TEAM")
 public class TeamPo {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long teamId;
+    private String teamId;
 
     private String name;
 
-    private Long teamLeaderId;
+    private String teamLeaderId;
 
 }
