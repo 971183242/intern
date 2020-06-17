@@ -4,93 +4,86 @@ import com.oocl.workshop.intern.domain.profile.entity.*;
 import com.oocl.workshop.intern.domain.profile.repository.po.*;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
 @Service
 public class ProfileFactory {
 
-    public BaseUserPo createPo(User user) {
+    public UserPo createPo(User user) {
         if (user instanceof Intern) {
-            return createInternPo((Intern) user);
+            return createUserPo((Intern) user);
         } else if (user instanceof TeamLeader) {
-            return createTeamLeaderPo((TeamLeader) user);
+            return createUserPo(user, UserType.TeamLeader);
         } else if (user instanceof HR) {
-            return createHrPo((HR) user);
+            return createUserPo(user, UserType.HR);
+        } else if (user instanceof SuperAdmin) {
+            return createUserPo(user, UserType.SuperAdmin);
         }
         return null;
     }
 
-    private void setCommonUserPoProperty(BaseUserPo baseUserPo, User user) {
-        baseUserPo.setUserId(user.getUserId());
-        baseUserPo.setDomainId(user.getDomainId());
-        baseUserPo.setName(user.getUserName());
-        baseUserPo.setEmail(user.getEmail());
+    private UserPo createUserPo(User user) {
+        UserPo userPo = new UserPo();
+        userPo.setUserId(user.getUserId());
+        userPo.setDomainId(user.getDomainId());
+        userPo.setName(user.getUserName());
+        userPo.setEmail(user.getEmail());
+        return userPo;
     }
 
-    private InternPo createInternPo(Intern intern) {
-        InternPo internPo = new InternPo();
-        setCommonUserPoProperty(internPo, intern);
-        internPo.setPeriod(intern.getPeriod());
-        return internPo;
+    private UserPo createUserPo(User user, UserType userType) {
+        UserPo userPo = createUserPo(user);
+        userPo.setUserType(userType);
+        return userPo;
     }
 
-    private TeamLeaderPo createTeamLeaderPo(TeamLeader teamLeader) {
-        TeamLeaderPo teamLeaderPo = new TeamLeaderPo();
-        setCommonUserPoProperty(teamLeaderPo, teamLeader);
-        return teamLeaderPo;
-    }
-
-    private HRPo createHrPo(HR hr) {
-        HRPo hrPo = new HRPo();
-        setCommonUserPoProperty(hrPo, hr);
-        return hrPo;
+    private UserPo createUserPo(Intern intern) {
+        UserPo userPo = createUserPo(intern, UserType.Intern);
+        userPo.setInternPeriod(intern.getPeriod());
+        return userPo;
     }
 
 
-    public User getUser(BaseUserPo userPo) {
-        if (userPo instanceof InternPo) {
-            return createIntern((InternPo) userPo);
-        } else if (userPo instanceof TeamLeaderPo) {
-            return createTeamLeader((TeamLeaderPo) userPo);
-        } else if (userPo instanceof HRPo) {
-            return createHR((HRPo) userPo);
-        } else if (userPo instanceof SuperAdminPo) {
-            return createSuperAdmin((SuperAdminPo) userPo);
+    public User getUser(UserPo userPo) {
+        if (UserType.Intern.equals(userPo.getUserType())) {
+            return createIntern(userPo);
+        } else if (UserType.TeamLeader.equals(userPo.getUserType())) {
+            return createTeamLeader(userPo);
+        } else if (UserType.HR.equals(userPo.getUserType())) {
+            return createHR(userPo);
+        } else if (UserType.SuperAdmin.equals(userPo.getUserType())) {
+            return createSuperAdmin(userPo);
         }
         return null;
     }
 
-    private void setCommonUserProperty(User user, BaseUserPo baseUserPo) {
-        user.setUserId(baseUserPo.getUserId());
-        user.setDomainId(baseUserPo.getDomainId());
-        user.setUserName(baseUserPo.getName());
-        user.setEmail(baseUserPo.getEmail());
+    private void setCommonUserProperty(User user, UserPo userPo) {
+        user.setUserId(userPo.getUserId());
+        user.setDomainId(userPo.getDomainId());
+        user.setUserName(userPo.getName());
+        user.setEmail(userPo.getEmail());
     }
 
-    private Intern createIntern(InternPo internPo) {
+    private Intern createIntern(UserPo userPo) {
         Intern intern = new Intern();
-        setCommonUserProperty(intern, internPo);
-        intern.setPeriod(internPo.getPeriod());
+        setCommonUserProperty(intern, userPo);
+        intern.setPeriod(userPo.getInternPeriod());
         return intern;
     }
 
-    private TeamLeader createTeamLeader(TeamLeaderPo teamLeaderPo) {
+    private TeamLeader createTeamLeader(UserPo userPo) {
         TeamLeader teamLeader = new TeamLeader();
-        setCommonUserProperty(teamLeader, teamLeaderPo);
+        setCommonUserProperty(teamLeader, userPo);
         return teamLeader;
     }
 
-    private HR createHR(HRPo hrPo) {
+    private HR createHR(UserPo userPo) {
         HR hr = new HR();
-        setCommonUserProperty(hr, hrPo);
+        setCommonUserProperty(hr, userPo);
         return hr;
     }
 
-    private SuperAdmin createSuperAdmin(SuperAdminPo superAdminPo) {
+    private SuperAdmin createSuperAdmin(UserPo userPo) {
         SuperAdmin superAdmin = new SuperAdmin();
-        setCommonUserProperty(superAdmin, superAdminPo);
+        setCommonUserProperty(superAdmin, userPo);
         return superAdmin;
     }
 
