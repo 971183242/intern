@@ -22,7 +22,9 @@ public interface AttendanceStatusService {
      * Usage: create an Attendance Log or update it
      *
      * For batch operation，like batch approve, use it with loop*/
-    Attendance createUpdateAttendance(Attendance attendance);
+    Attendance createAttendance(Attendance attendance);
+
+    Attendance updateAttendance(Attendance attendance);
 
 
 
