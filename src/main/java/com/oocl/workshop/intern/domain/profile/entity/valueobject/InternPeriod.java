@@ -1,6 +1,8 @@
 package com.oocl.workshop.intern.domain.profile.entity.valueobject;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Temporal;
@@ -9,6 +11,8 @@ import java.util.Date;
 
 @Data
 @Embeddable
+@NoArgsConstructor
+@AllArgsConstructor
 public class InternPeriod {
     @Temporal(TemporalType.DATE)
     private Date dateFrom;

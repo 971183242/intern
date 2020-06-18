@@ -47,7 +47,7 @@ public class ProfileDomainServiceImpl implements ProfileDomainService {
 
     @Override
     public Intern updateIntern(Intern intern) {
-        Objects.requireNonNull(intern.getUserId(), "Intern id should not be empty in update");
+        Objects.requireNonNull(intern.getDomainId(), "Intern id should not be empty in update");
         UserPo userPo = profileFactory.createPo(intern);
         userRepo.save(userPo);
         return intern;
@@ -56,7 +56,7 @@ public class ProfileDomainServiceImpl implements ProfileDomainService {
     @Override
     public Optional<User> findUserByDomainId(String domainId) {
         Objects.requireNonNull(domainId, "DomainId should not be empty");
-        UserPo userPo = userRepo.findUserByDomainId(domainId);
+        UserPo userPo = userRepo.findById(domainId).orElse(null);
         User user = Optional.ofNullable(userPo)
                 .map(profileFactory::getUser)
                 .orElse(null);
@@ -66,33 +66,22 @@ public class ProfileDomainServiceImpl implements ProfileDomainService {
     @Override
     public Optional<TeamLeader> findTeamLeaderByDomainId(String domainId) {
         Objects.requireNonNull(domainId, "DomainId should not be empty");
-        UserPo userPo = userRepo.findUserByDomainId(domainId);
+        UserPo userPo = userRepo.findById(domainId).orElse(null);
         if (userPo == null || !UserType.TeamLeader.equals(userPo.getUserType())) {
             return Optional.empty();
         }
-        Optional<TeamPo> teamPoOpt = teamRepo.findByTeamLeaderId(userPo.getUserId());
         TeamLeader teamLeader = (TeamLeader) profileFactory.getUser(userPo);
-        teamPoOpt.map(profileFactory::createTeam)
-                .map(teamLeader.getTeamList()::add)
-                .orElse(null);
-
         return Optional.of(teamLeader);
     }
 
     @Override
-    public Page<Intern> findInternByTeamId(Long teamId, PageInfo pageInfo) {
-        Optional<TeamPo> teamPoOpt = teamRepo.findById(teamId);
-        Page<UserPo> userPoPage = userRepo.findByUserTypeAndTeam(UserType.Intern, teamPoOpt.orElse(null),
-                PageRequest.of(pageInfo.getPageIndex(), pageInfo.getPageSize()));
-        return userPoPage.map(profileFactory::getIntern);
+    public Page<Intern> findInternByTeamId(String teamId, PageInfo pageInfo) {
+        return null;
     }
 
     @Override
-    public Page<Intern> findActiveInternByTeamId(Long teamId, PageInfo pageInfo) {
-        Optional<TeamPo> teamPoOpt = teamRepo.findById(teamId);
-        Page<UserPo> userPoPage = userRepo.findActiveInternByTeam(teamPoOpt.orElse(null),
-                PageRequest.of(pageInfo.getPageIndex(), pageInfo.getPageSize()));
-        return userPoPage.map(profileFactory::getIntern);
+    public Page<Intern> findActiveInternByTeamId(String teamId, PageInfo pageInfo) {
+        return null;
     }
 
     @Override

@@ -7,5 +7,4 @@ import java.util.List;
 
 @Data
 public class TeamLeader extends User {
-    private List<Team> teamList = new ArrayList<>();
 }

@@ -19,9 +19,9 @@ public interface ProfileDomainService {
 
     Optional<TeamLeader> findTeamLeaderByDomainId(String domainId);
 
-    Page<Intern> findInternByTeamId(Long teamId, PageInfo pageInfo);
+    Page<Intern> findInternByTeamId(String teamId, PageInfo pageInfo);
 
-    Page<Intern> findActiveInternByTeamId(Long teamId, PageInfo pageInfo);
+    Page<Intern> findActiveInternByTeamId(String teamId, PageInfo pageInfo);
 
     Page<Intern> findIntern(PageInfo pageInfo);
 }
