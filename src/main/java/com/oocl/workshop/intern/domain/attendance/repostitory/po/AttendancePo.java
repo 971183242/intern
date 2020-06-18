@@ -2,7 +2,6 @@ package com.oocl.workshop.intern.domain.attendance.repostitory.po;
 
 import com.oocl.workshop.intern.domain.attendance.entity.AttendanceStatus;
 import lombok.Data;
-import org.checkerframework.checker.units.qual.C;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,7 +10,7 @@ import java.util.Date;
 @Entity
 @Table(name = "T_ATTENDANCE", indexes = {
         @Index(name = "idx_attendace_day", columnList = "work_day"),
-        @Index(name = "idx_attendance_intern_day", columnList = "intern_id, work_day")
+        @Index(name = "idx_attendance_intern_day", columnList = "intern_id, work_day", unique = true)
 })
 public class AttendancePo {
     @Id

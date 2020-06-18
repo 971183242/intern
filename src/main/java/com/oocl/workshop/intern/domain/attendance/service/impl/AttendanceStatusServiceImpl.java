@@ -25,9 +25,10 @@ public class AttendanceStatusServiceImpl implements AttendanceStatusService {
 
     @Override
     public Attendance createAttendance(Attendance attendance) {
-        AttendancePo attendancePo = attendanceFactory.createPo(attendance);
-        attendancePo = attendanceRepo.save(attendancePo);
-        return attendanceFactory.getAttendance(attendancePo);
+//        AttendancePo attendancePo = null;attendanceFactory.createPo(attendance);
+//        attendancePo = attendanceRepo.save(attendancePo);
+//        return attendanceFactory.getAttendance(attendancePo);
+        return null;
     }
 
     @Override

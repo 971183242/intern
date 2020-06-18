@@ -7,5 +7,5 @@ import java.util.Date;
 import java.util.List;
 
 public interface AttendanceRepo extends JpaRepository<AttendancePo, Long> {
-    List<AttendancePo> findByInternIdAndWorkDayBetween(String internId, Date startDate, Date endDate);
+    List<AttendancePo> findByInternIdAndWorkDayBetweenOrderByWorkDayDesc(String internId, Date startDate, Date endDate);
 }
