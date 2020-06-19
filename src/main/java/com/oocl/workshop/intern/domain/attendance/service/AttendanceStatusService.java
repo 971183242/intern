@@ -1,6 +1,6 @@
 package com.oocl.workshop.intern.domain.attendance.service;
 
-import com.oocl.workshop.intern.domain.attendance.entity.Attendance;
+import com.oocl.workshop.intern.domain.attendance.entity.DailyAttendance;
 
 import java.util.Date;
 import java.util.List;
@@ -16,15 +16,15 @@ public interface AttendanceStatusService {
      * 所以这里没有查询指定月份签到记录的Api,而是用dateFrom和dateTo来代替
      * 例如Leader在查看指定intern的签到记录时，关注的可能是上月25日到本月25日的签到记录情况
      * */
-    List<Attendance> findAttendancesByInternIdAndDate(Long internId, Date dateFrom, Date dateTo);
+    List<DailyAttendance> findAttendancesByInternIdAndDate(Long internId, Date dateFrom, Date dateTo);
 
     /**
      * Usage: create an Attendance Log or update it
      *
      * For batch operation，like batch approve, use it with loop*/
-    Attendance createAttendance(Attendance attendance);
+    DailyAttendance createAttendance(DailyAttendance attendance);
 
-    Attendance updateAttendance(Attendance attendance);
+    DailyAttendance updateAttendance(DailyAttendance attendance);
 
 
 

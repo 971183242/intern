@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class DailyAttendance implements Attendance {
+public class DailyAttendance {
 
     private Long attendanceId;
 

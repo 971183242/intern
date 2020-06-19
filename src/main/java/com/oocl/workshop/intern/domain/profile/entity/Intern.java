@@ -7,4 +7,6 @@ import lombok.Data;
 public class Intern extends User {
 
     private InternPeriod period;
+
+    private Team team;
 }

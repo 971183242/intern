@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class MonthlyAttendance implements Attendance {
+public class MonthlyAttendance {
     private String internId;
     private Date startDate;
     private Date endDate;

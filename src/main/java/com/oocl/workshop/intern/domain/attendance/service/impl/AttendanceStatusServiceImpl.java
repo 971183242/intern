@@ -1,8 +1,7 @@
 package com.oocl.workshop.intern.domain.attendance.service.impl;
 
-import com.oocl.workshop.intern.domain.attendance.entity.Attendance;
+import com.oocl.workshop.intern.domain.attendance.entity.DailyAttendance;
 import com.oocl.workshop.intern.domain.attendance.repostitory.facade.AttendanceRepo;
-import com.oocl.workshop.intern.domain.attendance.repostitory.po.AttendancePo;
 import com.oocl.workshop.intern.domain.attendance.service.AttendanceFactory;
 import com.oocl.workshop.intern.domain.attendance.service.AttendanceStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +18,12 @@ public class AttendanceStatusServiceImpl implements AttendanceStatusService {
     private AttendanceRepo attendanceRepo;
 
     @Override
-    public List<Attendance> findAttendancesByInternIdAndDate(Long internId, Date dateFrom, Date dateTo) {
+    public List<DailyAttendance> findAttendancesByInternIdAndDate(Long internId, Date dateFrom, Date dateTo) {
         return null;
     }
 
     @Override
-    public Attendance createAttendance(Attendance attendance) {
+    public DailyAttendance createAttendance(DailyAttendance attendance) {
 //        AttendancePo attendancePo = null;attendanceFactory.createPo(attendance);
 //        attendancePo = attendanceRepo.save(attendancePo);
 //        return attendanceFactory.getAttendance(attendancePo);
@@ -32,7 +31,7 @@ public class AttendanceStatusServiceImpl implements AttendanceStatusService {
     }
 
     @Override
-    public Attendance updateAttendance(Attendance attendance) {
+    public DailyAttendance updateAttendance(DailyAttendance attendance) {
         return null;
     }
 
