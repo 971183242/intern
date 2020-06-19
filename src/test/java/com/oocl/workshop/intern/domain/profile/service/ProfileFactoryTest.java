@@ -171,9 +171,9 @@ class ProfileFactoryTest {
         assertTrue(user instanceof TeamLeader);
 
         UserPo intern0 = userRepo.findById("intern_0").get();
-        User intern = profileFactory.getUser(intern0);
+        Intern intern = (Intern) profileFactory.getUser(intern0);
         assertEquals("实习生甲", intern.getUserName());
-        assertEquals(new Date(120, 5, 1), ((Intern) intern).getPeriod().getDateTo());
+        assertEquals(new Date(120, 5, 1), intern.getPeriod().getDateTo());
         assertTrue(intern instanceof Intern);
         assertEquals("team_01", intern.getTeam().getTeamId());
         assertEquals("team_name_01", intern.getTeam().getName());

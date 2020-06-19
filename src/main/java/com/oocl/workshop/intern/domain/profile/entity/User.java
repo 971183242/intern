@@ -7,6 +7,4 @@ public abstract class User {
     private String domainId;
     private String email;
     private String userName;
-
-    private Team team;
 }
