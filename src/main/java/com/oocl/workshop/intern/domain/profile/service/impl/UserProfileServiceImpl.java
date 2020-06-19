@@ -3,7 +3,6 @@ package com.oocl.workshop.intern.domain.profile.service.impl;
 import com.oocl.workshop.intern.domain.profile.entity.Intern;
 import com.oocl.workshop.intern.domain.profile.entity.User;
 import com.oocl.workshop.intern.domain.profile.entity.UserType;
-import com.oocl.workshop.intern.domain.profile.repository.facade.TeamRepo;
 import com.oocl.workshop.intern.domain.profile.repository.facade.UserRepo;
 import com.oocl.workshop.intern.domain.profile.repository.po.UserPo;
 import com.oocl.workshop.intern.domain.profile.service.ProfileFactory;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -28,19 +26,20 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     public User createUser(User user) {
-        userRepo.save(profileFactory.createPo(user));
-        return user;
+        UserPo userPo = profileFactory.createPo(user);
+        userPo = userRepo.save(userPo);
+        return profileFactory.getUser(userPo);
     }
 
     @Override
     public User updateUser(User user) {
-        userRepo.save(profileFactory.createPo(user));
-        return user;
+        UserPo userPo = profileFactory.createPo(user);
+        userPo = userRepo.save(userPo);
+        return profileFactory.getUser(userPo);
     }
 
     @Override
     public Optional<User> findUserByDomainId(String domainId) {
-        Objects.requireNonNull(domainId, "DomainId should not be empty");
         User user = userRepo.findById(domainId)
                 .map(profileFactory::getUser)
                 .orElse(null);
