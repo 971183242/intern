@@ -47,7 +47,7 @@ public class AttendanceRepoTest {
 
     @Test
     public void findByInternIdAndWorkDayBetween() {
-        List<AttendancePo> attendancePos = attendanceRepo.findByInternIdAndWorkDayBetweenOrderByWorkDayDesc("intern_02", new Date(120, 1, 1), new Date(120, 5, 1));
+        List<AttendancePo> attendancePos = attendanceRepo.findByInternIdAndWorkDayBetweenOrderByWorkDay("intern_02", new Date(120, 1, 1), new Date(120, 5, 1));
         assertEquals(2, attendancePos.size());
     }
 }

@@ -52,7 +52,7 @@ public class AttendanceFactory {
         Date startDate = localDate2Date(startLocalDate);
         Date endDate = localDate2Date(endLocalDate);
 
-        List<AttendancePo> attendancePoList = attendanceRepo.findByInternIdAndWorkDayBetweenOrderByWorkDayDesc(internId, startDate, endDate);
+        List<AttendancePo> attendancePoList = attendanceRepo.findByInternIdAndWorkDayBetweenOrderByWorkDay(internId, startDate, endDate);
         List<DailyAttendance> dailyAttendances = attendancePoList.stream().map(this::getAttendance).collect(Collectors.toList());
 
         MonthlyAttendance monthlyAttendance = new MonthlyAttendance();
