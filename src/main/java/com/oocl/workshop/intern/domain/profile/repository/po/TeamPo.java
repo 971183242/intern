@@ -2,22 +2,18 @@ package com.oocl.workshop.intern.domain.profile.repository.po;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "T_TEAM")
+@Table(name = "T_TEAM", indexes = @Index(name = "idx_team_leader_id", columnList = "team_leader_id"))
 public class TeamPo {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long teamId;
+    private String teamId;
 
     private String name;
 
-    private Long teamLeaderId;
+    @Column(name = "team_leader_id")
+    private String teamLeaderId;
 
 }

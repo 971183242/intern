@@ -5,8 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface TeamRepo extends JpaRepository<TeamPo, Long> {
-    Optional<TeamPo> findByName(String name);
-
-    Optional<TeamPo> findByTeamLeaderId(Long teamLeaderId);
+public interface TeamRepo extends JpaRepository<TeamPo, String> {
+    Optional<TeamPo> findFirstByTeamLeaderId(String teamLeaderId);
 }

@@ -2,18 +2,16 @@ package com.oocl.workshop.intern.domain.attendance.entity;
 
 import lombok.Data;
 
-import java.time.Month;
 import java.util.Date;
 
 @Data
-public class Attendance {
+public class DailyAttendance {
+
     private Long attendanceId;
 
-    private Long internId;
+    private String internId;
 
     private AttendanceStatus attendanceStatus;
 
     private Date workDay;
-
-    private Month month;
 }
