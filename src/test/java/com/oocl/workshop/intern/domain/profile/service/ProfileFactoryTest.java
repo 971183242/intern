@@ -55,7 +55,7 @@ class ProfileFactoryTest {
         teamLeaderPo.setDomainId("teamLeader_01");
         teamLeaderPo.setEmail("teamLeader_01@oocl.com");
         teamLeaderPo.setName("XX项目负责人");
-        teamLeaderPo.setUserType(UserType.TeamLeader);
+        teamLeaderPo.setUserType(UserType.EMPLOYEE);
         userRepo.save(teamLeaderPo);
 
         // Intern - 指定了Team
@@ -63,7 +63,7 @@ class ProfileFactoryTest {
         internPo0.setDomainId("intern_0");
         internPo0.setEmail("intern_0@oocl.com");
         internPo0.setName("实习生甲");
-        internPo0.setUserType(UserType.Intern);
+        internPo0.setUserType(UserType.INTERN);
         internPo0.setInternPeriod(new InternPeriod(new Date(120, 0, 1), new Date(120, 5, 1)));
         internPo0.setTeamId("team_01");
         userRepo.save(internPo0);
@@ -73,7 +73,7 @@ class ProfileFactoryTest {
         internPo1.setDomainId("intern_1");
         internPo1.setEmail("intern_1@oocl.com");
         internPo1.setName("实习生乙");
-        internPo1.setUserType(UserType.Intern);
+        internPo1.setUserType(UserType.EMPLOYEE);
         internPo1.setInternPeriod(new InternPeriod(new Date(120, 0, 1), new Date(120, 5, 1)));
         userRepo.save(internPo1);
     }
@@ -84,7 +84,7 @@ class ProfileFactoryTest {
         Team team = new Team();
         team.setName("team_name_02");
         team.setTeamId("team_02");
-        TeamLeader teamLeader = new TeamLeader();
+        Employee teamLeader = new Employee();
         teamLeader.setDomainId("leader_02");
         team.setTeamLeader(teamLeader);
 
@@ -105,7 +105,7 @@ class ProfileFactoryTest {
         assertEquals("team_01", team01.getTeamId());
         assertEquals("team_name_01", team01.getName());
         assertEquals("teamLeader_01", team01.getTeamLeader().getDomainId());
-        assertEquals("XX项目负责人", team01.getTeamLeader().getUserName());
+        assertEquals("XX项目负责人", team01.getTeamLeader().getName());
         assertEquals("teamLeader_01@oocl.com", team01.getTeamLeader().getEmail());
 
         Team team02 = profileFactory.getTeam(teamRepo.findById("team_02").get());
@@ -119,86 +119,86 @@ class ProfileFactoryTest {
     void createUserPo() {
         Intern intern = new Intern();
         intern.setDomainId("intern_1");
-        intern.setUserName("实习生乙");
+        intern.setName("实习生乙");
         intern.setEmail("intern_1@oocl.com");
         InternPeriod period = new InternPeriod();
         period.setDateFrom(new Date(120, 1, 1));
         intern.setPeriod(period);
 
         UserPo userPo = profileFactory.createPo(intern);
-        assertEquals(UserType.Intern, userPo.getUserType());
+        assertEquals(UserType.INTERN, userPo.getUserType());
         assertEquals(intern.getDomainId(), userPo.getDomainId());
         assertEquals(intern.getEmail(), userPo.getEmail());
-        assertEquals(intern.getUserName(), userPo.getName());
+        assertEquals(intern.getName(), userPo.getName());
         assertEquals(intern.getPeriod().getDateFrom(), userPo.getInternPeriod().getDateFrom());
 
-        TeamLeader leader = new TeamLeader();
+        Employee leader = new Employee();
         leader.setDomainId("leader");
         leader.setEmail("leader@oocl.com");
-        leader.setUserName("leader name");
+        leader.setName("leader name");
         UserPo leaderPo = profileFactory.createPo(leader);
-        assertEquals(leader.getUserName(), leaderPo.getName());
+        assertEquals(leader.getName(), leaderPo.getName());
         assertEquals(leader.getDomainId(), leaderPo.getDomainId());
         assertEquals(leader.getEmail(), leaderPo.getEmail());
-        assertEquals(UserType.TeamLeader, leaderPo.getUserType());
+        assertEquals(UserType.EMPLOYEE, leaderPo.getUserType());
 
-        HR hr = new HR();
+        Employee hr = new Employee();
         hr.setDomainId("hr");
         hr.setEmail("hr@oocl.com");
-        hr.setUserName("人事经理");
+        hr.setName("人事经理");
         UserPo hrPo = profileFactory.createPo(hr);
-        assertEquals(hr.getUserName(), hrPo.getName());
+        assertEquals(hr.getName(), hrPo.getName());
         assertEquals(hr.getDomainId(), hrPo.getDomainId());
         assertEquals(hr.getEmail(), hrPo.getEmail());
-        assertEquals(UserType.HR, hrPo.getUserType());
+        assertEquals(UserType.EMPLOYEE, hrPo.getUserType());
 
-        SuperAdmin admin = new SuperAdmin();
+        Employee admin = new Employee();
         admin.setDomainId("leader");
         admin.setEmail("leader@oocl.com");
-        admin.setUserName("leader name");
+        admin.setName("leader name");
         UserPo adminPo = profileFactory.createPo(admin);
-        assertEquals(admin.getUserName(), adminPo.getName());
+        assertEquals(admin.getName(), adminPo.getName());
         assertEquals(admin.getDomainId(), adminPo.getDomainId());
         assertEquals(admin.getEmail(), adminPo.getEmail());
-        assertEquals(UserType.SuperAdmin, adminPo.getUserType());
+        assertEquals(UserType.EMPLOYEE, adminPo.getUserType());
     }
 
     @Test
     void getUser() {
         UserPo teamLeader = userRepo.findById("teamLeader_01").get();
         User user = profileFactory.getUser(teamLeader);
-        assertEquals("XX项目负责人", user.getUserName());
-        assertTrue(user instanceof TeamLeader);
+        assertEquals("XX项目负责人", user.getName());
+        assertTrue(user instanceof Employee);
 
         UserPo intern0 = userRepo.findById("intern_0").get();
         Intern intern = (Intern) profileFactory.getUser(intern0);
-        assertEquals("实习生甲", intern.getUserName());
+        assertEquals("实习生甲", intern.getName());
         assertEquals(new Date(120, 5, 1), intern.getPeriod().getDateTo());
         assertTrue(intern instanceof Intern);
         assertEquals("team_01", intern.getTeam().getTeamId());
         assertEquals("team_name_01", intern.getTeam().getName());
         assertEquals("teamLeader_01", intern.getTeam().getTeamLeader().getDomainId());
-        assertEquals("XX项目负责人", intern.getTeam().getTeamLeader().getUserName());
+        assertEquals("XX项目负责人", intern.getTeam().getTeamLeader().getName());
         assertEquals("teamLeader_01@oocl.com", intern.getTeam().getTeamLeader().getEmail());
 
         UserPo hrPo = new UserPo();
         hrPo.setDomainId("hr");
         hrPo.setName("hr name");
         hrPo.setEmail("hr@oocl.com");
-        hrPo.setUserType(UserType.HR);
+        hrPo.setUserType(UserType.EMPLOYEE);
         User hr = profileFactory.getUser(hrPo);
         assertEquals(hrPo.getEmail(), hr.getEmail());
-        assertEquals(hrPo.getName(), hr.getUserName());
+        assertEquals(hrPo.getName(), hr.getName());
         assertEquals(hrPo.getDomainId(), hr.getDomainId());
 
         UserPo adminPo = new UserPo();
         adminPo.setDomainId("admin");
         adminPo.setName("admin name");
         adminPo.setEmail("admin@oocl.com");
-        adminPo.setUserType(UserType.HR);
+        adminPo.setUserType(UserType.EMPLOYEE);
         User adminDo = profileFactory.getUser(adminPo);
         assertEquals(adminPo.getEmail(), adminDo.getEmail());
-        assertEquals(adminPo.getName(), adminDo.getUserName());
+        assertEquals(adminPo.getName(), adminDo.getName());
         assertEquals(adminPo.getDomainId(), adminDo.getDomainId());
     }
 }

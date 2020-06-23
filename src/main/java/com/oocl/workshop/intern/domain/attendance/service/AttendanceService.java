@@ -15,7 +15,5 @@ public interface AttendanceService {
 
     DailyAttendance approveAttendance(DailyAttendance attendance);
 
-    MonthlyAttendance findMonthlyAttendance(String domainId, int year, int month);
-
     MonthlyAttendance approveMonthlyAttendance(MonthlyAttendance monthlyAttendance);
 }

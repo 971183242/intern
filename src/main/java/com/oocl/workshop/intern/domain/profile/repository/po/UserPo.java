@@ -23,6 +23,8 @@ public class UserPo extends BasePo {
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
+    private String role;
+
     @Embedded
     private InternPeriod internPeriod;
 

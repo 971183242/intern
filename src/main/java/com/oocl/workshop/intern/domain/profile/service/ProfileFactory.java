@@ -1,17 +1,27 @@
 package com.oocl.workshop.intern.domain.profile.service;
 
-import com.oocl.workshop.intern.domain.profile.entity.*;
+import com.oocl.workshop.intern.domain.profile.entity.Employee;
+import com.oocl.workshop.intern.domain.profile.entity.Intern;
+import com.oocl.workshop.intern.domain.profile.entity.Role;
+import com.oocl.workshop.intern.domain.profile.entity.Team;
+import com.oocl.workshop.intern.domain.profile.entity.User;
+import com.oocl.workshop.intern.domain.profile.entity.UserType;
 import com.oocl.workshop.intern.domain.profile.repository.facade.TeamRepo;
 import com.oocl.workshop.intern.domain.profile.repository.facade.UserRepo;
-import com.oocl.workshop.intern.domain.profile.repository.po.*;
+import com.oocl.workshop.intern.domain.profile.repository.po.TeamPo;
+import com.oocl.workshop.intern.domain.profile.repository.po.UserPo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ProfileFactory {
+
+    private static final String SYMBOL_ROLE_SEPARATER = ";";
 
     @Autowired
     UserRepo userRepo;
@@ -22,57 +32,47 @@ public class ProfileFactory {
     public UserPo createPo(User user) {
         if (user instanceof Intern) {
             return createUserPo((Intern) user);
-        } else if (user instanceof TeamLeader) {
-            return createUserPo(user, UserType.TeamLeader);
-        } else if (user instanceof HR) {
-            return createUserPo(user, UserType.HR);
-        } else if (user instanceof SuperAdmin) {
-            return createUserPo(user, UserType.SuperAdmin);
+        } else if (user instanceof Employee) {
+            return createUserPo((Employee) user);
         }
         return null;
     }
 
-
-    private UserPo createUserPo(User user) {
+    private UserPo createUserPo(User user, UserType userType) {
         UserPo userPo = new UserPo();
         userPo.setDomainId(user.getDomainId());
-        userPo.setName(user.getUserName());
+        userPo.setName(user.getName());
         userPo.setEmail(user.getEmail());
-        return userPo;
-    }
-
-
-    private UserPo createUserPo(User user, UserType userType) {
-        UserPo userPo = createUserPo(user);
         userPo.setUserType(userType);
+        userPo.setRole(user.getRoles().stream().map(r -> r.name()).collect(Collectors.joining(SYMBOL_ROLE_SEPARATER)));
         return userPo;
     }
 
 
     private UserPo createUserPo(Intern intern) {
-        UserPo userPo = createUserPo(intern, UserType.Intern);
+        UserPo userPo = createUserPo(intern, UserType.INTERN);
         userPo.setInternPeriod(intern.getPeriod());
         userPo.setTeamId(intern.getTeam() != null ? intern.getTeam().getTeamId() : null);
         return userPo;
     }
 
+    private UserPo createUserPo(Employee employee) {
+        return createUserPo(employee, UserType.EMPLOYEE);
+    }
+
 
     public User getUser(UserPo userPo) {
-        if (UserType.Intern.equals(userPo.getUserType())) {
+        if (UserType.INTERN.equals(userPo.getUserType())) {
             return getIntern(userPo);
-        } else if (UserType.TeamLeader.equals(userPo.getUserType())) {
-            return getTeamLeader(userPo);
-        } else if (UserType.HR.equals(userPo.getUserType())) {
-            return getHR(userPo);
-        } else if (UserType.SuperAdmin.equals(userPo.getUserType())) {
-            return getSuperAdmin(userPo);
+        } else if (UserType.EMPLOYEE.equals(userPo.getUserType())) {
+            return getEmployee(userPo);
         }
         return null;
     }
 
 
     public Intern getIntern(UserPo userPo) {
-        if (!UserType.Intern.equals(userPo.getUserType())) {
+        if (!UserType.INTERN.equals(userPo.getUserType())) {
             return null;
         }
         Intern intern = new Intern();
@@ -84,41 +84,26 @@ public class ProfileFactory {
         return intern;
     }
 
-
-    public TeamLeader getTeamLeader(UserPo userPo) {
-        if (!UserType.TeamLeader.equals(userPo.getUserType())) {
+    public Employee getEmployee(UserPo userPo) {
+        if (!UserType.EMPLOYEE.equals(userPo.getUserType())) {
             return null;
         }
-        TeamLeader teamLeader = new TeamLeader();
-        setCommonUserProperty(teamLeader, userPo);
-        return teamLeader;
-    }
-
-
-    public HR getHR(UserPo userPo) {
-        if (!UserType.HR.equals(userPo.getUserType())) {
-            return null;
-        }
-        HR hr = new HR();
-        setCommonUserProperty(hr, userPo);
-        return hr;
-    }
-
-
-    public SuperAdmin getSuperAdmin(UserPo userPo) {
-        if (!UserType.SuperAdmin.equals(userPo.getUserType())) {
-            return null;
-        }
-        SuperAdmin superAdmin = new SuperAdmin();
-        setCommonUserProperty(superAdmin, userPo);
-        return superAdmin;
+        Employee employee = new Employee();
+        setCommonUserProperty(employee, userPo);
+        return employee;
     }
 
 
     private void setCommonUserProperty(User user, UserPo userPo) {
         user.setDomainId(userPo.getDomainId());
-        user.setUserName(userPo.getName());
+        user.setName(userPo.getName());
         user.setEmail(userPo.getEmail());
+
+        if (!StringUtils.isEmpty(userPo.getRole())) {
+            user.setRoles(Stream.of(userPo.getRole().split(SYMBOL_ROLE_SEPARATER)).map(s -> Role.valueOf(s)).collect(Collectors.toList()));
+        } else {
+            user.getRoles().clear();
+        }
     }
 
 
@@ -149,7 +134,7 @@ public class ProfileFactory {
     }
 
 
-    private TeamLeader getTeamLeader(Optional<UserPo> userPo) {
-        return userPo.isPresent() ? getTeamLeader(userPo.get()) : null;
+    private Employee getTeamLeader(Optional<UserPo> userPo) {
+        return userPo.isPresent() ? (Employee) getUser(userPo.get()) : null;
     }
 }

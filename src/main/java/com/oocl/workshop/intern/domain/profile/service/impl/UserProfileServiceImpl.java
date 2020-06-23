@@ -48,7 +48,7 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     public List<Intern> findInternsByTeamId(String teamId) {
-        List<UserPo> internPoList = userRepo.findByUserTypeAndTeamId(UserType.Intern, teamId);
+        List<UserPo> internPoList = userRepo.findByUserTypeAndTeamId(UserType.INTERN, teamId);
         List<Intern> internList = internPoList.stream()
                 .map(profileFactory::getIntern)
                 .collect(Collectors.toList());

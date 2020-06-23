@@ -60,37 +60,4 @@ class AttendanceFactoryTest {
         assertEquals(attendancePo.getAttendanceStatus(), attendance.getAttendanceStatus());
         assertEquals(attendancePo.getWorkDay(), attendance.getWorkDay());
     }
-
-    @Test
-    void getMonthlyAttendance() {
-        AttendancePo attendancePo0 = new AttendancePo();
-        attendancePo0.setInternId("intern_01");
-        attendancePo0.setAttendanceStatus(AttendanceStatus.CheckedIn);
-        attendancePo0.setWorkDay(new Date(120, 4, 25));
-        attendanceRepo.save(attendancePo0);
-
-        AttendancePo attendancePo1 = new AttendancePo();
-        attendancePo1.setInternId("intern_01");
-        attendancePo1.setAttendanceStatus(AttendanceStatus.Approved);
-        attendancePo1.setWorkDay(new Date(120, 4, 28));
-        attendanceRepo.save(attendancePo1);
-
-        AttendancePo attendancePo2 = new AttendancePo();
-        attendancePo2.setInternId("intern_01");
-        attendancePo2.setAttendanceStatus(AttendanceStatus.Rejected);
-        attendancePo2.setWorkDay(new Date(120, 5, 1));
-        attendanceRepo.save(attendancePo2);
-
-        MonthlyAttendance monthlyAttendance = attendanceFactory.getMonthlyAttendance("intern_01", 2020, 6);
-        assertEquals("intern_01", monthlyAttendance.getInternId());
-        assertEquals(2020, monthlyAttendance.getYear());
-        assertEquals(6, monthlyAttendance.getMonth());
-        assertEquals(new Date(120, 4, 26), monthlyAttendance.getStartDate());
-        assertEquals(new Date(120, 5, 25), monthlyAttendance.getEndDate());
-
-        assertEquals(2, monthlyAttendance.getAttendances().size());
-        assertEquals("intern_01", monthlyAttendance.getAttendances().get(0).getInternId());
-        assertEquals(AttendanceStatus.Approved, monthlyAttendance.getAttendances().get(0).getAttendanceStatus());
-        assertEquals(new Date(120, 4, 28), monthlyAttendance.getAttendances().get(0).getWorkDay());
-    }
 }

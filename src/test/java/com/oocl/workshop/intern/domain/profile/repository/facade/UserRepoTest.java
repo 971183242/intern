@@ -34,28 +34,28 @@ public class UserRepoTest {
         superAdmin.setDomainId("superadmin");
         superAdmin.setEmail("superadmin@oocl.com");
         superAdmin.setName("超级管理员");
-        superAdmin.setUserType(UserType.SuperAdmin);
+        superAdmin.setUserType(UserType.EMPLOYEE);
         userRepo.save(superAdmin);
 
         UserPo hr = new UserPo();
         hr.setDomainId("hr");
         hr.setEmail("hr@oocl.com");
         hr.setName("人事经理");
-        hr.setUserType(UserType.HR);
+        hr.setUserType(UserType.EMPLOYEE);
         userRepo.save(hr);
 
         UserPo teamLeaderPo = new UserPo();
         teamLeaderPo.setDomainId("teamLeader");
         teamLeaderPo.setEmail("teamLeader@oocl.com");
         teamLeaderPo.setName("XX项目负责人");
-        teamLeaderPo.setUserType(UserType.TeamLeader);
+        teamLeaderPo.setUserType(UserType.EMPLOYEE);
         userRepo.save(teamLeaderPo);
 
         UserPo internPo0 = new UserPo();
         internPo0.setDomainId("intern_0");
         internPo0.setEmail("intern_0@oocl.com");
         internPo0.setName("实习生甲");
-        internPo0.setUserType(UserType.Intern);
+        internPo0.setUserType(UserType.EMPLOYEE);
         InternPeriod period0 = new InternPeriod();
         period0.setDateFrom(new Date(120, 0, 1));
         period0.setDateTo(new Date(120, 5, 1));
@@ -66,7 +66,7 @@ public class UserRepoTest {
         internPo1.setDomainId("intern_1");
         internPo1.setEmail("intern_1@oocl.com");
         internPo1.setName("实习生乙");
-        internPo1.setUserType(UserType.Intern);
+        internPo1.setUserType(UserType.EMPLOYEE);
         InternPeriod period1 = new InternPeriod();
         period1.setDateFrom(new Date(120, 3, 1));
         period1.setDateTo(new Date(120, 5, 1));
@@ -86,7 +86,7 @@ public class UserRepoTest {
         assertEquals("superadmin@oocl.com", admin.getEmail());
         assertEquals("超级管理员", admin.getName());
         assertEquals("superadmin", admin.getDomainId());
-        assertEquals(UserType.SuperAdmin, admin.getUserType());
+        assertEquals(UserType.EMPLOYEE, admin.getUserType());
     }
 
     @Test
@@ -95,7 +95,7 @@ public class UserRepoTest {
         assertEquals("teamLeader@oocl.com", admin.getEmail());
         assertEquals("XX项目负责人", admin.getName());
         assertEquals("teamLeader", admin.getDomainId());
-        assertEquals(UserType.TeamLeader, admin.getUserType());
+        assertEquals(UserType.EMPLOYEE, admin.getUserType());
     }
 
     @Test
@@ -118,7 +118,7 @@ public class UserRepoTest {
 
     @Test
     public void testTeamLeaders() {
-        List<UserPo> leaders = userRepo.findByUserType(UserType.TeamLeader);
+        List<UserPo> leaders = userRepo.findByUserType(UserType.EMPLOYEE);
         assertEquals(1, leaders.size());
     }
 
