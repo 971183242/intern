@@ -2,30 +2,22 @@ package com.oocl.workshop.intern.domain.attendance.service;
 
 import com.oocl.workshop.intern.domain.attendance.entity.AttendanceStatus;
 import com.oocl.workshop.intern.domain.attendance.entity.DailyAttendance;
-import com.oocl.workshop.intern.domain.attendance.entity.MonthlyAttendance;
-import com.oocl.workshop.intern.domain.attendance.repostitory.facade.AttendanceRepo;
 import com.oocl.workshop.intern.domain.attendance.repostitory.po.AttendancePo;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-@SpringBootTest
-@Transactional(propagation = Propagation.NESTED)
-@TestPropertySource("classpath:application-test.properties")
+@ExtendWith(MockitoExtension.class)
 class AttendanceFactoryTest {
-
-    @Autowired
-    AttendanceRepo attendanceRepo;
-
-    @Autowired
+    @InjectMocks
     AttendanceFactory attendanceFactory;
+
 
     @Test
     void createPo() {

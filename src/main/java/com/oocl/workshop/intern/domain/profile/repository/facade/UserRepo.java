@@ -11,7 +11,7 @@ import java.util.List;
 public interface UserRepo extends JpaRepository<UserPo, String> {
     List<UserPo> findByUserType(UserType userType);
 
-    List<UserPo> findByUserTypeAndTeamId(UserType userType, String teamId);
+    List<UserPo> findByUserTypeAndRoleContains(UserType userType, String role);
 
-    Page<UserPo> findByUserType(UserType userType, Pageable pageable);
+    List<UserPo> findByUserTypeAndTeamId(UserType userType, String teamId);
 }

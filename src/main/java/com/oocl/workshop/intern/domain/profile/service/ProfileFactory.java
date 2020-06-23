@@ -1,11 +1,6 @@
 package com.oocl.workshop.intern.domain.profile.service;
 
-import com.oocl.workshop.intern.domain.profile.entity.Employee;
-import com.oocl.workshop.intern.domain.profile.entity.Intern;
-import com.oocl.workshop.intern.domain.profile.entity.Role;
-import com.oocl.workshop.intern.domain.profile.entity.Team;
-import com.oocl.workshop.intern.domain.profile.entity.User;
-import com.oocl.workshop.intern.domain.profile.entity.UserType;
+import com.oocl.workshop.intern.domain.profile.entity.*;
 import com.oocl.workshop.intern.domain.profile.repository.facade.TeamRepo;
 import com.oocl.workshop.intern.domain.profile.repository.facade.UserRepo;
 import com.oocl.workshop.intern.domain.profile.repository.po.TeamPo;
@@ -21,7 +16,7 @@ import java.util.stream.Stream;
 @Service
 public class ProfileFactory {
 
-    private static final String SYMBOL_ROLE_SEPARATER = ";";
+    private static final String SYMBOL_ROLE_SEPARATOR = ";";
 
     @Autowired
     UserRepo userRepo;
@@ -29,7 +24,7 @@ public class ProfileFactory {
     @Autowired
     TeamRepo teamRepo;
 
-    public UserPo createPo(User user) {
+    public UserPo createUserPo(User user) {
         if (user instanceof Intern) {
             return createUserPo((Intern) user);
         } else if (user instanceof Employee) {
@@ -44,7 +39,7 @@ public class ProfileFactory {
         userPo.setName(user.getName());
         userPo.setEmail(user.getEmail());
         userPo.setUserType(userType);
-        userPo.setRole(user.getRoles().stream().map(r -> r.name()).collect(Collectors.joining(SYMBOL_ROLE_SEPARATER)));
+        userPo.setRole(user.getRoles().stream().map(r -> r.getFullName()).collect(Collectors.joining(SYMBOL_ROLE_SEPARATOR)));
         return userPo;
     }
 
@@ -100,7 +95,7 @@ public class ProfileFactory {
         user.setEmail(userPo.getEmail());
 
         if (!StringUtils.isEmpty(userPo.getRole())) {
-            user.setRoles(Stream.of(userPo.getRole().split(SYMBOL_ROLE_SEPARATER)).map(s -> Role.valueOf(s)).collect(Collectors.toList()));
+            user.setRoles(Stream.of(userPo.getRole().split(SYMBOL_ROLE_SEPARATOR)).map(Role::getRole).collect(Collectors.toList()));
         } else {
             user.getRoles().clear();
         }

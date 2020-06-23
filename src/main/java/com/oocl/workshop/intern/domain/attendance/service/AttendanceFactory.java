@@ -29,4 +29,5 @@ public class AttendanceFactory {
         attendance.setAttendanceStatus(attendancePo.getAttendanceStatus());
         return attendance;
     }
+
 }

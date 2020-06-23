@@ -26,14 +26,14 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     public User createUser(User user) {
-        UserPo userPo = profileFactory.createPo(user);
+        UserPo userPo = profileFactory.createUserPo(user);
         userPo = userRepo.save(userPo);
         return profileFactory.getUser(userPo);
     }
 
     @Override
     public User updateUser(User user) {
-        UserPo userPo = profileFactory.createPo(user);
+        UserPo userPo = profileFactory.createUserPo(user);
         userPo = userRepo.save(userPo);
         return profileFactory.getUser(userPo);
     }
