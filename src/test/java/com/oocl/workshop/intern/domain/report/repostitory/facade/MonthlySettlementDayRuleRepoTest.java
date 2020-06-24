@@ -1,14 +1,12 @@
-package com.oocl.workshop.intern.domain.attendance.repostitory.facade;
+package com.oocl.workshop.intern.domain.report.repostitory.facade;
 
-import com.oocl.workshop.intern.domain.report.repostitory.facade.MonthlySettlementDayRuleRepo;
 import com.oocl.workshop.intern.domain.report.repostitory.po.MonthlySettlementDayRule;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 @TestPropertySource("classpath:application-test.properties")

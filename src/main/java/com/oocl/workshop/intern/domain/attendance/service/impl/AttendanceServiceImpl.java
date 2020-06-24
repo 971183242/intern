@@ -2,7 +2,7 @@ package com.oocl.workshop.intern.domain.attendance.service.impl;
 
 import com.oocl.workshop.intern.domain.attendance.entity.AttendanceStatus;
 import com.oocl.workshop.intern.domain.attendance.entity.DailyAttendance;
-import com.oocl.workshop.intern.domain.attendance.entity.MonthlyAttendance;
+import com.oocl.workshop.intern.domain.attendance.entity.PeriodAttendance;
 import com.oocl.workshop.intern.domain.attendance.repostitory.facade.AttendanceRepo;
 import com.oocl.workshop.intern.domain.attendance.repostitory.po.AttendancePo;
 import com.oocl.workshop.intern.domain.attendance.service.AttendanceFactory;
@@ -59,13 +59,13 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public MonthlyAttendance approveMonthlyAttendance(MonthlyAttendance monthlyAttendance) {
-        List<DailyAttendance> attendanceList = monthlyAttendance.getAttendances().stream()
+    public PeriodAttendance approveMonthlyAttendance(PeriodAttendance periodAttendance) {
+        List<DailyAttendance> attendanceList = periodAttendance.getAttendances().stream()
                 .map(this::approveDailyCheckedInAttendance)
                 .collect(Collectors.toList());
 
-        monthlyAttendance.setAttendances(attendanceList);
-        return monthlyAttendance;
+        periodAttendance.setAttendances(attendanceList);
+        return periodAttendance;
     }
 
     private DailyAttendance approveDailyCheckedInAttendance(DailyAttendance dailyAttendance) {
