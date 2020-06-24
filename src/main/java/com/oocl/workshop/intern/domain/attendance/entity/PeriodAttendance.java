@@ -6,11 +6,12 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class MonthlyAttendance {
+public class PeriodAttendance {
     private String internId;
     private Date startDate;
     private Date endDate;
-    private int year;
-    private int month;
     private List<DailyAttendance> attendances;
+    private int checkedInAttendanceCount;
+    private int approvedAttendanceCount;
+    private int rejectedAttendanceCount;
 }
