@@ -59,12 +59,6 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public MonthlyAttendance findMonthlyAttendance(String domainId, int year, int month) {
-        MonthlyAttendance monthlyAttendance = attendanceFactory.getMonthlyAttendance(domainId, year, month);
-        return monthlyAttendance;
-    }
-
-    @Override
     public MonthlyAttendance approveMonthlyAttendance(MonthlyAttendance monthlyAttendance) {
         List<DailyAttendance> attendanceList = monthlyAttendance.getAttendances().stream()
                 .map(this::approveDailyCheckedInAttendance)

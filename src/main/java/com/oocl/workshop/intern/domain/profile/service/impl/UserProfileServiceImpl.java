@@ -26,14 +26,14 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     public User createUser(User user) {
-        UserPo userPo = profileFactory.createPo(user);
+        UserPo userPo = profileFactory.createUserPo(user);
         userPo = userRepo.save(userPo);
         return profileFactory.getUser(userPo);
     }
 
     @Override
     public User updateUser(User user) {
-        UserPo userPo = profileFactory.createPo(user);
+        UserPo userPo = profileFactory.createUserPo(user);
         userPo = userRepo.save(userPo);
         return profileFactory.getUser(userPo);
     }
@@ -48,7 +48,7 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     public List<Intern> findInternsByTeamId(String teamId) {
-        List<UserPo> internPoList = userRepo.findByUserTypeAndTeamId(UserType.Intern, teamId);
+        List<UserPo> internPoList = userRepo.findByUserTypeAndTeamId(UserType.INTERN, teamId);
         List<Intern> internList = internPoList.stream()
                 .map(profileFactory::getIntern)
                 .collect(Collectors.toList());

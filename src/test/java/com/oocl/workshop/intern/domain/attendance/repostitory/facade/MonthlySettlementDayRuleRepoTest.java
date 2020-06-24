@@ -1,6 +1,7 @@
 package com.oocl.workshop.intern.domain.attendance.repostitory.facade;
 
-import com.oocl.workshop.intern.domain.attendance.repostitory.po.MonthlySettlementDayRule;
+import com.oocl.workshop.intern.domain.report.repostitory.facade.MonthlySettlementDayRuleRepo;
+import com.oocl.workshop.intern.domain.report.repostitory.po.MonthlySettlementDayRule;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;

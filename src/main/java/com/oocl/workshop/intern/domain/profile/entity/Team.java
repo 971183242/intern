@@ -6,5 +6,5 @@ import lombok.Data;
 public class Team {
     private String teamId;
     private String name;
-    private TeamLeader teamLeader;
+    private Employee teamLeader;
 }

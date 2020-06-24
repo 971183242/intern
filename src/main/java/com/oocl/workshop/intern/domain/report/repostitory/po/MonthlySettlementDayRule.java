@@ -1,4 +1,4 @@
-package com.oocl.workshop.intern.domain.attendance.repostitory.po;
+package com.oocl.workshop.intern.domain.report.repostitory.po;
 
 import lombok.Data;
 

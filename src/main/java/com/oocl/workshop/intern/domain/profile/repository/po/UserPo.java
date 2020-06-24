@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "T_USER", indexes = @Index(name = "idx_user_team_id", columnList = "team_id"))
 @EntityListeners(AuditingEntityListener.class)
-public class UserPo extends BasePo {
+public class UserPo {
     @Id
     private String domainId;
 
@@ -22,6 +22,8 @@ public class UserPo extends BasePo {
 
     @Enumerated(EnumType.STRING)
     private UserType userType;
+
+    private String role;
 
     @Embedded
     private InternPeriod internPeriod;
