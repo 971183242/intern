@@ -6,7 +6,7 @@ import com.oocl.workshop.intern.domain.attendance.entity.PeriodAttendance;
 import com.oocl.workshop.intern.domain.attendance.repostitory.facade.AttendanceRepo;
 import com.oocl.workshop.intern.domain.attendance.repostitory.po.AttendancePo;
 import com.oocl.workshop.intern.domain.attendance.service.AttendanceFactory;
-import com.oocl.workshop.intern.domain.attendance.service.AttendanceService;
+import com.oocl.workshop.intern.domain.attendance.service.AttendanceDomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class AttendanceServiceImpl implements AttendanceService {
+public class AttendanceDomServiceImpl implements AttendanceDomService {
 
     @Autowired
     private AttendanceFactory attendanceFactory;

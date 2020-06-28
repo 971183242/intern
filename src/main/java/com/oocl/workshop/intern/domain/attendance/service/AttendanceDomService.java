@@ -3,7 +3,7 @@ package com.oocl.workshop.intern.domain.attendance.service;
 import com.oocl.workshop.intern.domain.attendance.entity.DailyAttendance;
 import com.oocl.workshop.intern.domain.attendance.entity.PeriodAttendance;
 
-public interface AttendanceService {
+public interface AttendanceDomService {
 
     DailyAttendance createAttendance(DailyAttendance attendance);
 
