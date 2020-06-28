@@ -31,7 +31,8 @@ public class AttendanceAppServiceTest {
 
     @Test
     public void should_checkIn_create_attendanceDo() {
-        AttendanceAppService service = new AttendanceAppServiceImpl(attendanceDomService);
+        AttendanceAppServiceImpl service = new AttendanceAppServiceImpl();
+        service.setAttendanceDomService(attendanceDomService);
         Date date = parseDate("20200624");
 
         when(attendanceDomService.createAttendance(Mockito.any())).thenReturn(new DailyAttendance());
@@ -56,7 +57,8 @@ public class AttendanceAppServiceTest {
     void should_checkIn_create_attendanceDo_from_domain_service() {
         Date date = parseDate("20200625");
         DailyAttendance mockAttendance = getMockedDailyAttendance(date);
-        AttendanceAppService service = new AttendanceAppServiceImpl(attendanceDomService);
+        AttendanceAppServiceImpl service = new AttendanceAppServiceImpl();
+        service.setAttendanceDomService(attendanceDomService);
         when(attendanceDomService.createAttendance(Mockito.any())).thenReturn(mockAttendance);
         DailyAttendance attendance = service.checkIn("guda", date);
         Assertions.assertNotEquals(0L, attendance.getAttendanceId());
@@ -79,8 +81,9 @@ public class AttendanceAppServiceTest {
         DailyAttendance attendance = new DailyAttendance();
         attendance.setAttendanceId(1L);
         when(attendanceDomService.removeAttendance(Mockito.any())).thenReturn(attendance);
-        AttendanceAppServiceImpl attendanceAppService = new AttendanceAppServiceImpl(attendanceDomService);
-        DailyAttendance removedAttendance = attendanceAppService.cancelCheckIn(1L);
+        AttendanceAppServiceImpl service = new AttendanceAppServiceImpl();
+        service.setAttendanceDomService(attendanceDomService);
+        DailyAttendance removedAttendance = service.cancelCheckIn(1L);
         ArgumentCaptor<DailyAttendance> dailyAttendanceArgumentCaptor = ArgumentCaptor.forClass(DailyAttendance.class);
         verify(attendanceDomService, only()).removeAttendance(dailyAttendanceArgumentCaptor.capture());
         assertEquals(1L, dailyAttendanceArgumentCaptor.getValue().getAttendanceId());
