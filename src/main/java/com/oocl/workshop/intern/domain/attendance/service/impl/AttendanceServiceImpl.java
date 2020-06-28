@@ -8,10 +8,12 @@ import com.oocl.workshop.intern.domain.attendance.repostitory.po.AttendancePo;
 import com.oocl.workshop.intern.domain.attendance.service.AttendanceFactory;
 import com.oocl.workshop.intern.domain.attendance.service.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class AttendanceServiceImpl implements AttendanceService {
 
     @Autowired
