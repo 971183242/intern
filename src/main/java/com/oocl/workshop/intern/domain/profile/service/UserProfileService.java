@@ -3,6 +3,7 @@ package com.oocl.workshop.intern.domain.profile.service;
 import com.oocl.workshop.intern.domain.profile.entity.Intern;
 import com.oocl.workshop.intern.domain.profile.entity.User;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,6 @@ public interface UserProfileService {
 
     Optional<User> findUserByDomainId(String domainId);
 
-    List<Intern> findInternsByTeamId(String teamId);
+    List<Intern> findInterns(String teamId, Date from, Date to);
 
 }

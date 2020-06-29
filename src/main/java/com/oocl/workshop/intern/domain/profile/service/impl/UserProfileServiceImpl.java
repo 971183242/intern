@@ -10,6 +10,7 @@ import com.oocl.workshop.intern.domain.profile.service.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -47,8 +48,9 @@ public class UserProfileServiceImpl implements UserProfileService {
     }
 
     @Override
-    public List<Intern> findInternsByTeamId(String teamId) {
-        List<UserPo> internPoList = userRepo.findByUserTypeAndTeamId(UserType.INTERN, teamId);
+    public List<Intern> findInterns(String teamId, Date from, Date to) {
+        //todo userRepo.findTeamActiveInterns(teamId, from, to);
+        List<UserPo> internPoList = null;
         List<Intern> internList = internPoList.stream()
                 .map(profileFactory::getIntern)
                 .collect(Collectors.toList());

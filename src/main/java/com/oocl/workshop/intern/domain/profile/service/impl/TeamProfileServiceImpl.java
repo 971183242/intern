@@ -6,10 +6,12 @@ import com.oocl.workshop.intern.domain.profile.repository.po.TeamPo;
 import com.oocl.workshop.intern.domain.profile.service.ProfileFactory;
 import com.oocl.workshop.intern.domain.profile.service.TeamProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class TeamProfileServiceImpl implements TeamProfileService {
 
     @Autowired

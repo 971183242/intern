@@ -10,6 +10,7 @@ import com.oocl.workshop.intern.domain.attendance.service.AttendanceDomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,60 +23,63 @@ public class AttendanceDomServiceImpl implements AttendanceDomService {
     @Autowired
     private AttendanceRepo attendanceRepo;
 
-
-    @Override
-    public DailyAttendance createAttendance(DailyAttendance attendance) {
+    private DailyAttendance createAttendance(DailyAttendance attendance) {
         AttendancePo attendancePo = attendanceFactory.createPo(attendance);
         attendancePo = attendanceRepo.save(attendancePo);
         return attendanceFactory.getAttendance(attendancePo);
     }
 
     @Override
-    public DailyAttendance updateAttendance(DailyAttendance attendance) {
-        AttendancePo attendancePo = attendanceFactory.createPo(attendance);
-        attendancePo = attendanceRepo.save(attendancePo);
-        return attendanceFactory.getAttendance(attendancePo);
+    public DailyAttendance createAttendance(String internId, Date workDay) {
+        DailyAttendance dailyAttendance = new DailyAttendance();
+        dailyAttendance.setAttendanceStatus(AttendanceStatus.CheckedIn);
+        dailyAttendance.setInternId(internId);
+        dailyAttendance.setWorkDay(workDay);
+        return createAttendance(dailyAttendance);
     }
 
     @Override
-    public DailyAttendance removeAttendance(DailyAttendance attendance) {
-        AttendancePo attendancePo = attendanceFactory.createPo(attendance);
-        attendanceRepo.delete(attendancePo);
-        return attendance;
+    public void removeAttendance(long attendanceId) {
+        attendanceRepo.deleteById(attendanceId);
     }
 
     @Override
-    public DailyAttendance rejectAttendance(DailyAttendance attendance) {
+    public PeriodAttendance confirmPeriodAttendance(PeriodAttendance periodAttendance) {
+        List<DailyAttendance> dailyAttendanceList = periodAttendance.getAttendances().stream()
+                .map(this::confirmAttendance)
+                .collect(Collectors.toList());
+        periodAttendance.setAttendances(dailyAttendanceList);
+        return periodAttendance;
+    }
+
+    private DailyAttendance confirmAttendance(DailyAttendance attendance) {
+        DailyAttendance result;
+        switch (attendance.getAttendanceStatus()) {
+            case CheckedIn:
+                result = approveAttendance(attendance);
+                break;
+            case Rejected:
+                result = rejectAttendance(attendance);
+                break;
+            default:
+                result = attendance;
+                break;
+        }
+        return result;
+    }
+
+    private DailyAttendance rejectAttendance(DailyAttendance attendance) {
         AttendancePo attendancePo = attendanceFactory.createPo(attendance);
         attendancePo.setAttendanceStatus(AttendanceStatus.Rejected);
         attendancePo = attendanceRepo.save(attendancePo);
         return attendanceFactory.getAttendance(attendancePo);
     }
 
-    @Override
-    public DailyAttendance approveAttendance(DailyAttendance attendance) {
+    private DailyAttendance approveAttendance(DailyAttendance attendance) {
         AttendancePo attendancePo = attendanceFactory.createPo(attendance);
         attendancePo.setAttendanceStatus(AttendanceStatus.Approved);
         attendancePo = attendanceRepo.save(attendancePo);
         return attendanceFactory.getAttendance(attendancePo);
     }
 
-    @Override
-    public PeriodAttendance approveMonthlyAttendance(PeriodAttendance periodAttendance) {
-        List<DailyAttendance> attendanceList = periodAttendance.getAttendances().stream()
-                .map(this::approveDailyCheckedInAttendance)
-                .collect(Collectors.toList());
-
-        periodAttendance.setAttendances(attendanceList);
-        return periodAttendance;
-    }
-
-    private DailyAttendance approveDailyCheckedInAttendance(DailyAttendance dailyAttendance) {
-        if (! AttendanceStatus.CheckedIn
-                .equals(dailyAttendance.getAttendanceStatus())) {
-            return dailyAttendance;
-        }
-
-        return approveAttendance(dailyAttendance);
-    }
 }
