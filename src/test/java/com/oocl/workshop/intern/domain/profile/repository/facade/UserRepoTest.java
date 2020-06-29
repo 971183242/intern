@@ -58,4 +58,10 @@ public class UserRepoTest {
         assertEquals("intern_1", users.get(0).getDomainId());
     }
 
+    @Test
+    void findTeamActiveInterns() {
+        List<UserPo> users = userRepo.findTeamActiveInterns("TMS", new Date(120,5,1), new Date(120,5,1));
+        assertEquals(1, users.size());
+        assertEquals("intern_1", users.get(0).getDomainId());
+    }
 }
