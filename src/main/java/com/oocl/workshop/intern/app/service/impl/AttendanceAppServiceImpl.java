@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
-import static com.oocl.workshop.intern.domain.attendance.entity.AttendanceStatus.CheckedIn;
-
 @Data
 @Service
 public class AttendanceAppServiceImpl implements AttendanceAppService {
@@ -21,19 +19,11 @@ public class AttendanceAppServiceImpl implements AttendanceAppService {
 
     @Override
     public DailyAttendance checkIn(String internId, Date date) {
-        DailyAttendance attendance = new DailyAttendance();
-        attendance.setInternId(internId);
-        attendance.setWorkDay(date);
-        attendance.setAttendanceStatus(CheckedIn);
-        //return attendanceDomService.createAttendance(attendance);
-        return null;
+        return attendanceDomService.createAttendance(internId, date);
     }
 
     @Override
-    public DailyAttendance cancelCheckIn(long id) {
-        DailyAttendance attendance = new DailyAttendance();
-        attendance.setAttendanceId(id);
-        //return attendanceDomService.removeAttendance(attendance);
-        return null;
+    public void cancelCheckIn(long id) {
+        attendanceDomService.removeAttendance(id);
     }
 }

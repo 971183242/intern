@@ -7,5 +7,5 @@ import java.util.Date;
 public interface AttendanceAppService {
     DailyAttendance checkIn(String internId, Date date);
 
-    DailyAttendance cancelCheckIn(long id);
+    void cancelCheckIn(long id);
 }
