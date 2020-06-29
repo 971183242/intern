@@ -25,13 +25,15 @@ public class AttendanceAppServiceImpl implements AttendanceAppService {
         attendance.setInternId(internId);
         attendance.setWorkDay(date);
         attendance.setAttendanceStatus(CheckedIn);
-        return attendanceDomService.createAttendance(attendance);
+        //return attendanceDomService.createAttendance(attendance);
+        return null;
     }
 
     @Override
     public DailyAttendance cancelCheckIn(long id) {
         DailyAttendance attendance = new DailyAttendance();
         attendance.setAttendanceId(id);
-        return attendanceDomService.removeAttendance(attendance);
+        //return attendanceDomService.removeAttendance(attendance);
+        return null;
     }
 }
