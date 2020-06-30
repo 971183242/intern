@@ -3,7 +3,7 @@ package com.oocl.workshop.intern.domain.profile.service;
 import com.oocl.workshop.intern.domain.profile.entity.Team;
 import com.oocl.workshop.intern.domain.profile.repository.facade.TeamRepo;
 import com.oocl.workshop.intern.domain.profile.repository.po.TeamPo;
-import com.oocl.workshop.intern.domain.profile.service.impl.TeamProfileServiceImpl;
+import com.oocl.workshop.intern.domain.profile.service.impl.ProfileDomServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,10 +19,10 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class TeamProfileServiceTest {
+class ProfileDomServiceTest {
 
     @InjectMocks
-    private TeamProfileService teamProfileService = new TeamProfileServiceImpl();
+    private ProfileDomService profileDomService = new ProfileDomServiceImpl();
 
     @Mock
     private TeamRepo teamRepo;
@@ -56,7 +56,7 @@ class TeamProfileServiceTest {
     @DisplayName("return 2 teams when given totally 2 in repository")
     void findAllTeams() {
         given2TeamPos();
-        List<Team> allTeams = teamProfileService.findAllTeams();
+        List<Team> allTeams = profileDomService.findAllTeams();
         assertAll(() -> assertThat(allTeams.size()).isEqualTo(2),
                 () -> assertThat(allTeams.get(0).getTeamId()).isEqualTo("T1"),
                 () -> assertThat(allTeams.get(1).getName()).isEqualTo("Team 2")
