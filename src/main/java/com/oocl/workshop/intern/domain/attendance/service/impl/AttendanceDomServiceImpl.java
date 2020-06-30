@@ -55,7 +55,7 @@ public class AttendanceDomServiceImpl implements AttendanceDomService {
     private DailyAttendance confirmAttendance(DailyAttendance attendance) {
         DailyAttendance result;
         switch (attendance.getAttendanceStatus()) {
-            case CheckedIn:
+            case Approved:
                 result = approveAttendance(attendance);
                 break;
             case Rejected:

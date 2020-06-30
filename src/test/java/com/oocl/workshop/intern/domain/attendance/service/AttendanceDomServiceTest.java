@@ -2,6 +2,7 @@ package com.oocl.workshop.intern.domain.attendance.service;
 
 import com.oocl.workshop.intern.domain.attendance.entity.AttendanceStatus;
 import com.oocl.workshop.intern.domain.attendance.entity.DailyAttendance;
+import com.oocl.workshop.intern.domain.attendance.entity.PeriodAttendance;
 import com.oocl.workshop.intern.domain.attendance.repostitory.facade.AttendanceRepo;
 import com.oocl.workshop.intern.domain.attendance.repostitory.po.AttendancePo;
 import com.oocl.workshop.intern.domain.attendance.service.impl.AttendanceDomServiceImpl;
@@ -76,5 +77,39 @@ class AttendanceDomServiceTest {
 
     @Test
     void confirmPeriodAttendance() {
+        PeriodAttendance periodAttendance = new PeriodAttendance();
+        String internId = "testId";
+
+        LocalDateTime approvedDateTime = LocalDateTime.of(2020, Month.JUNE, 1, 10, 0);
+        Date approvedDay = Date.from(approvedDateTime.toInstant(ZoneOffset.UTC));
+        DailyAttendance approvedAttendance = attendanceDomService.createAttendance(internId, approvedDay);
+        approvedAttendance.setAttendanceStatus(AttendanceStatus.Approved);
+        periodAttendance.getAttendances().add(approvedAttendance);
+
+        LocalDateTime approvedDateTime2 = LocalDateTime.of(2020, Month.JUNE, 2, 10, 0);
+        Date approvedDay2 = Date.from(approvedDateTime2.toInstant(ZoneOffset.UTC));
+        DailyAttendance approvedAttendance2 = attendanceDomService.createAttendance(internId, approvedDay2);
+        approvedAttendance2.setAttendanceStatus(AttendanceStatus.Approved);
+        periodAttendance.getAttendances().add(approvedAttendance2);
+
+        LocalDateTime checkedInDateTime = LocalDateTime.of(2020, Month.JUNE, 3, 10, 0);
+        Date checkedInDay = Date.from(approvedDateTime.toInstant(ZoneOffset.UTC));
+        DailyAttendance checkedIndAttendance = attendanceDomService.createAttendance(internId, checkedInDay);
+        periodAttendance.getAttendances().add(checkedIndAttendance);
+
+        LocalDateTime rejectedDateTime = LocalDateTime.of(2020,Month.JUNE,5,10,0);
+        Date rejectedDay = Date.from(approvedDateTime.toInstant(ZoneOffset.UTC));
+        DailyAttendance rejectedAttendance = attendanceDomService.createAttendance(internId, rejectedDay);
+        rejectedAttendance.setAttendanceStatus(AttendanceStatus.Rejected);
+        periodAttendance.getAttendances().add(rejectedAttendance);
+
+        periodAttendance = attendanceDomService.confirmPeriodAttendance(periodAttendance);
+
+        PeriodAttendance finalPeriodAttendance = periodAttendance;
+        assertAll(() -> assertThat(finalPeriodAttendance.getApprovedAttendanceCount()).isEqualTo(2),
+                () -> assertThat(finalPeriodAttendance.getCheckedInAttendanceCount()).isEqualTo(1),
+                () -> assertThat(finalPeriodAttendance.getRejectedAttendanceCount()).isEqualTo(1));
+
+
     }
 }
