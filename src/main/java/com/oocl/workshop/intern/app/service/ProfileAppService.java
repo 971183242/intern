@@ -6,5 +6,5 @@ import java.util.Date;
 import java.util.List;
 
 public interface ProfileAppService {
-    List<Intern> getInterns(String team, Date parseDate);
+    List<Intern> getInterns(String teamId, Date date);
 }
