@@ -52,6 +52,23 @@ public class AttendanceDomServiceImpl implements AttendanceDomService {
         return periodAttendance;
     }
 
+    @Override
+    public List<DailyAttendance> findByInternIdAndStatus(String internId, AttendanceStatus status) {
+        List<AttendancePo> attendancePoList = attendanceRepo.findByInternIdAndStatus(internId, status);
+        return attendancePoList.stream().map(po -> attendanceFactory.getAttendance(po)).collect(Collectors.toList());
+    }
+
+    @Override
+    public PeriodAttendance findByInternIdAndBetweenDate(String internId, Date startDate, Date endDate) {
+        List<AttendancePo> attendancePoList = attendanceRepo.findByInternIdAndWorkDayBetweenOrderByWorkDay(internId, startDate, endDate);
+        PeriodAttendance periodAttendance = new PeriodAttendance();
+        periodAttendance.setAttendances(attendancePoList.stream().map(po -> attendanceFactory.getAttendance(po)).collect(Collectors.toList()));
+        periodAttendance.setInternId(internId);
+        periodAttendance.setStartDate(startDate);
+        periodAttendance.setEndDate(endDate);
+        return null;
+    }
+
     private DailyAttendance confirmAttendance(DailyAttendance attendance) {
         DailyAttendance result;
         switch (attendance.getAttendanceStatus()) {

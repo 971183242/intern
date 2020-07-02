@@ -1,9 +1,11 @@
 package com.oocl.workshop.intern.domain.attendance.service;
 
+import com.oocl.workshop.intern.domain.attendance.entity.AttendanceStatus;
 import com.oocl.workshop.intern.domain.attendance.entity.DailyAttendance;
 import com.oocl.workshop.intern.domain.attendance.entity.PeriodAttendance;
 
 import java.util.Date;
+import java.util.List;
 
 public interface AttendanceDomService {
 
@@ -12,4 +14,8 @@ public interface AttendanceDomService {
     void removeAttendance(long attendanceId);
 
     PeriodAttendance confirmPeriodAttendance(PeriodAttendance periodAttendance);
+
+    List<DailyAttendance> findByInternIdAndStatus(String internId, AttendanceStatus status);
+
+    PeriodAttendance findByInternIdAndBetweenDate(String internId, Date startDate, Date endDate);
 }
