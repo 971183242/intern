@@ -84,8 +84,6 @@ class AttendanceDomServiceTest {
         );
     }
 
-    }
-
     @Test
     void getAttendance() {
         long attendanceId = 100L;
@@ -180,4 +178,5 @@ class AttendanceDomServiceTest {
         DailyAttendance da1 = new DailyAttendance();
         da1.setAttendanceStatus(attendanceStatus);
         return da1;
+    }
 }
