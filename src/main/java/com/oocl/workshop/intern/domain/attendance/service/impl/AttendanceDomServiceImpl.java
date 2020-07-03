@@ -5,8 +5,8 @@ import com.oocl.workshop.intern.domain.attendance.entity.DailyAttendance;
 import com.oocl.workshop.intern.domain.attendance.entity.PeriodAttendance;
 import com.oocl.workshop.intern.domain.attendance.repostitory.facade.AttendanceRepo;
 import com.oocl.workshop.intern.domain.attendance.repostitory.po.AttendancePo;
-import com.oocl.workshop.intern.domain.attendance.service.AttendanceFactory;
 import com.oocl.workshop.intern.domain.attendance.service.AttendanceDomService;
+import com.oocl.workshop.intern.domain.attendance.service.AttendanceFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -91,17 +91,6 @@ public class AttendanceDomServiceImpl implements AttendanceDomService {
     public List<DailyAttendance> findByInternIdAndStatus(String internId, AttendanceStatus status) {
         List<AttendancePo> attendancePoList = attendanceRepo.findByInternIdAndAttendanceStatus(internId, status);
         return attendancePoList.stream().map(po -> attendanceFactory.getAttendance(po)).collect(Collectors.toList());
-    }
-
-    @Override
-    public PeriodAttendance findByInternIdAndBetweenDate(String internId, Date startDate, Date endDate) {
-        List<AttendancePo> attendancePoList = attendanceRepo.findByInternIdAndWorkDayBetweenOrderByWorkDay(internId, startDate, endDate);
-        PeriodAttendance periodAttendance = new PeriodAttendance();
-        periodAttendance.setAttendances(attendancePoList.stream().map(po -> attendanceFactory.getAttendance(po)).collect(Collectors.toList()));
-        periodAttendance.setInternId(internId);
-        periodAttendance.setStartDate(startDate);
-        periodAttendance.setEndDate(endDate);
-        return null;
     }
 
     private DailyAttendance confirmAttendance(DailyAttendance attendance) {
