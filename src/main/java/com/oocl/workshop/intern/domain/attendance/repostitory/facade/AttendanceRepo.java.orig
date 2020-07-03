@@ -9,7 +9,10 @@ import java.util.List;
 
 public interface AttendanceRepo extends JpaRepository<AttendancePo, Long> {
     List<AttendancePo> findByInternIdAndWorkDayBetweenOrderByWorkDay(String internId, Date startDate, Date endDate);
+<<<<<<< HEAD
     List<AttendancePo> findByInternIdAndAttendanceStatus(String internId, AttendanceStatus attendanceStatus);
+=======
 
     List<AttendancePo> findByInternIdAndAttendanceStatus(String internId, AttendanceStatus status);
+>>>>>>> f3df49ea89c3e0809df34a6caec5ed2162a690f9
 }

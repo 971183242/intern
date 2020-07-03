@@ -15,11 +15,15 @@ public interface AttendanceDomService {
 
     PeriodAttendance confirmPeriodAttendance(PeriodAttendance periodAttendance);
 
+<<<<<<< HEAD
     DailyAttendance getAttendance(long attendanceId);
-    List<DailyAttendance> findByInternIdAndStatus(String internId, AttendanceStatus status);
 
     DailyAttendance updateAttendance(DailyAttendance dailyAttendance);
-    PeriodAttendance findByInternIdAndBetweenDate(String internId, Date startDate, Date endDate);
 
     PeriodAttendance getPeriodAttendance(String internId, Date startDate, Date endDate);
+=======
+    List<DailyAttendance> findByInternIdAndStatus(String internId, AttendanceStatus status);
+
+    PeriodAttendance findByInternIdAndBetweenDate(String internId, Date startDate, Date endDate);
+>>>>>>> f3df49ea89c3e0809df34a6caec5ed2162a690f9
 }
