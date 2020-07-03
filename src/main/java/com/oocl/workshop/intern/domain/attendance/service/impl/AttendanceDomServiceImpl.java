@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -75,7 +76,7 @@ public class AttendanceDomServiceImpl implements AttendanceDomService {
         periodAttendance.setInternId(internId);
         periodAttendance.setStartDate(startDate);
         periodAttendance.setEndDate(endDate);
-        attendancePos.stream().map(attendanceFactory::getAttendance).forEach(periodAttendance.getAttendances()::add);
+        periodAttendance.getAttendances().addAll(attendancePos.stream().filter(Objects::nonNull).map(attendanceFactory::getAttendance).collect(Collectors.toList()));
         periodAttendance.setApprovedAttendanceCount(getCountByStatus(attendancePos, AttendanceStatus.Approved));
         periodAttendance.setRejectedAttendanceCount(getCountByStatus(attendancePos, AttendanceStatus.Rejected));
         periodAttendance.setCheckedInAttendanceCount(getCountByStatus(attendancePos, AttendanceStatus.CheckedIn));

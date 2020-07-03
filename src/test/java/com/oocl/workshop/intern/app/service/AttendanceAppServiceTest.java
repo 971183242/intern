@@ -1,20 +1,38 @@
 package com.oocl.workshop.intern.app.service;
 
+import com.google.common.collect.ImmutableList;
 import com.oocl.workshop.intern.app.service.impl.AttendanceAppServiceImpl;
 import com.oocl.workshop.intern.domain.attendance.entity.AttendanceStatus;
 import com.oocl.workshop.intern.domain.attendance.entity.DailyAttendance;
+import com.oocl.workshop.intern.domain.attendance.entity.PeriodAttendance;
+import com.oocl.workshop.intern.domain.attendance.repostitory.facade.AttendanceRepo;
+import com.oocl.workshop.intern.domain.attendance.repostitory.po.AttendancePo;
 import com.oocl.workshop.intern.domain.attendance.service.AttendanceDomService;
+import com.oocl.workshop.intern.domain.report.service.MonthlySettlementDayRuleService;
+import com.oocl.workshop.intern.infrastructure.InternApplicationException;
+import com.oocl.workshop.intern.infrastructure.common.ErrorCodes;
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class AttendanceAppServiceTest {
@@ -73,5 +91,136 @@ public class AttendanceAppServiceTest {
         AttendanceAppServiceImpl service = new AttendanceAppServiceImpl();
         service.setAttendanceDomService(attendanceDomService);
         service.cancelCheckIn(1L);
+    }
+
+    @Test
+    void approveWithoutAttendanceRecord() {
+        AttendanceAppServiceImpl service = new AttendanceAppServiceImpl();
+        service.setAttendanceDomService(attendanceDomService);
+        when(attendanceDomService.getAttendance(anyLong())).thenReturn(null);
+        DailyAttendance attendance = new DailyAttendance();
+        attendance.setAttendanceId(100L);
+        attendance.setAttendanceStatus(AttendanceStatus.Approved);
+
+        InternApplicationException exception = assertThrows(InternApplicationException.class, () -> service.confirm(attendance));
+        assertEquals(ErrorCodes.ATTENDANCE_RECORD_NOT_FOUND, exception.getCode());
+    }
+
+    @Test
+    void approveRejectedAttendance() {
+        confirmAttendanceSuccess(AttendanceStatus.Rejected, AttendanceStatus.Approved);
+    }
+
+    @Test
+    void approveApprovedAttendance() {
+        confirmAttendanceSuccess(AttendanceStatus.Approved, AttendanceStatus.Approved);
+    }
+
+    @Test
+    void rejectApprovedAttendance() {
+        long attendanceId = 100L;
+        DailyAttendance attendance = new DailyAttendance();
+        attendance.setAttendanceStatus(AttendanceStatus.Approved);
+
+        InternApplicationException exception = assertThrows(InternApplicationException.class,
+                () -> confirmAttendance(AttendanceStatus.Rejected, attendanceId, attendance));
+        assertEquals(ErrorCodes.TRY_TO_REJECT_APPROVED_ATTENDANCE, exception.getCode());
+    }
+
+    @Test
+    void rejectAttendance() {
+        confirmAttendanceSuccess(AttendanceStatus.CheckedIn, AttendanceStatus.Rejected);
+    }
+
+    @Test
+    void useCheckinAsConfirmTargetStatus() {
+        long attendanceId = 100L;
+        DailyAttendance attendance = new DailyAttendance();
+        attendance.setAttendanceStatus(AttendanceStatus.CheckedIn);
+
+        InternApplicationException exception = assertThrows(InternApplicationException.class,
+                () -> confirmAttendance(AttendanceStatus.CheckedIn, attendanceId, attendance));
+        assertEquals(ErrorCodes.INVALID_ATTENDANCE_CONFIRM_STATUS, exception.getCode());
+    }
+
+    @Test
+    void confirmWithoutSpecifedStatus() {
+        long attendanceId = 100L;
+        DailyAttendance attendance = new DailyAttendance();
+        attendance.setAttendanceStatus(AttendanceStatus.CheckedIn);
+
+        InternApplicationException exception = assertThrows(InternApplicationException.class,
+                () -> confirmAttendance(null, attendanceId, attendance));
+        assertEquals(ErrorCodes.INVALID_ATTENDANCE_CONFIRM_STATUS, exception.getCode());
+    }
+
+    private void confirmAttendanceSuccess(AttendanceStatus currentStatus, AttendanceStatus targetStatus) {
+        long attendanceId = 100L;
+        DailyAttendance attendance = new DailyAttendance();
+        attendance.setAttendanceStatus(currentStatus);
+
+        DailyAttendance updatedAttendance = confirmAttendance(targetStatus, attendanceId, attendance);
+        assertEquals(targetStatus, updatedAttendance.getAttendanceStatus());
+    }
+
+    private DailyAttendance confirmAttendance(AttendanceStatus targetStatus, long attendanceId, DailyAttendance attendance) {
+        AttendanceAppServiceImpl service = new AttendanceAppServiceImpl();
+        service.setAttendanceDomService(attendanceDomService);
+        when(attendanceDomService.getAttendance(attendanceId)).thenReturn(attendance);
+        when(attendanceDomService.updateAttendance(any())).thenReturn(attendance);
+        DailyAttendance requestAttendance = new DailyAttendance();
+        requestAttendance.setAttendanceId(attendanceId);
+        requestAttendance.setAttendanceStatus(targetStatus);
+
+        return service.confirm(requestAttendance);
+    }
+
+    @Test
+    void containsUnconfirmedAttendanceReturnsTrue() {
+        String internId = "100";
+        AttendanceAppServiceImpl service = new AttendanceAppServiceImpl();
+        AttendanceRepo attendanceRepo = mock(AttendanceRepo.class);
+        AttendancePo attendancePo = new AttendancePo();
+        when(attendanceRepo.findByInternIdAndAttendanceStatus(internId, AttendanceStatus.CheckedIn)).thenReturn(ImmutableList.of(attendancePo));
+        service.setAttendanceRepo(attendanceRepo);
+        assertTrue(service.containsUnconfirmedAttendance(internId));
+    }
+
+    @Test
+    void containsUnconfirmedAttendanceReturnsFalse() {
+        String internId = "100";
+        AttendanceAppServiceImpl service = new AttendanceAppServiceImpl();
+        AttendanceRepo attendanceRepo = mock(AttendanceRepo.class);
+        when(attendanceRepo.findByInternIdAndAttendanceStatus(internId, AttendanceStatus.CheckedIn)).thenReturn(ImmutableList.of());
+        service.setAttendanceRepo(attendanceRepo);
+        assertFalse(service.containsUnconfirmedAttendance(internId));
+    }
+
+    @Test
+    void getAttendancesWithInvalidDate() {
+        InternApplicationException e = new InternApplicationException(null);
+        AttendanceAppServiceImpl service = new AttendanceAppServiceImpl();
+        MonthlySettlementDayRuleService monthlySettlementDayRuleService = mock(MonthlySettlementDayRuleService.class);
+        when(monthlySettlementDayRuleService.getMonthlySettlementDateWindow(ArgumentMatchers.isNull())).thenThrow(e);
+        service.setMonthlySettlementDayRuleService(monthlySettlementDayRuleService);
+        InternApplicationException exception = assertThrows(InternApplicationException.class, () -> service.findAttendances("100", null));
+        assertEquals(e, exception);
+    }
+
+    @Test
+    void getAttendances() {
+        AttendanceAppServiceImpl service = new AttendanceAppServiceImpl();
+        Date startDate = new Date();
+        Date endDate = DateUtils.addMonths(startDate, 1);
+        Date today = new Date();
+        String internId = "100";
+        MonthlySettlementDayRuleService monthlySettlementDayRuleService = mock(MonthlySettlementDayRuleService.class);
+        when(monthlySettlementDayRuleService.getMonthlySettlementDateWindow(today)).thenReturn(ImmutableList.of(startDate, endDate));
+        service.setMonthlySettlementDayRuleService(monthlySettlementDayRuleService);
+        service.setAttendanceDomService(attendanceDomService);
+        PeriodAttendance periodAttendance = new PeriodAttendance();
+        when(attendanceDomService.getPeriodAttendance(internId, startDate, endDate)).thenReturn(periodAttendance);
+        assertEquals(periodAttendance, service.findAttendances(internId, today));
+        verify(attendanceDomService, Mockito.times(1)).getPeriodAttendance(internId, startDate, endDate);
     }
 }

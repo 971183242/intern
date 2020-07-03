@@ -7,6 +7,7 @@ import com.oocl.workshop.intern.domain.attendance.entity.PeriodAttendance;
 import com.oocl.workshop.intern.domain.attendance.repostitory.facade.AttendanceRepo;
 import com.oocl.workshop.intern.domain.attendance.service.AttendanceDomService;
 import com.oocl.workshop.intern.domain.report.repostitory.facade.MonthlySettlementDayRuleRepo;
+import com.oocl.workshop.intern.domain.report.service.MonthlySettlementDayRuleService;
 import com.oocl.workshop.intern.infrastructure.InternApplicationException;
 import com.oocl.workshop.intern.infrastructure.common.ErrorCodes;
 import lombok.Data;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static org.apache.commons.lang3.time.DateUtils.addDays;
 import static org.apache.commons.lang3.time.DateUtils.addMonths;
@@ -35,11 +37,11 @@ public class AttendanceAppServiceImpl implements AttendanceAppService {
         this.attendanceRepo = attendanceRepo;
     }
 
-    private MonthlySettlementDayRuleRepo monthlySettlementDayRuleRepo;
+    private MonthlySettlementDayRuleService monthlySettlementDayRuleService;
 
     @Autowired
-    public void setMonthlySettlementDayRuleRepo(MonthlySettlementDayRuleRepo monthlySettlementDayRuleRepo) {
-        this.monthlySettlementDayRuleRepo = monthlySettlementDayRuleRepo;
+    public void setMonthlySettlementDayRuleService(MonthlySettlementDayRuleService monthlySettlementDayRuleService) {
+        this.monthlySettlementDayRuleService = monthlySettlementDayRuleService;
     }
 
     @Override
@@ -92,11 +94,7 @@ public class AttendanceAppServiceImpl implements AttendanceAppService {
 
     @Override
     public PeriodAttendance findAttendances(String internId, Date date) {
-        int monthlySettlementDay = monthlySettlementDayRuleRepo.getMonthlySettlementDay();
-        Date startDate = addDays(setDays(date, monthlySettlementDay), 1);
-        if (DateUtils.getFragmentInDays(date, Calendar.DAY_OF_MONTH) < monthlySettlementDay) {
-            startDate = addMonths(startDate, -1);
-        }
-        return attendanceDomService.getPeriodAttendance(internId, startDate, addMonths(startDate, 1));
+        List<Date> timeWindow = monthlySettlementDayRuleService.getMonthlySettlementDateWindow(date);
+        return attendanceDomService.getPeriodAttendance(internId, timeWindow.get(0), timeWindow.get(1));
     }
 }
