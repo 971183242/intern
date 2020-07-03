@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,6 +51,39 @@ public class AttendanceDomServiceImpl implements AttendanceDomService {
                 .collect(Collectors.toList());
         periodAttendance.setAttendances(dailyAttendanceList);
         return periodAttendance;
+    }
+
+    @Override
+    public DailyAttendance getAttendance(long attendanceId) {
+        return attendanceRepo.findById(attendanceId).map(attendanceFactory::getAttendance).orElse(null);
+    }
+
+    @Override
+    public DailyAttendance updateAttendance(DailyAttendance dailyAttendance) {
+        Optional<AttendancePo> attendancePo = attendanceRepo.findById(dailyAttendance.getAttendanceId());
+        if (!attendancePo.isPresent()) {
+            return createAttendance(dailyAttendance);
+        }
+        attendanceFactory.updatePo(dailyAttendance, attendancePo.get());
+        return attendanceFactory.getAttendance(attendancePo.get());
+    }
+
+    @Override
+    public PeriodAttendance getPeriodAttendance(String internId, Date startDate, Date endDate) {
+        List<AttendancePo> attendancePos = attendanceRepo.findByInternIdAndWorkDayBetweenOrderByWorkDay(internId, startDate, endDate);
+        PeriodAttendance periodAttendance = new PeriodAttendance();
+        periodAttendance.setInternId(internId);
+        periodAttendance.setStartDate(startDate);
+        periodAttendance.setEndDate(endDate);
+        attendancePos.stream().map(attendanceFactory::getAttendance).forEach(periodAttendance.getAttendances()::add);
+        periodAttendance.setApprovedAttendanceCount(getCountByStatus(attendancePos, AttendanceStatus.Approved));
+        periodAttendance.setRejectedAttendanceCount(getCountByStatus(attendancePos, AttendanceStatus.Rejected));
+        periodAttendance.setCheckedInAttendanceCount(getCountByStatus(attendancePos, AttendanceStatus.CheckedIn));
+        return periodAttendance;
+    }
+
+    private int getCountByStatus(List<AttendancePo> attendancePos, AttendanceStatus status) {
+        return (int) attendancePos.stream().map(AttendancePo::getAttendanceStatus).filter(status::equals).count();
     }
 
     private DailyAttendance confirmAttendance(DailyAttendance attendance) {

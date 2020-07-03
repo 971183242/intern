@@ -12,4 +12,10 @@ public interface AttendanceDomService {
     void removeAttendance(long attendanceId);
 
     PeriodAttendance confirmPeriodAttendance(PeriodAttendance periodAttendance);
+
+    DailyAttendance getAttendance(long attendanceId);
+
+    DailyAttendance updateAttendance(DailyAttendance dailyAttendance);
+
+    PeriodAttendance getPeriodAttendance(String internId, Date startDate, Date endDate);
 }
