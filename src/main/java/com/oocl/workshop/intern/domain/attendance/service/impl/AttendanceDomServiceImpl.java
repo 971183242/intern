@@ -54,7 +54,7 @@ public class AttendanceDomServiceImpl implements AttendanceDomService {
 
     @Override
     public List<DailyAttendance> findByInternIdAndStatus(String internId, AttendanceStatus status) {
-        List<AttendancePo> attendancePoList = attendanceRepo.findByInternIdAndStatus(internId, status);
+        List<AttendancePo> attendancePoList = attendanceRepo.findByInAndInternIdAndAttendanceStatus(internId, status);
         return attendancePoList.stream().map(po -> attendanceFactory.getAttendance(po)).collect(Collectors.toList());
     }
 
