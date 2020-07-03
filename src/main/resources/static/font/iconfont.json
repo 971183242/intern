@@ -1,0 +1,37 @@
+{
+  "id": "1895093",
+  "name": "intern",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1164943",
+      "name": "点",
+      "font_class": "dian1",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
+      "icon_id": "14046404",
+      "name": "点",
+      "font_class": "dian",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "1190852",
+      "name": "next",
+      "font_class": "next",
+      "unicode": "e65b",
+      "unicode_decimal": 58971
+    },
+    {
+      "icon_id": "1190879",
+      "name": "previous",
+      "font_class": "previous",
+      "unicode": "e669",
+      "unicode_decimal": 58985
+    }
+  ]
+}
