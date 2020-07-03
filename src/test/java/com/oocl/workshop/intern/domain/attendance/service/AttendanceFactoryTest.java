@@ -3,6 +3,7 @@ package com.oocl.workshop.intern.domain.attendance.service;
 import com.oocl.workshop.intern.domain.attendance.entity.AttendanceStatus;
 import com.oocl.workshop.intern.domain.attendance.entity.DailyAttendance;
 import com.oocl.workshop.intern.domain.attendance.repostitory.po.AttendancePo;
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,6 +13,7 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 class AttendanceFactoryTest {
@@ -51,5 +53,19 @@ class AttendanceFactoryTest {
         assertEquals(attendancePo.getInternId(), attendance.getInternId());
         assertEquals(attendancePo.getAttendanceStatus(), attendance.getAttendanceStatus());
         assertEquals(attendancePo.getWorkDay(), attendance.getWorkDay());
+    }
+
+    @Test
+    void updateAttendance() {
+        DailyAttendance attendance = new DailyAttendance();
+        attendance.setAttendanceId(1l);
+        attendance.setInternId("intern_01");
+        attendance.setAttendanceStatus(AttendanceStatus.CheckedIn);
+        attendance.setWorkDay(new Date());
+        AttendancePo attendancePo = new AttendancePo();
+        attendanceFactory.updatePo(attendance, attendancePo);
+        assertEquals(attendance.getInternId(), attendancePo.getInternId());
+        assertEquals(attendance.getAttendanceStatus(), attendancePo.getAttendanceStatus());
+        assertTrue(DateUtils.isSameInstant(attendance.getWorkDay(), attendancePo.getWorkDay()));
     }
 }
