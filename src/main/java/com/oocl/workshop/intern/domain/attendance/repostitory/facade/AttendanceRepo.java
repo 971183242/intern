@@ -10,5 +10,5 @@ import java.util.List;
 public interface AttendanceRepo extends JpaRepository<AttendancePo, Long> {
     List<AttendancePo> findByInternIdAndWorkDayBetweenOrderByWorkDay(String internId, Date startDate, Date endDate);
 
-    List<AttendancePo> findByInternIdAndStatus(String internId, AttendanceStatus status);
+    List<AttendancePo> findByInAndInternIdAndAttendanceStatus(String internId, AttendanceStatus status);
 }
