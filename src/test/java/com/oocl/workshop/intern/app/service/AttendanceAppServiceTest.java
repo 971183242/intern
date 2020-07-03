@@ -8,6 +8,8 @@ import com.oocl.workshop.intern.domain.attendance.entity.PeriodAttendance;
 import com.oocl.workshop.intern.domain.attendance.repostitory.facade.AttendanceRepo;
 import com.oocl.workshop.intern.domain.attendance.repostitory.po.AttendancePo;
 import com.oocl.workshop.intern.domain.attendance.service.AttendanceDomService;
+import com.oocl.workshop.intern.domain.profile.entity.Intern;
+import com.oocl.workshop.intern.domain.profile.service.ProfileDomService;
 import com.oocl.workshop.intern.domain.report.service.MonthlySettlementDayRuleService;
 import com.oocl.workshop.intern.infrastructure.InternApplicationException;
 import com.oocl.workshop.intern.infrastructure.common.ErrorCodes;
@@ -22,7 +24,9 @@ import org.mockito.MockitoAnnotations;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -38,6 +42,11 @@ import static org.mockito.Mockito.when;
 public class AttendanceAppServiceTest {
     @Mock
     AttendanceDomService attendanceDomService;
+
+    @Mock
+    MonthlySettlementDayRuleService monthlySettlementDayRuleService;
+    @Mock
+    private ProfileDomService profileDomService;
 
     @BeforeEach
     public void before() {
@@ -91,6 +100,23 @@ public class AttendanceAppServiceTest {
         AttendanceAppServiceImpl service = new AttendanceAppServiceImpl();
         service.setAttendanceDomService(attendanceDomService);
         service.cancelCheckIn(1L);
+    }
+
+    @Test
+    void should_get_interns_from_domain_service() {
+        AttendanceAppServiceImpl service = new AttendanceAppServiceImpl();
+        service.setMonthlySettlementDayRuleService(monthlySettlementDayRuleService);
+        service.setProfileDomService(profileDomService);
+
+        Date date = parseDate("2020-06-29");
+        Date startDate = parseDate("2020-06-01");
+        Date endDate = parseDate("2020-06-30");
+        when(monthlySettlementDayRuleService.getMonthlySettlementDateWindow(date)).thenReturn(Arrays.asList(startDate, endDate));
+
+        List<Intern> mockedInterns = Arrays.asList(new Intern(), new Intern());
+        when(profileDomService.findTeamInterns("team", startDate, endDate)).thenReturn(mockedInterns);
+        List<Intern> interns = service.getInternsActiveInDateContainedPeriod("team", date);
+        assertEquals(2, interns.size());
     }
 
     @Test

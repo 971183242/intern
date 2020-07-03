@@ -6,22 +6,18 @@ import com.oocl.workshop.intern.domain.attendance.entity.DailyAttendance;
 import com.oocl.workshop.intern.domain.attendance.entity.PeriodAttendance;
 import com.oocl.workshop.intern.domain.attendance.repostitory.facade.AttendanceRepo;
 import com.oocl.workshop.intern.domain.attendance.service.AttendanceDomService;
-import com.oocl.workshop.intern.domain.report.repostitory.facade.MonthlySettlementDayRuleRepo;
+import com.oocl.workshop.intern.domain.profile.entity.Intern;
+import com.oocl.workshop.intern.domain.profile.service.ProfileDomService;
 import com.oocl.workshop.intern.domain.report.service.MonthlySettlementDayRuleService;
 import com.oocl.workshop.intern.infrastructure.InternApplicationException;
 import com.oocl.workshop.intern.infrastructure.common.ErrorCodes;
 import lombok.Data;
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import static org.apache.commons.lang3.time.DateUtils.addDays;
-import static org.apache.commons.lang3.time.DateUtils.addMonths;
-import static org.apache.commons.lang3.time.DateUtils.setDays;
 
 @Data
 @Service
@@ -31,6 +27,13 @@ public class AttendanceAppServiceImpl implements AttendanceAppService {
     private AttendanceDomService attendanceDomService;
 
     private AttendanceRepo attendanceRepo;
+
+    private ProfileDomService profileDomService;
+
+    @Autowired
+    public void setProfileDomService(ProfileDomService profileDomService) {
+        this.profileDomService = profileDomService;
+    }
 
     @Autowired
     public void setAttendanceRepo(AttendanceRepo attendanceRepo) {
@@ -96,5 +99,12 @@ public class AttendanceAppServiceImpl implements AttendanceAppService {
     public PeriodAttendance findAttendances(String internId, Date date) {
         List<Date> timeWindow = monthlySettlementDayRuleService.getMonthlySettlementDateWindow(date);
         return attendanceDomService.getPeriodAttendance(internId, timeWindow.get(0), timeWindow.get(1));
+    }
+
+    @Override
+    public List<Intern> getInternsActiveInDateContainedPeriod(String teamId, Date date) {
+        Calendar currentMonthFirstDate = Calendar.getInstance();
+        List<Date> settlementDateWindow = monthlySettlementDayRuleService.getMonthlySettlementDateWindow(date);
+        return profileDomService.findTeamInterns(teamId, settlementDateWindow.get(0), settlementDateWindow.get(1));
     }
 }
