@@ -15,10 +15,14 @@ public class AttendanceFactory {
     public AttendancePo createPo(DailyAttendance attendance) {
         AttendancePo attendancePo = new AttendancePo();
         attendancePo.setAttendanceId(attendance.getAttendanceId());
+        updatePo(attendance, attendancePo);
+        return attendancePo;
+    }
+
+    public void updatePo(DailyAttendance attendance, AttendancePo attendancePo) {
         attendancePo.setAttendanceStatus(attendance.getAttendanceStatus());
         attendancePo.setInternId(attendance.getInternId());
         attendancePo.setWorkDay(attendance.getWorkDay());
-        return attendancePo;
     }
 
     public DailyAttendance getAttendance(AttendancePo attendancePo) {

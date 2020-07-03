@@ -54,6 +54,7 @@ public class AttendanceDomServiceImpl implements AttendanceDomService {
     }
 
     @Override
+<<<<<<< HEAD
     public DailyAttendance getAttendance(long attendanceId) {
         return attendanceRepo.findById(attendanceId).map(attendanceFactory::getAttendance).orElse(null);
     }
@@ -84,9 +85,7 @@ public class AttendanceDomServiceImpl implements AttendanceDomService {
 
     private int getCountByStatus(List<AttendancePo> attendancePos, AttendanceStatus status) {
         return (int) attendancePos.stream().map(AttendancePo::getAttendanceStatus).filter(status::equals).count();
-    }
-
-    @Override
+=======
     public List<DailyAttendance> findByInternIdAndStatus(String internId, AttendanceStatus status) {
         List<AttendancePo> attendancePoList = attendanceRepo.findByInternIdAndAttendanceStatus(internId, status);
         return attendancePoList.stream().map(po -> attendanceFactory.getAttendance(po)).collect(Collectors.toList());
@@ -101,6 +100,7 @@ public class AttendanceDomServiceImpl implements AttendanceDomService {
         periodAttendance.setStartDate(startDate);
         periodAttendance.setEndDate(endDate);
         return null;
+>>>>>>> f3df49ea89c3e0809df34a6caec5ed2162a690f9
     }
 
     private DailyAttendance confirmAttendance(DailyAttendance attendance) {
