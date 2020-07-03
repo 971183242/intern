@@ -20,11 +20,6 @@ public class MonthlySettlementDayRuleServiceImpl implements MonthlySettlementDay
     }
 
     @Override
-    public int getMonthlySettlementDay() {
-        return ruleRepo.getMonthlySettlementDay();
-    }
-
-    @Override
     public List<Date> getMonthlySettlementDateWindow(Date baseDate) {
         int monthlySettlementDay = ruleRepo.getMonthlySettlementDay();
         Date startDate = DateUtil.getMonthSettlementStartDate(monthlySettlementDay, baseDate);
