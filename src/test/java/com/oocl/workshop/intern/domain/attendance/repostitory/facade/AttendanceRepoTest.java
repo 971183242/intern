@@ -2,17 +2,23 @@ package com.oocl.workshop.intern.domain.attendance.repostitory.facade;
 
 import com.oocl.workshop.intern.domain.attendance.entity.AttendanceStatus;
 import com.oocl.workshop.intern.domain.attendance.repostitory.po.AttendancePo;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 @DataJpaTest
@@ -49,5 +55,20 @@ public class AttendanceRepoTest {
     public void findByInternIdAndWorkDayBetween() {
         List<AttendancePo> attendancePos = attendanceRepo.findByInternIdAndWorkDayBetweenOrderByWorkDay("intern_02", new Date(120, 1, 1), new Date(120, 5, 1));
         assertEquals(2, attendancePos.size());
+    }
+
+    @Test
+    @Sql(statements="insert into T_ATTENDANCE(attendance_id,intern_id, attendance_status,work_day,version)" +
+            " values(9999998, 'test','CheckedIn','2020-05-01',12)")
+    void updateVersionException() {
+
+        AttendancePo attendancePo = new AttendancePo();
+        attendancePo.setAttendanceId(9999998L);
+        attendancePo.setInternId("test");
+        attendancePo.setVersion(11);
+        attendancePo.setAttendanceStatus(AttendanceStatus.Approved);
+
+        assertThrows(ObjectOptimisticLockingFailureException.class, () -> attendanceRepo.save(attendancePo));
+
     }
 }

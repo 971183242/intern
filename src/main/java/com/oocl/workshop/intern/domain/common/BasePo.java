@@ -9,6 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 import java.util.Date;
 
 @Data
@@ -27,4 +28,7 @@ public abstract class BasePo {
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastModifiedDate;
+
+    @Version
+    private int version;
 }

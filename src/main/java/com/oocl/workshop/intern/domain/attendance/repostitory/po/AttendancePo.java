@@ -1,6 +1,7 @@
 package com.oocl.workshop.intern.domain.attendance.repostitory.po;
 
 import com.oocl.workshop.intern.domain.attendance.entity.AttendanceStatus;
+import com.oocl.workshop.intern.domain.common.BasePo;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ import java.util.Date;
         @Index(name = "idx_attendace_day", columnList = "work_day"),
         @Index(name = "idx_attendance_intern_day", columnList = "intern_id, work_day", unique = true)
 })
-public class AttendancePo {
+public class AttendancePo extends BasePo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long attendanceId;

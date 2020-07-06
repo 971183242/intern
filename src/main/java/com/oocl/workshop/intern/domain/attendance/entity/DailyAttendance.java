@@ -14,4 +14,6 @@ public class DailyAttendance {
     private AttendanceStatus attendanceStatus;
 
     private Date workDay;
+
+    private int version;
 }

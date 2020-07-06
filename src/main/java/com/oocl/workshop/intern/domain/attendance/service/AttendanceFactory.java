@@ -23,6 +23,7 @@ public class AttendanceFactory {
         attendancePo.setAttendanceStatus(attendance.getAttendanceStatus());
         attendancePo.setInternId(attendance.getInternId());
         attendancePo.setWorkDay(attendance.getWorkDay());
+        attendancePo.setVersion(attendance.getVersion());
     }
 
     public DailyAttendance getAttendance(AttendancePo attendancePo) {
@@ -31,6 +32,7 @@ public class AttendanceFactory {
         attendance.setInternId(attendancePo.getInternId());
         attendance.setWorkDay(attendancePo.getWorkDay());
         attendance.setAttendanceStatus(attendancePo.getAttendanceStatus());
+        attendance.setVersion(attendancePo.getVersion());
         return attendance;
     }
 
