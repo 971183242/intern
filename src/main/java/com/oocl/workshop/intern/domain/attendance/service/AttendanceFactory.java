@@ -1,18 +1,20 @@
 package com.oocl.workshop.intern.domain.attendance.service;
 
+import com.google.gson.Gson;
 import com.oocl.workshop.intern.domain.attendance.entity.DailyAttendance;
-import com.oocl.workshop.intern.domain.attendance.repostitory.facade.AttendanceRepo;
 import com.oocl.workshop.intern.domain.attendance.repostitory.po.AttendancePo;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AttendanceFactory {
 
-    @Autowired
-    AttendanceRepo attendanceRepo;
+    static Logger logger = LoggerFactory.getLogger(AttendanceFactory.class);
 
     public AttendancePo createPo(DailyAttendance attendance) {
+        logger.info("create attendance:" + new Gson().toJson(attendance));
         AttendancePo attendancePo = new AttendancePo();
         attendancePo.setAttendanceId(attendance.getAttendanceId());
         updatePo(attendance, attendancePo);
@@ -27,12 +29,14 @@ public class AttendanceFactory {
     }
 
     public DailyAttendance getAttendance(AttendancePo attendancePo) {
+        logger.info("getAttendance attendance. Po:" + new Gson().toJson(attendancePo));
         DailyAttendance attendance = new DailyAttendance();
         attendance.setAttendanceId(attendancePo.getAttendanceId());
         attendance.setInternId(attendancePo.getInternId());
         attendance.setWorkDay(attendancePo.getWorkDay());
         attendance.setAttendanceStatus(attendancePo.getAttendanceStatus());
         attendance.setVersion(attendancePo.getVersion());
+        logger.info("getAttendance DailyAttendance:" + new Gson().toJson(attendance));
         return attendance;
     }
 

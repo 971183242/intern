@@ -1,10 +1,13 @@
 package com.oocl.workshop.intern.domain.profile.service;
 
+import com.google.gson.Gson;
 import com.oocl.workshop.intern.domain.profile.entity.*;
 import com.oocl.workshop.intern.domain.profile.repository.facade.TeamRepo;
 import com.oocl.workshop.intern.domain.profile.repository.facade.UserRepo;
 import com.oocl.workshop.intern.domain.profile.repository.po.TeamPo;
 import com.oocl.workshop.intern.domain.profile.repository.po.UserPo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -15,6 +18,7 @@ import java.util.stream.Stream;
 
 @Service
 public class ProfileFactory {
+    static Logger logger = LoggerFactory.getLogger(ProfileFactory.class);
 
     private static final String SYMBOL_ROLE_SEPARATOR = ";";
 
@@ -25,12 +29,16 @@ public class ProfileFactory {
     TeamRepo teamRepo;
 
     public UserPo createUserPo(User user) {
+        UserPo userPo = null;
         if (user instanceof Intern) {
-            return createUserPo((Intern) user);
+            logger.info("create Intern:" + new Gson().toJson(user));
+            userPo = createUserPo((Intern) user);
         } else if (user instanceof Employee) {
-            return createUserPo((Employee) user);
+            logger.info("create Employee:" + new Gson().toJson(user));
+            userPo = createUserPo((Employee) user);
         }
-        return null;
+        logger.info("created UserPo :" + new Gson().toJson(userPo));
+        return userPo;
     }
 
     private UserPo createUserPo(User user, UserType userType) {
@@ -57,12 +65,15 @@ public class ProfileFactory {
 
 
     public User getUser(UserPo userPo) {
+        logger.info("getUser.userPo:" + new Gson().toJson(userPo));
+        User user = null;
         if (UserType.INTERN.equals(userPo.getUserType())) {
-            return getIntern(userPo);
+            user = getIntern(userPo);
         } else if (UserType.EMPLOYEE.equals(userPo.getUserType())) {
-            return getEmployee(userPo);
+            user = getEmployee(userPo);
         }
-        return null;
+        logger.info("getUser:" + new Gson().toJson(user));
+        return user;
     }
 
 
