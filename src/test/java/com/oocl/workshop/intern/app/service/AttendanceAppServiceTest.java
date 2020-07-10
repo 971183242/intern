@@ -11,7 +11,6 @@ import com.oocl.workshop.intern.domain.attendance.service.AttendanceDomService;
 import com.oocl.workshop.intern.domain.profile.entity.Intern;
 import com.oocl.workshop.intern.domain.profile.service.ProfileDomService;
 import com.oocl.workshop.intern.domain.report.service.MonthlySettlementDayRuleService;
-import com.oocl.workshop.intern.support.InternApplicationException;
 import com.oocl.workshop.intern.support.common.ErrorCodes;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.jupiter.api.Assertions;
@@ -21,6 +20,8 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -128,8 +129,8 @@ public class AttendanceAppServiceTest {
         attendance.setAttendanceId(100L);
         attendance.setAttendanceStatus(AttendanceStatus.Approved);
 
-        InternApplicationException exception = assertThrows(InternApplicationException.class, () -> service.confirm(attendance));
-        assertEquals(ErrorCodes.ATTENDANCE_RECORD_NOT_FOUND, exception.getCode());
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> service.confirm(attendance));
+        assertEquals(ErrorCodes.ATTENDANCE_RECORD_NOT_FOUND, exception.getReason());
     }
 
     @Test
@@ -148,9 +149,9 @@ public class AttendanceAppServiceTest {
         DailyAttendance attendance = new DailyAttendance();
         attendance.setAttendanceStatus(AttendanceStatus.Approved);
 
-        InternApplicationException exception = assertThrows(InternApplicationException.class,
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class,
                 () -> confirmAttendance(AttendanceStatus.Rejected, attendanceId, attendance));
-        assertEquals(ErrorCodes.TRY_TO_REJECT_APPROVED_ATTENDANCE, exception.getCode());
+        assertEquals(ErrorCodes.TRY_TO_REJECT_APPROVED_ATTENDANCE, exception.getReason());
     }
 
     @Test
@@ -164,9 +165,9 @@ public class AttendanceAppServiceTest {
         DailyAttendance attendance = new DailyAttendance();
         attendance.setAttendanceStatus(AttendanceStatus.CheckedIn);
 
-        InternApplicationException exception = assertThrows(InternApplicationException.class,
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class,
                 () -> confirmAttendance(AttendanceStatus.CheckedIn, attendanceId, attendance));
-        assertEquals(ErrorCodes.INVALID_ATTENDANCE_CONFIRM_STATUS, exception.getCode());
+        assertEquals(ErrorCodes.INVALID_ATTENDANCE_CONFIRM_STATUS, exception.getReason());
     }
 
     @Test
@@ -175,9 +176,9 @@ public class AttendanceAppServiceTest {
         DailyAttendance attendance = new DailyAttendance();
         attendance.setAttendanceStatus(AttendanceStatus.CheckedIn);
 
-        InternApplicationException exception = assertThrows(InternApplicationException.class,
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class,
                 () -> confirmAttendance(null, attendanceId, attendance));
-        assertEquals(ErrorCodes.INVALID_ATTENDANCE_CONFIRM_STATUS, exception.getCode());
+        assertEquals(ErrorCodes.INVALID_ATTENDANCE_CONFIRM_STATUS, exception.getReason());
     }
 
     private void confirmAttendanceSuccess(AttendanceStatus currentStatus, AttendanceStatus targetStatus) {
@@ -224,12 +225,12 @@ public class AttendanceAppServiceTest {
 
     @Test
     void getAttendancesWithInvalidDate() {
-        InternApplicationException e = new InternApplicationException(null);
+        ResponseStatusException e = new ResponseStatusException(HttpStatus.BAD_REQUEST);
         AttendanceAppServiceImpl service = new AttendanceAppServiceImpl();
         MonthlySettlementDayRuleService monthlySettlementDayRuleService = mock(MonthlySettlementDayRuleService.class);
         when(monthlySettlementDayRuleService.getMonthlySettlementDateWindow(ArgumentMatchers.isNull())).thenThrow(e);
         service.setMonthlySettlementDayRuleService(monthlySettlementDayRuleService);
-        InternApplicationException exception = assertThrows(InternApplicationException.class, () -> service.findAttendances("100", null));
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> service.findAttendances("100", null));
         assertEquals(e, exception);
     }
 

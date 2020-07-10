@@ -4,12 +4,17 @@ import com.oocl.workshop.intern.interfaces.api.AttendanceController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import static com.oocl.workshop.intern.support.common.ErrorCodes.INVALID_ATTENDANCE_CONFIRM_STATUS;
+import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
 
 @SpringBootTest
 public class AttendanceControllerTest {
@@ -29,5 +34,18 @@ public class AttendanceControllerTest {
                 .andReturn().getResponse().getContentAsString();
         System.out.println(result);
         Assertions.assertNotNull(result);
+    }
+
+
+    private MessageSource messageSource;
+
+    @Autowired
+    public void setMessageSource(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
+    @Test
+    public void showMessage() {
+        System.out.println(messageSource.getMessage(INVALID_ATTENDANCE_CONFIRM_STATUS, null, getLocale()));
     }
 }
