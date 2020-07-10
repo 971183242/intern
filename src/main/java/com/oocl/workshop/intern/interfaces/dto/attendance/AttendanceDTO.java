@@ -4,5 +4,13 @@ import lombok.Data;
 
 @Data
 public class AttendanceDTO {
-    private String userId;
+    private Long attendanceId;
+
+    private String internId;
+
+    private String attendanceStatus;
+
+    private String workDay;
+
+    private int version;
 }
