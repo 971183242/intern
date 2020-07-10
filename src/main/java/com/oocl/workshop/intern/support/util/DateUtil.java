@@ -1,4 +1,4 @@
-package com.oocl.workshop.intern.infrastructure.util;
+package com.oocl.workshop.intern.support.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

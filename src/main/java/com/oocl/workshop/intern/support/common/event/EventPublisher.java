@@ -1,10 +1,10 @@
-package com.oocl.workshop.intern.infrastructure.common.event;
+package com.oocl.workshop.intern.support.common.event;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
-import static com.oocl.workshop.intern.infrastructure.ActiveMQConfig.INTERN_QUEUE;
+import static com.oocl.workshop.intern.support.ActiveMQConfig.INTERN_QUEUE;
 
 @Service
 public class EventPublisher {
