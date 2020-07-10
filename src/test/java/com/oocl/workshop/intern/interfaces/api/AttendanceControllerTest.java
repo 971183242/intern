@@ -16,7 +16,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Date;
@@ -48,23 +47,17 @@ public class AttendanceControllerTest {
     @Test
     void should_get_empty_attendance_data_from_attendance_controller() throws Exception {
         when(attendanceAppService.findAttendances(any(), any())).thenReturn(new PeriodAttendance());
-        String result = getSearchPeriodResultAction()
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString();
-        Assertions.assertNotNull(result);
+
+        Assertions.assertNotNull(getSearchPeriodResultAction());
     }
 
     @Test
     void should_get_attendance_data_from_service() throws Exception {
         int attendanceCount = 3;
         String interId = "guda";
-        PeriodAttendance periodAttendance = getMockPeriodAttendanceWithNAttendance(interId, attendanceCount);
+        when(attendanceAppService.findAttendances(interId, DateUtil.parseDate("2020-07-08"))).thenReturn(getMockPeriodAttendanceWithNAttendance(interId, attendanceCount));
+        List<AttendanceDTO> attendanceDTOs = new ObjectMapper().readerForListOf(AttendanceDTO.class).readValue(getSearchPeriodResultAction());
 
-        when(attendanceAppService.findAttendances(interId, DateUtil.parseDate("2020-07-08"))).thenReturn(periodAttendance);
-        String result = getSearchPeriodResultAction()
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString();
-        List<AttendanceDTO> attendanceDTOs = new ObjectMapper().readerForListOf(AttendanceDTO.class).readValue(result);
         assertEquals(attendanceCount, attendanceDTOs.size());
         attendanceDTOs.forEach(dto -> assertEquals(interId, dto.getInternId()));
     }
@@ -81,10 +74,12 @@ public class AttendanceControllerTest {
         return periodAttendance;
     }
 
-    private ResultActions getSearchPeriodResultAction() throws Exception {
+    private String getSearchPeriodResultAction() throws Exception {
         return mockMvc.perform(get("/attendance/searchPeriod")
                 .param("userId", "guda")
                 .param("date", "2020-07-08")
-                .accept(MediaType.APPLICATION_JSON));
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
     }
 }
