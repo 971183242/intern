@@ -15,23 +15,20 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneOffset;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static org.apache.commons.lang3.time.DateUtils.isSameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.nullable;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -83,6 +80,40 @@ class AttendanceDomServiceTest {
                 () -> assertThat(attendance.getAttendanceStatus()).isEqualTo(AttendanceStatus.CheckedIn)
         );
     }
+
+
+    @Test
+    void findByInternIdAndStatus() {
+        String internId = "1";
+        AttendancePo attendancePo1 = new AttendancePo();
+        attendancePo1.setInternId(internId);
+        attendancePo1.setAttendanceStatus(AttendanceStatus.CheckedIn);
+        DailyAttendance attendance1 = new DailyAttendance();
+        attendance1.setInternId(internId);
+        attendance1.setAttendanceStatus(AttendanceStatus.CheckedIn);
+
+        AttendancePo attendancePo2 = new AttendancePo();
+        attendancePo2.setInternId(internId);
+        attendancePo2.setAttendanceStatus(AttendanceStatus.CheckedIn);
+        DailyAttendance attendance2 = new DailyAttendance();
+        attendance2.setInternId(internId);
+        attendance2.setAttendanceStatus(AttendanceStatus.CheckedIn);
+        when(attendanceFactory.getAttendance(attendancePo1)).thenReturn(attendance1);
+        when(attendanceFactory.getAttendance(attendancePo2)).thenReturn(attendance2);
+        when(attendanceRepo.findByInternIdAndAttendanceStatus(internId, AttendanceStatus.CheckedIn)).thenReturn(Arrays.asList(attendancePo1, attendancePo2));
+        List<DailyAttendance> dailyAttendanceList = attendanceDomService.findByInternIdAndStatus(internId, AttendanceStatus.CheckedIn);
+        assertTrue(dailyAttendanceList.containsAll(Arrays.asList(attendance1,attendance2)));
+        assertTrue(Arrays.asList(attendance1, attendance2).containsAll(dailyAttendanceList));
+    }
+
+    @Test
+    void findByInternIdAndStatusEmptyTest(){
+        String internId = "1";
+        when(attendanceRepo.findByInternIdAndAttendanceStatus(internId, AttendanceStatus.CheckedIn)).thenReturn(Arrays.asList());
+        List<DailyAttendance> dailyAttendanceList = attendanceDomService.findByInternIdAndStatus(internId, AttendanceStatus.CheckedIn);
+        assertTrue(CollectionUtils.isEmpty(dailyAttendanceList));
+    }
+
 
     @Test
     void getAttendance() {
