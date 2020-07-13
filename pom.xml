@@ -161,6 +161,11 @@
             <id>aliyunmaven</id>
             <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>OOCLCentral</id>
+            <name>OOCL Central</name>
+            <url>http://artifact:8081/artifactory/repo</url>
+        </repository>
     </repositories>
 
     <build>
