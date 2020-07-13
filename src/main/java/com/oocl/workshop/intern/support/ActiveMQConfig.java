@@ -1,4 +1,4 @@
-package com.oocl.workshop.intern.infrastructure;
+package com.oocl.workshop.intern.support;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

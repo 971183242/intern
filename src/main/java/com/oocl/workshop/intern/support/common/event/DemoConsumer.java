@@ -1,4 +1,4 @@
-package com.oocl.workshop.intern.infrastructure.common.event;
+package com.oocl.workshop.intern.support.common.event;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
@@ -7,7 +7,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 
 import javax.jms.Session;
 
-import static com.oocl.workshop.intern.infrastructure.ActiveMQConfig.INTERN_QUEUE;
+import static com.oocl.workshop.intern.support.ActiveMQConfig.INTERN_QUEUE;
 
 public class DemoConsumer {
     @JmsListener(destination = INTERN_QUEUE)

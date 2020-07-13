@@ -1,5 +1,6 @@
 package com.oocl.workshop.intern.domain.profile.service.impl;
 
+import com.google.gson.Gson;
 import com.oocl.workshop.intern.domain.profile.entity.Intern;
 import com.oocl.workshop.intern.domain.profile.entity.Team;
 import com.oocl.workshop.intern.domain.profile.entity.User;
@@ -9,6 +10,8 @@ import com.oocl.workshop.intern.domain.profile.repository.po.TeamPo;
 import com.oocl.workshop.intern.domain.profile.repository.po.UserPo;
 import com.oocl.workshop.intern.domain.profile.service.ProfileFactory;
 import com.oocl.workshop.intern.domain.profile.service.ProfileDomService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProfileDomServiceImpl implements ProfileDomService {
+    static Logger logger = LoggerFactory.getLogger(ProfileDomServiceImpl.class);
 
     @Autowired
     private ProfileFactory profileFactory;
@@ -35,25 +39,31 @@ public class ProfileDomServiceImpl implements ProfileDomService {
         List<Team> teamList = teamPoList.stream()
                 .map(profileFactory::getTeam)
                 .collect(Collectors.toList());
+        logger.debug("findAllTeams:" + new Gson().toJson(teamList));
         return teamList;
     }
 
     @Override
     public User createUser(User user) {
+        logger.info("create user:" + new Gson().toJson(user));
         UserPo userPo = profileFactory.createUserPo(user);
         userPo = userRepo.save(userPo);
+        logger.info("saved userPo:" + new Gson().toJson(userPo));
         return profileFactory.getUser(userPo);
     }
 
     @Override
     public User updateUser(User user) {
+        logger.info("update user:" + new Gson().toJson(user));
         UserPo userPo = profileFactory.createUserPo(user);
         userPo = userRepo.save(userPo);
+        logger.info("updated userPo:" + new Gson().toJson(userPo));
         return profileFactory.getUser(userPo);
     }
 
     @Override
     public Optional<User> findUserByDomainId(String domainId) {
+        logger.info("findUserByDomainId domainId:" + domainId);
         User user = userRepo.findById(domainId)
                 .map(profileFactory::getUser)
                 .orElse(null);
@@ -62,10 +72,12 @@ public class ProfileDomServiceImpl implements ProfileDomService {
 
     @Override
     public List<Intern> findTeamInterns(String teamId, Date from, Date to) {
+        logger.info(String.format("findTeamInterns. teamId:%s, from:%s, to:%s", teamId, from, to));
         List<UserPo> internPoList = userRepo.findTeamActiveInterns(teamId, from, to);
         List<Intern> internList = internPoList.stream()
                 .map(profileFactory::getIntern)
                 .collect(Collectors.toList());
+        logger.debug("findTeamInterns:" + new Gson().toJson(internList));
         return internList;
     }
 

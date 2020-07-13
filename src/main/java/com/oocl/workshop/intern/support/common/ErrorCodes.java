@@ -1,4 +1,4 @@
-package com.oocl.workshop.intern.infrastructure.common;
+package com.oocl.workshop.intern.support.common;
 
 public class ErrorCodes {
     public static final String INVALID_ATTENDANCE_CONFIRM_STATUS = "IA0001";

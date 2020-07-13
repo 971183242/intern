@@ -1,4 +1,4 @@
-package com.oocl.workshop.intern.infrastructure;
+package com.oocl.workshop.intern.support;
 
 public class InternApplicationException extends RuntimeException {
     private String code;

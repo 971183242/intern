@@ -1,4 +1,4 @@
-package com.oocl.workshop.intern.infrastructure.common.event;
+package com.oocl.workshop.intern.support.common.event;
 
 import lombok.Data;
 
