@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.time.DateUtils.isSameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -102,16 +103,79 @@ class AttendanceDomServiceTest {
         when(attendanceFactory.getAttendance(attendancePo2)).thenReturn(attendance2);
         when(attendanceRepo.findByInternIdAndAttendanceStatus(internId, AttendanceStatus.CheckedIn)).thenReturn(Arrays.asList(attendancePo1, attendancePo2));
         List<DailyAttendance> dailyAttendanceList = attendanceDomService.findByInternIdAndStatus(internId, AttendanceStatus.CheckedIn);
-        assertTrue(dailyAttendanceList.containsAll(Arrays.asList(attendance1,attendance2)));
+        assertTrue(dailyAttendanceList.containsAll(Arrays.asList(attendance1, attendance2)));
         assertTrue(Arrays.asList(attendance1, attendance2).containsAll(dailyAttendanceList));
     }
 
     @Test
-    void findByInternIdAndStatusEmptyTest(){
+    void findByInternIdAndStatusEmptyTest() {
         String internId = "1";
         when(attendanceRepo.findByInternIdAndAttendanceStatus(internId, AttendanceStatus.CheckedIn)).thenReturn(Arrays.asList());
         List<DailyAttendance> dailyAttendanceList = attendanceDomService.findByInternIdAndStatus(internId, AttendanceStatus.CheckedIn);
         assertTrue(CollectionUtils.isEmpty(dailyAttendanceList));
+    }
+
+    @Test
+    void confirmPeriodAttendance() {
+        String internId = "testId";
+        LocalDateTime localDateTime = LocalDateTime.of(2020, Month.JUNE, 20, 10, 0);
+        Date workDay = Date.from(localDateTime.toInstant(ZoneOffset.UTC));
+
+        DailyAttendance approvedAttendance = new DailyAttendance();
+        approvedAttendance.setInternId(internId);
+        approvedAttendance.setWorkDay(workDay);
+        approvedAttendance.setAttendanceStatus(AttendanceStatus.Approved);
+        AttendancePo approvedAttendancePo = new AttendancePo();
+        approvedAttendancePo.setInternId(internId);
+        approvedAttendancePo.setWorkDay(workDay);
+        approvedAttendancePo.setAttendanceStatus(AttendanceStatus.Approved);
+        
+        DailyAttendance rejectedAttendance = new DailyAttendance();
+        rejectedAttendance.setAttendanceId(1L);
+        rejectedAttendance.setInternId(internId);
+        rejectedAttendance.setWorkDay(workDay);
+        rejectedAttendance.setAttendanceStatus(AttendanceStatus.Rejected);
+        AttendancePo rejectAttendancePo = new AttendancePo();
+        rejectAttendancePo.setAttendanceId(1L);
+        rejectAttendancePo.setInternId(internId);
+        rejectAttendancePo.setWorkDay(workDay);
+        rejectAttendancePo.setAttendanceStatus(AttendanceStatus.Rejected);
+
+        DailyAttendance checkInAttendance = new DailyAttendance();
+        checkInAttendance.setAttendanceId(1L);
+        checkInAttendance.setInternId(internId);
+        checkInAttendance.setWorkDay(workDay);
+        checkInAttendance.setAttendanceStatus(AttendanceStatus.CheckedIn);
+        AttendancePo checkInAttendancePo = new AttendancePo();
+        checkInAttendancePo.setAttendanceId(1L);
+        checkInAttendancePo.setInternId(internId);
+        checkInAttendancePo.setWorkDay(workDay);
+        checkInAttendancePo.setAttendanceStatus(AttendanceStatus.CheckedIn);
+
+        when(attendanceFactory.createPo(approvedAttendance)).thenReturn(approvedAttendancePo);
+        when(attendanceRepo.save(approvedAttendancePo)).thenReturn(approvedAttendancePo);
+        when(attendanceFactory.getAttendance(approvedAttendancePo)).thenReturn(approvedAttendance);
+
+        when(attendanceFactory.createPo(rejectedAttendance)).thenReturn(rejectAttendancePo);
+        when(attendanceRepo.save(rejectAttendancePo)).thenReturn(rejectAttendancePo);
+        when(attendanceFactory.getAttendance(rejectAttendancePo)).thenReturn(rejectedAttendance);
+
+        PeriodAttendance periodAttendance = new PeriodAttendance();
+        periodAttendance.getAttendances().add(approvedAttendance);
+        periodAttendance.getAttendances().add(rejectedAttendance);
+        periodAttendance.getAttendances().add(checkInAttendance);
+
+        PeriodAttendance result = attendanceDomService.confirmPeriodAttendance(periodAttendance);
+
+        List<DailyAttendance> approvedAttendances = result.getAttendances().stream().filter(dailyAttendance -> dailyAttendance.getAttendanceStatus().equals(AttendanceStatus.Approved)).collect(Collectors.toList());
+        List<DailyAttendance> checkedInAttendances = result.getAttendances().stream().filter(dailyAttendance -> dailyAttendance.getAttendanceStatus().equals(AttendanceStatus.CheckedIn)).collect(Collectors.toList());
+        List<DailyAttendance> rejectedAttendances = result.getAttendances().stream().filter(dailyAttendance -> dailyAttendance.getAttendanceStatus().equals(AttendanceStatus.Rejected)).collect(Collectors.toList());
+
+        assertAll(() -> assertThat(approvedAttendances.size()).isEqualTo(1),
+                () -> assertThat(checkedInAttendances.size()).isEqualTo(1),
+                () -> assertThat(rejectedAttendances.size()).isEqualTo(1));
+
+
     }
 
 
