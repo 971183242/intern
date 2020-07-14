@@ -1,0 +1,10 @@
+password=SSO_AGENT_CONFIG_PASSWORD
+cookie-path=/
+token-renewuntil=90000
+use-sunjce=false
+token-lifetime=60000
+use-cookie=false
+token-notbefore-tolerance=3600
+cipher-suite=2
+token-name=opentoken
+obfuscate-password=false

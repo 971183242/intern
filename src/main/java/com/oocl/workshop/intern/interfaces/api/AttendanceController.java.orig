@@ -4,13 +4,19 @@ import com.oocl.workshop.intern.app.service.AttendanceAppService;
 import com.oocl.workshop.intern.domain.attendance.entity.PeriodAttendance;
 import com.oocl.workshop.intern.interfaces.assembler.AttendanceAssembler;
 import com.oocl.workshop.intern.interfaces.dto.attendance.AttendanceDTO;
+<<<<<<< HEAD
+import com.oocl.workshop.intern.support.common.ErrorCodes;
+import org.springframework.http.HttpStatus;
+=======
 import com.oocl.workshop.intern.support.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.query.Procedure;
+>>>>>>> 5634e9d73829d938d803b9c7f698d0061babaee7
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.text.ParseException;
 import java.util.List;
@@ -22,6 +28,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("/attendance")
 public class AttendanceController {
 
+<<<<<<< HEAD
+    @GetMapping("/period/{userId}/{date}")
+    public AttendanceDTO getPeriodAttendance(@PathVariable String userId, @PathVariable String date) {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorCodes.ATTENDANCE_RECORD_NOT_FOUND);
+//        return new AttendanceDTO();
+=======
     private AttendanceAppService attendanceAppService;
 
     @Autowired
@@ -34,5 +46,6 @@ public class AttendanceController {
     public List<AttendanceDTO> getPeriodAttendance(@RequestParam("userId") String userId, @RequestParam("date") String date) throws ParseException {
         PeriodAttendance attendances = attendanceAppService.findAttendances(userId, DateUtil.parseDate(date));
         return attendances.getAttendances().stream().map(AttendanceAssembler::toDTO).collect(toList());
+>>>>>>> 5634e9d73829d938d803b9c7f698d0061babaee7
     }
 }

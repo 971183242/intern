@@ -16,6 +16,7 @@ public interface AttendanceDomService {
     PeriodAttendance confirmPeriodAttendance(PeriodAttendance periodAttendance);
 
     DailyAttendance getAttendance(long attendanceId);
+
     List<DailyAttendance> findByInternIdAndStatus(String internId, AttendanceStatus status);
 
     DailyAttendance updateAttendance(DailyAttendance dailyAttendance);
