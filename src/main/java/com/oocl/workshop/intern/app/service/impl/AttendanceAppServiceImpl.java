@@ -80,21 +80,21 @@ public class AttendanceAppServiceImpl implements AttendanceAppService {
     public DailyAttendance confirm(DailyAttendance requestAttendance) {
         DailyAttendance dailyAttendance = attendanceDomService.getAttendance(requestAttendance.getAttendanceId());
         if (dailyAttendance == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, messageSource.getMessage(ATTENDANCE_RECORD_NOT_FOUND, null, getLocale()));
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ATTENDANCE_RECORD_NOT_FOUND);
         }
         if (AttendanceStatus.Approved.equals(requestAttendance.getAttendanceStatus())) {
             approveAttendance(dailyAttendance);
         } else if (AttendanceStatus.Rejected.equals(requestAttendance.getAttendanceStatus())) {
             rejectAttendance(dailyAttendance);
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, messageSource.getMessage(INVALID_ATTENDANCE_CONFIRM_STATUS, null, getLocale()));
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_ATTENDANCE_CONFIRM_STATUS);
         }
         return attendanceDomService.updateAttendance(dailyAttendance);
     }
 
     private void rejectAttendance(DailyAttendance dailyAttendance) {
         if (AttendanceStatus.Approved.equals(dailyAttendance.getAttendanceStatus())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, messageSource.getMessage(TRY_TO_REJECT_APPROVED_ATTENDANCE, null, getLocale()));
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, TRY_TO_REJECT_APPROVED_ATTENDANCE);
         }
         dailyAttendance.setAttendanceStatus(AttendanceStatus.Rejected);
     }
