@@ -1,6 +1,7 @@
 package com.oocl.workshop.intern.interfaces.api;
 
 import com.oocl.workshop.intern.app.service.AttendanceAppService;
+import com.oocl.workshop.intern.domain.attendance.entity.PeriodAttendance;
 import com.oocl.workshop.intern.interfaces.assembler.AttendanceAssembler;
 import com.oocl.workshop.intern.interfaces.dto.attendance.AttendanceDTO;
 import com.oocl.workshop.intern.support.util.DateUtil;
@@ -37,19 +38,22 @@ public class AttendanceController {
                 .collect(toList());
     }
 
-    @PostMapping(value = "/checkIn", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/checkIn", consumes = APPLICATION_JSON_VALUE)
     public boolean internCheckIn(@RequestBody AttendanceDTO dto) throws ParseException {
         return Objects.nonNull(attendanceAppService.checkIn(dto.getInternId(), DateUtil.parseDate(dto.getWorkDay())));
     }
 
-    @PostMapping(value = "/cancelCheckIn", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/cancelCheckIn", consumes = APPLICATION_JSON_VALUE)
     public boolean internCancelCheckIn(@RequestBody AttendanceDTO dto) {
         attendanceAppService.cancelCheckIn(dto.getAttendanceId());
         return true;
     }
 
-    @PostMapping(value = "/confirm", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/confirm", consumes = APPLICATION_JSON_VALUE)
     public boolean confirmAttendance(@RequestBody List<AttendanceDTO> dtos) {
-        return dtos.stream().map(AttendanceAssembler::toDO).map(attendanceAppService::confirm).allMatch(Objects::nonNull);
+        PeriodAttendance periodAttendance = new PeriodAttendance();
+        dtos.stream().map(AttendanceAssembler::toDO).forEach(periodAttendance.getAttendances()::add);
+        attendanceAppService.confirmPeriodAttendance(periodAttendance);
+        return true;
     }
 }

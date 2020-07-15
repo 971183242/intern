@@ -12,11 +12,11 @@ public interface AttendanceAppService {
 
     void cancelCheckIn(long id);
 
-    DailyAttendance confirm(DailyAttendance requestAttendance);
-
     boolean containsUnconfirmedAttendance(String internId);
 
     PeriodAttendance findAttendances(String internId, Date date);
 
     List<Intern> getInternsActiveInDateContainedPeriod(String teamId, Date date);
+
+    PeriodAttendance confirmPeriodAttendance(PeriodAttendance periodAttendance);
 }
