@@ -5,6 +5,7 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
 import static com.oocl.workshop.intern.support.ActiveMQConfig.INTERN_QUEUE;
+import static com.oocl.workshop.intern.support.ActiveMQConfig.REPORT_QUEUE;
 
 @Service
 public class EventPublisher {
@@ -13,5 +14,9 @@ public class EventPublisher {
 
     public void publish(DomainEvent event) {
         jmsTemplate.convertAndSend(INTERN_QUEUE, event);
+    }
+
+    public void triggerReportEvent(DomainEvent event) {
+        jmsTemplate.convertAndSend(REPORT_QUEUE, event);
     }
 }

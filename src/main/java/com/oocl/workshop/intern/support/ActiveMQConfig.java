@@ -15,6 +15,8 @@ public class ActiveMQConfig {
 
     public static final String INTERN_QUEUE = "intern-event-queue";
 
+    public static final String REPORT_QUEUE = "intern-report-queue";
+
     @Bean
     public JmsListenerContainerFactory<?> queueListenerFactory() {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
