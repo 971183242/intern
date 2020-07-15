@@ -21,8 +21,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
-@TestPropertySource("classpath:application-test.properties")
-@Sql({"/sqls/insert-team.sql", "/sqls/insert-user.sql"})
+@Sql({"classpath:test-sqls/insert-team.sql","classpath:test-sqls/insert-user.sql"})
 public class UserRepoTest {
     @Autowired
     UserRepo userRepo;

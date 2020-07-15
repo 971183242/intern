@@ -13,8 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
-@TestPropertySource("classpath:application-test.properties")
-@Sql("/sqls/insert-team.sql")
+@Sql("classpath:test-sqls/insert-team.sql")
 class TeamRepoTest {
 
     @Autowired

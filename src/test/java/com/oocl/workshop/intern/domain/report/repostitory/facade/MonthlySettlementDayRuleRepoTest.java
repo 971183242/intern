@@ -18,14 +18,14 @@ class MonthlySettlementDayRuleRepoTest {
     @Test
     void getRule() {
         MonthlySettlementDayRule rule = new MonthlySettlementDayRule();
-        rule.setDay(20);
+        rule.setDay(21);
         ruleRepo.save(rule);
 
-        assertEquals(20, ruleRepo.getMonthlySettlementDay());
+        assertEquals(21, ruleRepo.getMonthlySettlementDay());
     }
 
     @Test
     void getNone() {
-        assertEquals(25, ruleRepo.getMonthlySettlementDay());
+        assertEquals(20, ruleRepo.getMonthlySettlementDay());
     }
 }
