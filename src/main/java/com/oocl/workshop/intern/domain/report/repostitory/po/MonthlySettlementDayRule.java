@@ -10,7 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "T_SETTLEMENT_DAY")
 public class MonthlySettlementDayRule {
-    public static final int DEFAULT_DAY = 25;
+    public static final int DEFAULT_DAY = 20;
 
     @Id
     private int day = DEFAULT_DAY;

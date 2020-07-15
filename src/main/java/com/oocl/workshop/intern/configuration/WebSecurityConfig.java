@@ -29,8 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
+        http.authorizeRequests()
                 .antMatchers(
                         "/assets/**",
                         "/bower_components/**",
@@ -44,7 +43,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/favicon.ico",
                         "/test",
                         "/error/403",
-                        "/toLogout").permitAll()
+                        "/toLogout",
+                        "/h2-console/**").permitAll()
                 .and()
                 .formLogin()
                 .loginPage("/login").loginProcessingUrl("/loginPage")
@@ -59,9 +59,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("toLogout")
                 .deleteCookies("JSESSIONID")
                 .permitAll()
-                .and()
-                .csrf()
-                .disable();
+                .and().headers().frameOptions().sameOrigin()
+                .and().csrf().disable();
     }
 
     @Override
