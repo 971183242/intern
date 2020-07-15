@@ -12,18 +12,11 @@ import com.oocl.workshop.intern.domain.report.service.MonthlySettlementDayRuleSe
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import static com.oocl.workshop.intern.support.common.ErrorCodes.ATTENDANCE_RECORD_NOT_FOUND;
-import static com.oocl.workshop.intern.support.common.ErrorCodes.INVALID_ATTENDANCE_CONFIRM_STATUS;
-import static com.oocl.workshop.intern.support.common.ErrorCodes.TRY_TO_REJECT_APPROVED_ATTENDANCE;
-import static org.springframework.context.i18n.LocaleContextHolder.getLocale;
 
 @Data
 @Service
@@ -70,39 +63,6 @@ public class AttendanceAppServiceImpl implements AttendanceAppService {
         attendanceDomService.removeAttendance(id);
     }
 
-    /**
-     * Partially update with DailyAttendance
-     * Now no concurrency check, to be supplemented
-     * @param requestAttendance only use attendanceStatus
-     * @return
-     */
-    @Override
-    public DailyAttendance confirm(DailyAttendance requestAttendance) {
-        DailyAttendance dailyAttendance = attendanceDomService.getAttendance(requestAttendance.getAttendanceId());
-        if (dailyAttendance == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ATTENDANCE_RECORD_NOT_FOUND);
-        }
-        if (AttendanceStatus.Approved.equals(requestAttendance.getAttendanceStatus())) {
-            approveAttendance(dailyAttendance);
-        } else if (AttendanceStatus.Rejected.equals(requestAttendance.getAttendanceStatus())) {
-            rejectAttendance(dailyAttendance);
-        } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_ATTENDANCE_CONFIRM_STATUS);
-        }
-        return attendanceDomService.updateAttendance(dailyAttendance);
-    }
-
-    private void rejectAttendance(DailyAttendance dailyAttendance) {
-        if (AttendanceStatus.Approved.equals(dailyAttendance.getAttendanceStatus())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, TRY_TO_REJECT_APPROVED_ATTENDANCE);
-        }
-        dailyAttendance.setAttendanceStatus(AttendanceStatus.Rejected);
-    }
-
-    private void approveAttendance(DailyAttendance dailyAttendance) {
-        dailyAttendance.setAttendanceStatus(AttendanceStatus.Approved);
-    }
-
     @Override
     public boolean containsUnconfirmedAttendance(String internId) {
         return !attendanceRepo.findByInternIdAndAttendanceStatus(internId, AttendanceStatus.CheckedIn).isEmpty();
@@ -119,5 +79,10 @@ public class AttendanceAppServiceImpl implements AttendanceAppService {
         Calendar currentMonthFirstDate = Calendar.getInstance();
         List<Date> settlementDateWindow = monthlySettlementDayRuleService.getMonthlySettlementDateWindow(date);
         return profileDomService.findTeamInterns(teamId, settlementDateWindow.get(0), settlementDateWindow.get(1));
+    }
+
+    @Override
+    public PeriodAttendance confirmPeriodAttendance(PeriodAttendance periodAttendance) {
+        return attendanceDomService.confirmPeriodAttendance(periodAttendance);
     }
 }

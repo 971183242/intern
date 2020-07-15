@@ -1,6 +1,7 @@
 package com.oocl.workshop.intern.interfaces.api;
 
 import com.oocl.workshop.intern.app.service.AttendanceAppService;
+import com.oocl.workshop.intern.domain.attendance.entity.PeriodAttendance;
 import com.oocl.workshop.intern.interfaces.assembler.AttendanceAssembler;
 import com.oocl.workshop.intern.interfaces.dto.attendance.AttendanceDTO;
 import com.oocl.workshop.intern.support.util.DateUtil;
@@ -50,6 +51,9 @@ public class AttendanceController {
 
     @PostMapping(value = "/confirm", produces = APPLICATION_JSON_VALUE)
     public boolean confirmAttendance(@RequestBody List<AttendanceDTO> dtos) {
-        return dtos.stream().map(AttendanceAssembler::toDO).map(attendanceAppService::confirm).allMatch(Objects::nonNull);
+        PeriodAttendance periodAttendance = new PeriodAttendance();
+        dtos.stream().map(AttendanceAssembler::toDO).forEach(periodAttendance.getAttendances()::add);
+        attendanceAppService.confirmPeriodAttendance(periodAttendance);
+        return true;
     }
 }

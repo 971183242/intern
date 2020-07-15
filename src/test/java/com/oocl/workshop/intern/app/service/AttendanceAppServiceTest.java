@@ -11,7 +11,6 @@ import com.oocl.workshop.intern.domain.attendance.service.AttendanceDomService;
 import com.oocl.workshop.intern.domain.profile.entity.Intern;
 import com.oocl.workshop.intern.domain.profile.service.ProfileDomService;
 import com.oocl.workshop.intern.domain.report.service.MonthlySettlementDayRuleService;
-import com.oocl.workshop.intern.support.common.ErrorCodes;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,8 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -118,88 +115,6 @@ public class AttendanceAppServiceTest {
         when(profileDomService.findTeamInterns("team", startDate, endDate)).thenReturn(mockedInterns);
         List<Intern> interns = service.getInternsActiveInDateContainedPeriod("team", date);
         assertEquals(2, interns.size());
-    }
-
-    @Test
-    void approveWithoutAttendanceRecord() {
-        AttendanceAppServiceImpl service = new AttendanceAppServiceImpl();
-        service.setAttendanceDomService(attendanceDomService);
-        when(attendanceDomService.getAttendance(anyLong())).thenReturn(null);
-        DailyAttendance attendance = new DailyAttendance();
-        attendance.setAttendanceId(100L);
-        attendance.setAttendanceStatus(AttendanceStatus.Approved);
-
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> service.confirm(attendance));
-        assertEquals(ErrorCodes.ATTENDANCE_RECORD_NOT_FOUND, exception.getReason());
-    }
-
-    @Test
-    void approveRejectedAttendance() {
-        confirmAttendanceSuccess(AttendanceStatus.Rejected, AttendanceStatus.Approved);
-    }
-
-    @Test
-    void approveApprovedAttendance() {
-        confirmAttendanceSuccess(AttendanceStatus.Approved, AttendanceStatus.Approved);
-    }
-
-    @Test
-    void rejectApprovedAttendance() {
-        long attendanceId = 100L;
-        DailyAttendance attendance = new DailyAttendance();
-        attendance.setAttendanceStatus(AttendanceStatus.Approved);
-
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class,
-                () -> confirmAttendance(AttendanceStatus.Rejected, attendanceId, attendance));
-        assertEquals(ErrorCodes.TRY_TO_REJECT_APPROVED_ATTENDANCE, exception.getReason());
-    }
-
-    @Test
-    void rejectAttendance() {
-        confirmAttendanceSuccess(AttendanceStatus.CheckedIn, AttendanceStatus.Rejected);
-    }
-
-    @Test
-    void useCheckinAsConfirmTargetStatus() {
-        long attendanceId = 100L;
-        DailyAttendance attendance = new DailyAttendance();
-        attendance.setAttendanceStatus(AttendanceStatus.CheckedIn);
-
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class,
-                () -> confirmAttendance(AttendanceStatus.CheckedIn, attendanceId, attendance));
-        assertEquals(ErrorCodes.INVALID_ATTENDANCE_CONFIRM_STATUS, exception.getReason());
-    }
-
-    @Test
-    void confirmWithoutSpecifedStatus() {
-        long attendanceId = 100L;
-        DailyAttendance attendance = new DailyAttendance();
-        attendance.setAttendanceStatus(AttendanceStatus.CheckedIn);
-
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class,
-                () -> confirmAttendance(null, attendanceId, attendance));
-        assertEquals(ErrorCodes.INVALID_ATTENDANCE_CONFIRM_STATUS, exception.getReason());
-    }
-
-    private void confirmAttendanceSuccess(AttendanceStatus currentStatus, AttendanceStatus targetStatus) {
-        long attendanceId = 100L;
-        DailyAttendance attendance = new DailyAttendance();
-        attendance.setAttendanceStatus(currentStatus);
-
-        DailyAttendance updatedAttendance = confirmAttendance(targetStatus, attendanceId, attendance);
-        assertEquals(targetStatus, updatedAttendance.getAttendanceStatus());
-    }
-
-    private DailyAttendance confirmAttendance(AttendanceStatus targetStatus, long attendanceId, DailyAttendance attendance) {
-        AttendanceAppServiceImpl service = new AttendanceAppServiceImpl();
-        service.setAttendanceDomService(attendanceDomService);
-        when(attendanceDomService.getAttendance(attendanceId)).thenReturn(attendance);
-        when(attendanceDomService.updateAttendance(any())).thenReturn(attendance);
-        DailyAttendance requestAttendance = new DailyAttendance();
-        requestAttendance.setAttendanceId(attendanceId);
-        requestAttendance.setAttendanceStatus(targetStatus);
-
-        return service.confirm(requestAttendance);
     }
 
     @Test
