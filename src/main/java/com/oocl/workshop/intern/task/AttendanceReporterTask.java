@@ -6,6 +6,7 @@ import com.oocl.workshop.intern.support.common.event.DomainEvent;
 import com.oocl.workshop.intern.support.common.event.EventPublisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -18,15 +19,16 @@ public class AttendanceReporterTask {
 
     Logger logger = LoggerFactory.getLogger(AttendanceReporterTask.class);
 
+    @Autowired
+    private EventPublisher eventPublisher;
+
     @Scheduled(cron = "0/5 * *  * * MON-FRI ")
     public void attendanceReportTask() {
-        EventPublisher publisher = new EventPublisher();
         DomainEvent event = new DomainEvent();
         event.setId(UUID.randomUUID().toString());
         event.setTimestamp(new Date());
         event.setSource("attendanceReport");
-//        publisher.triggerReportEvent(event);
+        eventPublisher.triggerReportEvent(event);
         logger.info("AttendanceReporterTask" +  new Gson().toJson(event));
-        System.out.println("attendanceReportTask");
     }
 }
