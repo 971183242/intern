@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -33,7 +34,7 @@ public class AttendanceDomServiceImpl implements AttendanceDomService {
     private DailyAttendance createAttendance(DailyAttendance attendance) {
         AttendancePo attendancePo = attendanceFactory.createPo(attendance);
         attendancePo = attendanceRepo.save(attendancePo);
-        logger.info("createAttendance Po:"+ new Gson().toJson(attendancePo));
+        logger.info("createAttendance Po:" + new Gson().toJson(attendancePo));
         return attendanceFactory.getAttendance(attendancePo);
     }
 
@@ -105,6 +106,13 @@ public class AttendanceDomServiceImpl implements AttendanceDomService {
         logger.info(String.format("findByInternIdAndStatus. internId:%s, attendanceStatus:%s", internId, status));
         List<AttendancePo> attendancePoList = attendanceRepo.findByInternIdAndAttendanceStatus(internId, status);
         return attendancePoList.stream().map(po -> attendanceFactory.getAttendance(po)).collect(Collectors.toList());
+    }
+
+    @Override
+    public DailyAttendance findByInternIdAndWorkDay(String internId, Date workDay) {
+        logger.info(String.format("findByInternIdAndWorkDay. internId:%s, attendanceStatus:%s", internId, workDay.toString()));
+        List<AttendancePo> specificDailyAttendancePo = attendanceRepo.findByInternIdAndWorkDayBetweenOrderByWorkDay(internId, workDay, workDay);
+        return CollectionUtils.isEmpty(specificDailyAttendancePo) ? null : attendanceFactory.getAttendance(specificDailyAttendancePo.get(0));
     }
 
     private DailyAttendance confirmAttendance(DailyAttendance attendance) {

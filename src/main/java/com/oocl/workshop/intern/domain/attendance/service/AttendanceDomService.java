@@ -19,6 +19,8 @@ public interface AttendanceDomService {
 
     List<DailyAttendance> findByInternIdAndStatus(String internId, AttendanceStatus status);
 
+    DailyAttendance findByInternIdAndWorkDay(String internId, Date workDay);
+
     DailyAttendance updateAttendance(DailyAttendance dailyAttendance);
 
     PeriodAttendance getPeriodAttendance(String internId, Date startDate, Date endDate);
