@@ -109,10 +109,12 @@ public class AttendanceDomServiceImpl implements AttendanceDomService {
     }
 
     @Override
-    public DailyAttendance findByInternIdAndWorkDay(String internId, Date workDay) {
+    public Optional<DailyAttendance> findByInternIdAndWorkDay(String internId, Date workDay) {
         logger.info(String.format("findByInternIdAndWorkDay. internId:%s, attendanceStatus:%s", internId, workDay.toString()));
         List<AttendancePo> specificDailyAttendancePo = attendanceRepo.findByInternIdAndWorkDayBetweenOrderByWorkDay(internId, workDay, workDay);
-        return CollectionUtils.isEmpty(specificDailyAttendancePo) ? null : attendanceFactory.getAttendance(specificDailyAttendancePo.get(0));
+        return CollectionUtils.isEmpty(specificDailyAttendancePo)
+                ? Optional.empty()
+                : Optional.ofNullable(attendanceFactory.getAttendance(specificDailyAttendancePo.get(0)));
     }
 
     private DailyAttendance confirmAttendance(DailyAttendance attendance) {

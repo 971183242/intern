@@ -6,6 +6,7 @@ import com.oocl.workshop.intern.domain.attendance.entity.PeriodAttendance;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface AttendanceDomService {
 
@@ -19,7 +20,7 @@ public interface AttendanceDomService {
 
     List<DailyAttendance> findByInternIdAndStatus(String internId, AttendanceStatus status);
 
-    DailyAttendance findByInternIdAndWorkDay(String internId, Date workDay);
+    Optional<DailyAttendance> findByInternIdAndWorkDay(String internId, Date workDay);
 
     DailyAttendance updateAttendance(DailyAttendance dailyAttendance);
 

@@ -1,7 +1,7 @@
 package com.oocl.workshop.intern.task;
 
 import com.google.gson.Gson;
-import com.oocl.workshop.intern.domain.attendance.service.AttendanceFactory;
+import com.oocl.workshop.intern.support.ActiveMQConfig;
 import com.oocl.workshop.intern.support.common.event.DomainEvent;
 import com.oocl.workshop.intern.support.common.event.EventPublisher;
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ public class AttendanceReporterTask {
         event.setId(UUID.randomUUID().toString());
         event.setTimestamp(new Date());
         event.setSource("attendanceReport");
-        eventPublisher.triggerReportEvent(event);
+        eventPublisher.publish(event, ActiveMQConfig.REPORT_QUEUE);
         logger.info("AttendanceReporterTask" +  new Gson().toJson(event));
     }
 }

@@ -189,8 +189,8 @@ class AttendanceDomServiceTest {
         dailyAttendance.setAttendanceId(attendanceId);
         when(attendanceRepo.findByInternIdAndWorkDayBetweenOrderByWorkDay(internId, workDay, workDay)).thenReturn(Collections.singletonList(attendancePo));
         when(attendanceFactory.getAttendance(attendancePo)).thenReturn(dailyAttendance);
-        DailyAttendance result = attendanceDomService.findByInternIdAndWorkDay(internId, workDay);
-        assertSame(result, dailyAttendance);
+        Optional<DailyAttendance> resultOpt = attendanceDomService.findByInternIdAndWorkDay(internId, workDay);
+        assertSame(resultOpt.get(), dailyAttendance);
     }
 
     @Test
@@ -198,8 +198,8 @@ class AttendanceDomServiceTest {
         String internId = "1";
         Date workDay = new Date();
         when(attendanceRepo.findByInternIdAndWorkDayBetweenOrderByWorkDay(internId, workDay, workDay)).thenReturn(Arrays.asList());
-        DailyAttendance result = attendanceDomService.findByInternIdAndWorkDay(internId, workDay);
-        assertTrue(null == result);
+        Optional<DailyAttendance> resultOpt = attendanceDomService.findByInternIdAndWorkDay(internId, workDay);
+        assertFalse(resultOpt.isPresent());
     }
 
 
