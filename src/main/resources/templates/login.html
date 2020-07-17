@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <link rel="icon" type="image/x-icon" th:href="@{img/favicon.ico}" />
+</head>
+<body class="sidebar-fixed">
+                        <form name="loginForm">
+                            <div class="content-layout-small">
+                                <div class="dataflow-alert dataflow-alert-info" th:action="@{/login/form}" method="post">
+                                    <p> Please sign in </p>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="username">Username</label>
+                                    <div class="input-wrapper">
+                                        <input class="form-control" readonly="readonly" th:value="${username}" id="username" name="username" placeholder="Username" autocomplete="off" required="required" type="text"/>
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="password">Password</label>
+                                    <div class="input-wrapper">
+                                        <input class="form-control" readonly="readonly" value="default" id="password" name="password" placeholder="Password" autocomplete="off" required="required" type="password"/>
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="dataflow-page-actions">
+                                    <button class="btn btn-primary" disabled="disabled" id="loginButton" type="button" > Login in ......</button>
+                                </div>
+                            </div>
+                        </form>
+<script th:src="@{js/common/jquery-2.1.1.min.js}"></script>
+<script type="text/javascript" th:src="@{js/login.js}"></script>
+</body></html>

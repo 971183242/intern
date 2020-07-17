@@ -15,3 +15,5 @@ insert into t_user(domain_id,name,email,user_type,role,date_from, date_to,team_i
 values('intern_0','实习生甲','intern_0@oocl.com','INTERN','ROLE_INTERN','2020-01-01','2020-06-01',null);
 insert into t_user(domain_id,name,email,user_type,role,date_from,date_to,team_id)
 values('intern_1','实习生乙','intern_1@oocl.com','INTERN','ROLE_INTERN','2020-02-01','2020-06-01','TMS');
+insert into t_user(domain_id,name,email,user_type,role,date_from,date_to,team_id)
+values('ouyanob','欧阳俊','intern_1@oocl.com','INTERN','ROLE_INTERN','2020-02-01','2020-06-01','TMS');

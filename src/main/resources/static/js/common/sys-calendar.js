@@ -1,9 +1,19 @@
-﻿
+﻿var currentMonth = new Date().getMonth() + 1;
+let attendanceList = [];
+let nowDateStr = '';
+let currentIntern = '';
+let checkInStr = '<div class="calendar-replenish" status="1">待审批</div>';
+let approvedStr = '<div class="calendar-sign" status="0">已签到</div>';
+let rejectedStr = '<div class="calendar-reject" status="2">拒批</div>';
+
+console.log("currentMonth:" + currentMonth);
 var Calendar = function (element, options) {
     this.el = $(element);
     this.options = $.extend(true, {}, this.options, options);
     this.init();
+
 };
+
 Calendar.prototype = {
     options: {
         mode: "month",
@@ -73,39 +83,6 @@ Calendar.prototype = {
             var mode = modeText == "月" ? "month" : "year";
             me.changeMode(mode);
         })
-        //calendar-cell日期点击事件
-        // el.on("click", ".calendar-cell-active", function (e) {
-        //     e.stopPropagation();
-        //     $(".dropdown-month").removeClass("open");
-        //     $(".dropdown-year").removeClass("open");
-        //     var cellDate = $(this).attr("title");
-        //
-        //     // let tipStr = '';
-        //     // let status = $(this).children(":last").attr("status");
-        //     // let that = $(this);
-        //     // if (status === undefined) {
-        //     //     tipStr = '<div class="calendar-replenish" status="1">待审批</div>';
-        //     //     me.applySuccess();
-        //     // } else if (status === '1') {
-        //     //     tipStr = '<div class="calendar-empty"><div> ';
-        //     //     me.cancelSuccess();
-        //     //     that.find(":last-child").css("display", "none");
-        //     // }
-        //     // that.append(tipStr);
-        //     var viewData = me.viewData;
-        //     var year = parseInt(cellDate.split("年")[0]);
-        //     var month = parseInt(cellDate.split("年")[1].split("月")[0]) - 1;
-        //     var date = parseInt(cellDate.split("年")[1].split("月")[1].split("日")[0]);
-        //
-        //     if (opts.mode == "year") {
-        //         if (opts.cellClick) opts.cellClick.call(me, viewData[month],e,me)
-        //     }
-        //     else if (opts.mode == "month" && month == opts.newDate.getMonth()) {
-        //
-        //         if (opts.cellClick) opts.cellClick.call(me, viewData[date],e,me)
-        //     }
-        // });
-
         //年份下拉
         el.on("click", ".calendar-year-select", function (e) {
             e.stopPropagation();
@@ -148,12 +125,12 @@ Calendar.prototype = {
             $(".dropdown-month").toggleClass("open");
         })
         //月份check事件
-        el.on("click", ".month-item", function (e) {
+        $(document).on("click", ".last-month-item", function (e) {
+            console.log("点击了");
             e.stopPropagation();
-            $(".dropdown-month").removeClass("open");
             var monthText = $(this).text();
-            var monthNum = monthText.split("月")[0];
-            if (monthNum == (opts.newDate.getMonth() + 1)) return;
+            // var monthNum = monthText.split("月")[0];
+            var monthNum = --currentMonth;
             var beforeDate = opts.newDate.getDate();
             opts.newDate.setMonth(monthNum - 1);
             var afterDate = opts.newDate.getDate();
@@ -162,12 +139,30 @@ Calendar.prototype = {
             if (beforeDate != afterDate) {
                 opts.newDate.setDate(opts.newDate.getDate() - 1);
             }
-            $(".calendar-month-text").text(monthText);
-
+            console.log(opts.newDate);
+            nowDateStr = dateFormat("YYYY-mm-dd", opts.newDate);
+            getAttendances(currentIntern, nowDateStr);
+            initAttendance();
+            $('.date-text').text('2020年' + (currentMonth -1) + '月-' + currentMonth +'月');
         })
-        $(document.body).on("click", function (e) {
-            $(".dropdown-month").removeClass("open");
-            $(".dropdown-year").removeClass("open");
+        $(document).on("click", ".next-month-item", function (e) {
+            console.log("点击了");
+            e.stopPropagation();
+            var monthText = $(this).text();
+            // var monthNum = monthText.split("月")[0];
+            var monthNum = ++currentMonth;
+            var beforeDate = opts.newDate.getDate();
+            opts.newDate.setMonth(monthNum - 1);
+            var afterDate = opts.newDate.getDate();
+            if (opts.monthClick) opts.monthClick.call(monthText,e, parseInt(monthNum),opts,me);
+            //处理日期30号，切换到2月不存在30号
+            if (beforeDate != afterDate) {
+                opts.newDate.setDate(opts.newDate.getDate() - 1);
+            }
+            nowDateStr = dateFormat("YYYY-mm-dd", opts.newDate);
+            getAttendances(currentIntern, nowDateStr);
+            initAttendance();
+            $('.date-text').text('2020年' + (currentMonth -1) + '月-' + currentMonth +'月');
         })
     },
     //公开方法
@@ -176,12 +171,6 @@ Calendar.prototype = {
         if (mode == me.options.mode) return;
         me.options.mode = mode;
         me._createCalendar();
-    },
-    applySuccess: function () {
-        Swal.fire("申请签到成功!", "", "success")
-    },
-    cancelSuccess: function () {
-        Swal.fire("取消签到成功!", "", "success")
     },
     getOffsetTop: function(obj) {
 		var tmp = obj.offsetTop;
@@ -613,7 +602,7 @@ Calendar.prototype = {
         // s += '<span class="calendar-icon"><i class="iconfont">∨</i></span>'
         // s += '<ul id="dropdown-year" class="dropdown-year">'
         // s += '</ul>'
-        s += '<span>2020年6月-7月</span>'
+        s += '<span class="date-text">2020年' + (currentMonth -1) + '月-' + currentMonth +'月</span>'
         s += '</div > '
 
         if (mode == "month") {
@@ -735,6 +724,13 @@ Calendar.prototype = {
         _newDate.setDate(1);
         
         var weekDay = _newDate.getDay() == 0 ? 7 : _newDate.getDay();
+        console.log("第几天:" + weekDay);
+        let lessDay = 14;
+        let rows = 6;
+        if (weekDay > 4) {
+            lessDay = 7;
+            rows = 5;
+        }
         //视图第一天
         var viewDate = me._cloneDate(_newDate);
         viewDate.setDate(viewDate.getDate() - weekDay + 1 - 14);
@@ -752,6 +748,9 @@ Calendar.prototype = {
                 var month = renderDate.getMonth() + 1;
                 var date = renderDate.getDate();
                 var day = renderDate.getDay();
+                // console.log("Year: " + year);
+                // console.log("Month: " + month);
+                // console.log("date: " + date);
                 if (renderDate.getMonth() < newDate.getMonth() && date < 21) {
                     s += '<td title="' + year + '年' + month + '月' + date + '日" class="calendar-cell calendar-last-month-cell">';
                     s += '<div class="calendar-date">';
@@ -761,14 +760,14 @@ Calendar.prototype = {
                     s += '<div class="calendar-date">';
                 }
                 else if (date == nowNum) {
-                    s += '<td title="' + year + '年' + month + '月' + date + '日" class="calendar-cell calendar-today calendar-cell-active">';
+                    s += '<td title="' + year + '年' + month + '月' + date + '日" class="calendar-cell calendar-today calendar-cell-active" attendanceId="" relTime="'+ renderDate +'" id="'+ month + date +'">';
                     s += '<div class="calendar-date">';
                 }
                 // else if(day==week[0] || day==week[1]){
                 // 	   s += '<td title="' + year + '年' + month + '月' + date + '日" class="calendar-cell calendar-weekend">';
                 // }
                 else {
-                    s += '<td title="' + year + '年' + month + '月' + date + '日" class="calendar-cell calendar-cell-active">';
+                    s += '<td title="' + year + '年' + month + '月' + date + '日" class="calendar-cell calendar-cell-active" attendanceId="" relTime="'+ renderDate +'" id="'+ month + date + '">';
                     s += '<div class="calendar-date-active calendar-date">';
                 }
                 s += '<div class="calendar-value">' + date + '</div>';
@@ -858,3 +857,68 @@ $.fn.calendar = function (options) {
 		return ary;
 	};
 })(window);
+
+let getAttendances = function(internId, date) {
+    $.ajax({
+        url: '/attendance/searchPeriod?userId=' + internId + '&date=' + date,
+        type: 'get',
+        dataType: 'json',
+        contentType: 'application/json;charset=UTF-8',
+        async: false,
+        success: function (data) {
+            console.log(data);
+            if (data.code === 1) {
+                attendanceList = data.data;
+            } else {
+
+            }
+        },
+        error: function (XMLHttpRequest) {
+        }
+    })
+};
+let initAttendance = function() {
+    for (let i = 0; i< attendanceList.length; i++) {
+        let date = new Date(attendanceList[i].workDay);
+        console.log(date.getTime());
+        let attendanceStatus = attendanceList[i].attendanceStatus;
+        let id = '#' + (date.getMonth() + 1) + date.getDate();
+        $(id).attr("attendanceId", attendanceList[i].attendanceId)
+        if (attendanceStatus === "CheckedIn"){
+            $(id).append(checkInStr);
+        }else if (attendanceStatus === 'Approved') {
+            $(id).append(approvedStr);
+        } else if (attendanceStatus === 'Rejected') {
+            $(id).append(rejectedStr);
+        }
+    }
+};
+
+let removeAttendance = function () {
+    for (let i = 0; i< attendanceList.length; i++) {
+        let date = new Date(attendanceList[i].workDay);
+        let id = '#' + (date.getMonth() + 1) + date.getDate();
+        $(id).attr("attendanceId", "")
+        $(id).find(":last-child").remove();
+    }
+};
+
+function dateFormat(fmt, date) {
+    let ret;
+    const opt = {
+        "Y+": date.getFullYear().toString(),        // 年
+        "m+": (date.getMonth() + 1).toString(),     // 月
+        "d+": date.getDate().toString(),            // 日
+        "H+": date.getHours().toString(),           // 时
+        "M+": date.getMinutes().toString(),         // 分
+        "S+": date.getSeconds().toString()          // 秒
+        // 有其他格式化字符需求可以继续添加，必须转化成字符串
+    };
+    for (let k in opt) {
+        ret = new RegExp("(" + k + ")").exec(fmt);
+        if (ret) {
+            fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+        };
+    };
+    return fmt;
+}
