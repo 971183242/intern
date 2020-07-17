@@ -27,7 +27,9 @@
         <tr>
             <td>本期实习生签到记录报表如下：</td>
         </tr>
-        <tr>姓名：${attendance.internId}   已签到：${attendance.workDay}   </tr>
+        <#list attendance as item>
+            <tr>&nbsp&nbsp${item.internId} &nbsp&nbsp 已通过：${item.approvedDays} &nbsp&nbsp 已拒绝： ${item.rejectedDays} &nbsp&nbsp 待审批：${item.checkInDays} </tr>
+        </#list>
         <tr>&nbsp;</tr>
         <tr >
             <td>

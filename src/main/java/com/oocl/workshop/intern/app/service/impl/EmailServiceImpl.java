@@ -44,7 +44,7 @@ public class EmailServiceImpl implements EmailService {
 
         helper.setFrom(mail.getFrom());
         helper.setTo(EmailUtil.parseEmailAddresses(mail.getTo()));
-        helper.setCc(EmailUtil.parseEmailAddresses(mail.getTo()));
+        helper.setCc(EmailUtil.parseEmailAddresses(mail.getCc()));
         helper.setText(html, true);
         helper.setSubject(mail.getSubject());
         if(mail.getAttachments() != null) {
