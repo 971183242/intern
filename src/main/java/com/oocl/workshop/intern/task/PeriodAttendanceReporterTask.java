@@ -27,7 +27,8 @@ public class PeriodAttendanceReporterTask {
     @Autowired
     private EventPublisher eventPublisher;
 
-    @Scheduled(cron = "0/5 * *  * * MON-FRI ")
+//    @Scheduled(cron = "0/5 * * * * MON-FRI ")
+    @Scheduled(cron = "0 45 8 * * MON-FRI ")
     public void execute() {
         if (Calendar.getInstance().getTime().getDate() > MonthlySettlementDayRule.DEFAULT_DAY) {
             DomainEvent event = new DomainEvent();
