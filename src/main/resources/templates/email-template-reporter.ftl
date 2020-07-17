@@ -30,6 +30,8 @@
     <#list attendance as item>
         <tr>&nbsp&nbsp${item.internId} &nbsp&nbsp 已通过：${item.approvedDays} &nbsp&nbsp 已拒绝： ${item.rejectedDays} &nbsp&nbsp 待审批：${item.checkInDays} </tr>
     </#list>
+    <tr>&nbsp&nbsp系统审批入口↓↓↓</tr>
+    <tr>&nbsp&nbsp http://shagit02-w10.corp.oocl.com:9080/intern#</tr>
     <tr>&nbsp;</tr>
     <tr >
         <td>
