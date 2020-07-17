@@ -32,6 +32,7 @@ public class DailyCheckInReminderTask {
 
     private final Logger logger = LoggerFactory.getLogger(DailyCheckInReminderTask.class);
 
+//    @Scheduled(cron="0/5 * * * * MON-FRI")
     @Scheduled(cron="0 0 16 * * MON-FRI")
     public void execute() {
         List<Team> teamList = profileDomService.findAllTeams();
