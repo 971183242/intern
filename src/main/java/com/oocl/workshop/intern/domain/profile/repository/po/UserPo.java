@@ -1,12 +1,20 @@
 package com.oocl.workshop.intern.domain.profile.repository.po;
 
-import com.oocl.workshop.intern.domain.common.BasePo;
 import com.oocl.workshop.intern.domain.profile.entity.UserType;
 import com.oocl.workshop.intern.domain.profile.entity.valueobject.InternPeriod;
 import lombok.Data;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.Table;
 
 @Data
 @Entity
@@ -30,4 +38,8 @@ public class UserPo {
 
     @Column(name = "team_id")
     private String teamId;
+
+    @Column(name = "is_active")
+    @ColumnDefault("true")
+    private boolean active = true;
 }
