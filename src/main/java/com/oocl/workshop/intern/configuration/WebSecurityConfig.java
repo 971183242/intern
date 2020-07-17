@@ -1,5 +1,6 @@
 package com.oocl.workshop.intern.configuration;
 
+import com.oocl.workshop.intern.domain.profile.entity.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -45,6 +46,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/error/403",
                         "/toLogout",
                         "/h2-console/**").permitAll()
+                .antMatchers(
+                        "/admin").hasAuthority(Role.SUPER_ADMIN.getFullName())
+                .antMatchers(
+                        "/intern").hasAuthority(Role.INTERN.getFullName())
+                .antMatchers(
+                        "/leader").hasAuthority(Role.TEAM_LEADER.getFullName())
                 .and()
                 .formLogin()
                 .loginPage("/login").loginProcessingUrl("/login/form")

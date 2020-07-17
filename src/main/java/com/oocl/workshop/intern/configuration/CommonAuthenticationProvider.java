@@ -32,14 +32,15 @@ public class CommonAuthenticationProvider implements AuthenticationProvider {
         }
         Set<String> authoritiesSet = new HashSet<>(16);
         Optional<User> userOptional = profileAppService.findUserByDomainId(username);
+        String teamId = "TMS";
         List<String> roles = new ArrayList<>();
-        if(userOptional.get().getRoles() !=null) {
+        if(userOptional !=null) {
             for (Role role: userOptional.get().getRoles()) {
                 roles.add(role.getFullName());
             }
         }
         authoritiesSet.addAll(roles);
-        CurrentUser userInfo = new CurrentUser(username, password, authoritiesSet,true, true, true, true);
+        CurrentUser userInfo = new CurrentUser(username, password, teamId ,authoritiesSet,true, true, true, true);
         userInfo.setAuthorities(authoritiesSet.parallelStream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
         return new UsernamePasswordAuthenticationToken(userInfo, password, userInfo.getAuthorities());
     }

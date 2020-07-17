@@ -18,6 +18,8 @@ public class CurrentUser implements Serializable, UserDetails {
 
     private String password;
 
+    private String teamId;
+
     private Set<String> roles;
 
     private boolean accountNonExpired;
@@ -36,13 +38,18 @@ public class CurrentUser implements Serializable, UserDetails {
     }
 
 
-    public CurrentUser(String username, String password, Set<String> roles, boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired, boolean enabled) {
+    public CurrentUser(String username, String password, String teamId, Set<String> roles, boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired, boolean enabled) {
         this.username = username;
         this.password = password;
+        this.teamId = teamId;
         this.roles = roles;
         this.accountNonExpired = accountNonExpired;
         this.accountNonLocked = accountNonLocked;
         this.credentialsNonExpired = credentialsNonExpired;
         this.enabled = enabled;
+    }
+
+    public CurrentUser(String username){
+        this.username = username;
     }
 }
