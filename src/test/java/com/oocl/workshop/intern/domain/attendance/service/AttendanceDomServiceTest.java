@@ -20,14 +20,12 @@ import org.springframework.util.CollectionUtils;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneOffset;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.time.DateUtils.isSameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.in;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -129,7 +127,7 @@ class AttendanceDomServiceTest {
         approvedAttendancePo.setInternId(internId);
         approvedAttendancePo.setWorkDay(workDay);
         approvedAttendancePo.setAttendanceStatus(AttendanceStatus.Approved);
-        
+
         DailyAttendance rejectedAttendance = new DailyAttendance();
         rejectedAttendance.setAttendanceId(1L);
         rejectedAttendance.setInternId(internId);
@@ -176,6 +174,32 @@ class AttendanceDomServiceTest {
                 () -> assertThat(rejectedAttendances.size()).isEqualTo(1));
 
 
+    }
+
+    @Test
+    void findByInternIdAndWorkDay() {
+        long attendanceId = 1L;
+        String internId = "1";
+        Date workDay = new Date();
+        AttendancePo attendancePo = new AttendancePo();
+        DailyAttendance dailyAttendance = new DailyAttendance();
+        dailyAttendance.setInternId(internId);
+        dailyAttendance.setAttendanceStatus(AttendanceStatus.CheckedIn);
+        dailyAttendance.setWorkDay(workDay);
+        dailyAttendance.setAttendanceId(attendanceId);
+        when(attendanceRepo.findByInternIdAndWorkDayBetweenOrderByWorkDay(internId, workDay, workDay)).thenReturn(Collections.singletonList(attendancePo));
+        when(attendanceFactory.getAttendance(attendancePo)).thenReturn(dailyAttendance);
+        Optional<DailyAttendance> resultOpt = attendanceDomService.findByInternIdAndWorkDay(internId, workDay);
+        assertSame(resultOpt.get(), dailyAttendance);
+    }
+
+    @Test
+    void findByInternIdAndWorkDayEmptyTest() {
+        String internId = "1";
+        Date workDay = new Date();
+        when(attendanceRepo.findByInternIdAndWorkDayBetweenOrderByWorkDay(internId, workDay, workDay)).thenReturn(Arrays.asList());
+        Optional<DailyAttendance> resultOpt = attendanceDomService.findByInternIdAndWorkDay(internId, workDay);
+        assertFalse(resultOpt.isPresent());
     }
 
 

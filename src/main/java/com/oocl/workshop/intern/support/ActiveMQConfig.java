@@ -14,7 +14,7 @@ import org.springframework.jms.support.converter.MessageType;
 public class ActiveMQConfig {
 
     public static final String INTERN_QUEUE = "intern-event-queue";
-
+    public static final String INTERN_NEED_CHECKIN_QUEUE = "intern-need-checkin-queue";
     public static final String REPORT_QUEUE = "intern-report-queue";
 
     @Bean
