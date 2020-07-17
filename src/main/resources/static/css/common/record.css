@@ -95,7 +95,7 @@
 .calendar-weekend{background: #FFEECC;}
 .calendar-cell.calendar-thisMonth .calendar-date,
 .calendar-cell.calendar-today .calendar-date {
-	border-top-color: #1890ff;
+	/*border-top-color: #1890ff;*/
 	background-color: #e6f7ff;
 }
 .calendar-date-active:hover {

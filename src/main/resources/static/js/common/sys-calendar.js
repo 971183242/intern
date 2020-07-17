@@ -761,7 +761,7 @@ Calendar.prototype = {
                 }
                 else if (date == nowNum) {
                     s += '<td title="' + year + '年' + month + '月' + date + '日" class="calendar-cell calendar-today calendar-cell-active" attendanceId="" relTime="'+ renderDate +'" id="'+ month + date +'">';
-                    s += '<div class="calendar-date">';
+                    s += '<div class="calendar-date-active calendar-date">';
                 }
                 // else if(day==week[0] || day==week[1]){
                 // 	   s += '<td title="' + year + '年' + month + '月' + date + '日" class="calendar-cell calendar-weekend">';
