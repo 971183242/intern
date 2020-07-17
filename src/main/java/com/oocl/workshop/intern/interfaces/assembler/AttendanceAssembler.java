@@ -1,8 +1,10 @@
 package com.oocl.workshop.intern.interfaces.assembler;
 
+import com.oocl.workshop.intern.domain.attendance.entity.AttendanceStatus;
 import com.oocl.workshop.intern.domain.attendance.entity.DailyAttendance;
 import com.oocl.workshop.intern.interfaces.dto.attendance.AttendanceDTO;
 import com.oocl.workshop.intern.support.util.DateUtil;
+import org.springframework.beans.BeanUtils;
 
 public class AttendanceAssembler {
     public static AttendanceDTO toDTO(DailyAttendance attendance) {
@@ -16,6 +18,9 @@ public class AttendanceAssembler {
     }
 
     public static DailyAttendance toDO(AttendanceDTO dto) {
-        return null;
+        DailyAttendance dailyAttendance = new DailyAttendance();
+        BeanUtils.copyProperties(dto, dailyAttendance);
+        dailyAttendance.setAttendanceStatus(AttendanceStatus.valueOf(dto.getAttendanceStatus()));
+        return dailyAttendance;
     }
 }

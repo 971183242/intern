@@ -6,6 +6,7 @@ import com.oocl.workshop.intern.domain.attendance.entity.AttendanceStatus;
 import com.oocl.workshop.intern.domain.attendance.entity.DailyAttendance;
 import com.oocl.workshop.intern.domain.attendance.entity.PeriodAttendance;
 import com.oocl.workshop.intern.interfaces.dto.attendance.AttendanceDTO;
+import com.oocl.workshop.intern.interfaces.dto.profile.UserDTO;
 import com.oocl.workshop.intern.support.util.DateUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Supplier;
@@ -92,6 +94,16 @@ public class AttendanceControllerTest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
         Assertions.assertTrue(Boolean.parseBoolean(result));
+    }
+
+    @Test
+    void should_get_team_interns_success() throws Exception {
+        when(attendanceAppService.getInternsActiveInDateContainedPeriod(any(), any())).thenReturn(Collections.emptyList());
+        String result = mockMvc.perform(get("/attendance/getInterns").param("teamId", "fwk").param("date", "2020-07-17"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        List<UserDTO> interns = new ObjectMapper().readerForListOf(UserDTO.class).readValue(result);
+        assertEquals(0, interns.size());
     }
 
     private PeriodAttendance getMockPeriodAttendanceWithNAttendance(String interId, int attendanceCount) {

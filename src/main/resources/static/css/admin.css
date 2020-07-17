@@ -1,0 +1,25 @@
+.fixed-table-toolbar,.fixed-table-pagination {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.bootstrap-table{
+    margin-top: -45px;
+}
+.btn-delete, .btn-edit {
+    border: 0;
+}
+.glyphicon-pencil:hover {
+    color: #337ab7;
+}
+.glyphicon-pencil,.glyphicon-trash {
+    cursor: pointer;
+    margin-left: 10px;
+}
+.glyphicon-trash {
+    margin-left: 15px;
+}
+.glyphicon-trash:hover {
+    color: #337ab7;
+
+}

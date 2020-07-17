@@ -127,13 +127,22 @@ public class AttendanceDomServiceImpl implements AttendanceDomService {
                 result = rejectAttendance(attendance);
                 break;
             default:
-                result = attendance;
+                result = checkedInAttendance(attendance);
                 break;
         }
         return result;
     }
 
+    private DailyAttendance checkedInAttendance(DailyAttendance attendance) {
+        attendance = getAttendance(attendance.getAttendanceId());
+        AttendancePo attendancePo = attendanceFactory.createPo(attendance);
+        attendancePo.setAttendanceStatus(AttendanceStatus.CheckedIn);
+        attendancePo = attendanceRepo.save(attendancePo);
+        return attendanceFactory.getAttendance(attendancePo);
+    }
+
     private DailyAttendance rejectAttendance(DailyAttendance attendance) {
+        attendance = getAttendance(attendance.getAttendanceId());
         AttendancePo attendancePo = attendanceFactory.createPo(attendance);
         attendancePo.setAttendanceStatus(AttendanceStatus.Rejected);
         attendancePo = attendanceRepo.save(attendancePo);
@@ -141,6 +150,7 @@ public class AttendanceDomServiceImpl implements AttendanceDomService {
     }
 
     private DailyAttendance approveAttendance(DailyAttendance attendance) {
+        attendance = getAttendance(attendance.getAttendanceId());
         AttendancePo attendancePo = attendanceFactory.createPo(attendance);
         attendancePo.setAttendanceStatus(AttendanceStatus.Approved);
         attendancePo = attendanceRepo.save(attendancePo);

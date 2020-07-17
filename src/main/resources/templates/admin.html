@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" th:href="@{css/common/bootstrap-3.3.7.css}">
+    <link rel="stylesheet" th:href="@{css/common/bootstrap-table.css}" />
+    <link rel="stylesheet" th:href="@{css/admin.css}" />
+    <title>User admin</title>
+    <style>
+    </style>
+</head>
+<body>
+    <div>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Intern System</a>
+                </div>
+                <div>
+                    <!--向右对齐-->
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                用户 <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">个人信息</a></li>
+                                <li><a href="#">登出</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="mo" style="width: 80%;margin-left: auto;margin-right: auto">
+        <!-- 按钮触发模态框 -->
+        <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+            <i class="glyphicon glyphicon-plus"></i> Crate User
+        </button>
+        <!-- 模态框（Modal） -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            Create User
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" role="form" style="width: 95%;margin-left: auto;margin-right: auto">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">DomainId</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" id="domainId" type="text" value="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Name</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" id="name" type="text" value="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Email</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" id="email" type="text" value="">
+                                </div>
+                            </div>
+                            <!--<div class="form-group">-->
+                                <!--<label class="col-sm-2 control-label">Roles</label>-->
+                                <!--<div class="col-sm-10">-->
+                                    <!--<label class="checkbox-inline">-->
+                                        <!--<input type="checkbox" id="inlineCheckbox1" value="admin"> admin-->
+                                    <!--</label>-->
+                                    <!--<label class="checkbox-inline">-->
+                                        <!--<input type="checkbox" id="inlineCheckbox2" value="leader"> leader-->
+                                    <!--</label>-->
+                                    <!--<label class="checkbox-inline">-->
+                                        <!--<input type="checkbox" id="internCheckBox" value="intern"> intern-->
+                                    <!--</label>-->
+                                    <!--<label class="checkbox-inline">-->
+                                        <!--<input type="checkbox" id="inlineCheckbox4" value="option3"> hr-->
+                                    <!--</label>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <div class="form-group leader-select">
+                                <label class="col-sm-2 control-label">Leader</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" id="teamId">
+                                        <option value="team1">team1</option>
+                                        <option value="team2">team2</option>
+                                        <option value="team3">team3</option>
+                                        <option value="team4">team4</option>
+                                        <option value="team5">team5</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel
+                        </button>
+                        <button type="button" class="btn btn-primary save-user">
+                            Submit
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+    </div>
+    <table style="width: 80%;margin-left: auto;margin-right: auto;" id="table">
+    </table>
+    <script type="text/javascript" th:src="@{js/common/jquery-2.1.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{js/common/bootstrap-3.3.7.min.js}"></script>
+    <script type="text/javascript" th:src="@{js/common/bootstrap-table.min.js}"></script>
+    <script type="text/javascript" th:src="@{js/admin.js}"></script>
+</body>
+</html>
