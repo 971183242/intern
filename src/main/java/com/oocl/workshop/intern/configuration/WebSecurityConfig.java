@@ -47,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/h2-console/**").permitAll()
                 .and()
                 .formLogin()
-                .loginPage("/login").loginProcessingUrl("/loginPage")
+                .loginPage("/login").loginProcessingUrl("/login/form")
                 .failureUrl("/login?error")
                 .successHandler(myAuthenticationSuccessHandler)
                 .failureHandler(myAuthenticationFailHandler)
