@@ -6,6 +6,7 @@ import com.oocl.workshop.intern.domain.profile.entity.Role;
 import com.oocl.workshop.intern.domain.profile.entity.User;
 import com.oocl.workshop.intern.interfaces.dto.ResultDto;
 import com.oocl.workshop.intern.sso.exceptions.SSOException;
+import com.oocl.workshop.intern.support.util.UserInfoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -33,12 +34,14 @@ public class ForwardController {
     private AttendanceDomService attendanceDomService;
 
     @RequestMapping(value = "/intern", method = RequestMethod.GET)
-    public String toIntern() {
+    public String toIntern(ModelMap modelMap) {
+        setAttributes(modelMap);
         return "intern";
     }
 
     @RequestMapping(value = "/leader", method = RequestMethod.GET)
-    public String toLeader() {
+    public String toLeader(ModelMap modelMap) {
+        setAttributes(modelMap);
         return "leader";
     }
 
@@ -86,12 +89,18 @@ public class ForwardController {
     public String index(Authentication authentication) {
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
         if (roles.contains(Role.SUPER_ADMIN.getFullName())){
-            return "admin";
+            return "redirect:admin";
         }else if (roles.contains(Role.INTERN.getFullName())){
-            return "intern";
+            return "redirect:intern";
         }else if (roles.contains(Role.TEAM_LEADER.getFullName())){
-            return "leader";
+            return "redirect:leader";
         }
         return "error";
     }
+
+    private void setAttributes(ModelMap modelMap) {
+        modelMap.addAttribute("domainId", UserInfoUtil.getUserDetails().getUsername());
+        modelMap.addAttribute("teamId", UserInfoUtil.getUserDetails().getTeamId());
+    }
+
 }

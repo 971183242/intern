@@ -17,7 +17,7 @@ public class InternAssembler {
         userDTO.setName(intern.getName());
         userDTO.setInternPeriodFromDate(DateUtil.formatDate(intern.getPeriod().getDateFrom()));
         userDTO.setInternPeriodToDate(DateUtil.formatDate(intern.getPeriod().getDateTo()));
-        userDTO.setTeam(TeamAssembler.toDTO(intern.getTeam()));
+//        userDTO.setTeam(TeamAssembler.toDTO(intern.getTeam()));
         userDTO.setRoles(intern.getRoles().stream().map(Role::getFullName).collect(toList()));
         return userDTO;
     }

@@ -127,7 +127,7 @@ new SYSUI({
 });
 let nowDate = new Date();
 nowDateStr = dateFormat("YYYY-mm-dd", nowDate);
-currentIntern = 'User1';
+currentIntern = $('#domainId').text();
 getAttendances(currentIntern, nowDateStr);
 initAttendance();
 

@@ -62,8 +62,9 @@ public class AttendanceController {
     }
 
     @GetMapping(value = "/getInterns", produces = APPLICATION_JSON_VALUE)
-    public List<UserDTO> getTeamInterns(@RequestParam("teamId") String teamId, @RequestParam("date") String dateStr) throws ParseException {
+    public ResultDto getTeamInterns(@RequestParam("teamId") String teamId, @RequestParam("date") String dateStr) throws ParseException {
         List<Intern> interns = attendanceAppService.getInternsActiveInDateContainedPeriod(teamId, DateUtil.parseDate(dateStr));
-        return interns.stream().map(InternAssembler::toDTO).collect(toList());
+        List<UserDTO> userDTOS = interns.stream().map(InternAssembler::toDTO).collect(toList());
+        return ResultDto.success(userDTOS);
     }
 }

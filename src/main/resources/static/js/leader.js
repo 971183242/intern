@@ -84,9 +84,9 @@ let confirmAttendances = function(operation) {
     }
 };
 
-let getTeamUsers = function(leaderId) {
+let getTeamUsers = function(teamId, dateStr) {
     $.ajax({
-        url: '/mock/profile/users/' + leaderId,
+        url: '/attendance/getInterns?teamId=' + teamId + '&date=' + dateStr,
         type: 'get',
         dataType: 'json',
         contentType: 'application/json;charset=UTF-8',
@@ -108,7 +108,7 @@ let initUserList = function() {
     let userListBoxEl = $('.user-list-box');
     userListBoxEl.empty();
     let userListStr = '';
-    let activeFlag = 'active'
+    let activeFlag = 'active';
     for (let i = 0; i < internList.length; i++) {
         let domainId = internList[i].domainId;
         if (i > 0) {
@@ -151,7 +151,8 @@ new SYSUI({
 });
 let nowDate = new Date();
 nowDateStr = dateFormat("YYYY-mm-dd", nowDate);
-getTeamUsers("22");
+let teamId = $('#teamId').val();
+getTeamUsers(teamId, nowDateStr);
 initUserList();
 getAttendances(currentIntern, nowDateStr);
 initAttendance();
