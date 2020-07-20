@@ -113,5 +113,17 @@ class ProfileAppServiceImplTest {
     void getRoles() {
         List<String> roles = profileAppServiceImpl.getRoles();
         log.info(roles.toString());
+        assertEquals(4, roles.size());
+    }
+
+    @Test
+    void getInterns() {
+        Date date = new Date();
+        when(monthlySettlementDayRuleService.getMonthlySettlementDateWindow(date)).thenReturn(Lists.newArrayList(new Date(), new Date()));
+        when(profileDomService.findInterns(any(), any())).thenReturn(Lists.newArrayList(new Intern()));
+
+        List<Intern> interns = profileAppServiceImpl.getInterns(date);
+        assertEquals(1, interns.size());
+        verify(profileDomService, times(1)).findInterns(any(Date.class), any(Date.class));
     }
 }

@@ -1,8 +1,12 @@
 package com.oocl.workshop.intern.domain.profile.service;
 
+import com.google.common.collect.Lists;
+import com.oocl.workshop.intern.domain.profile.entity.Intern;
 import com.oocl.workshop.intern.domain.profile.entity.Team;
 import com.oocl.workshop.intern.domain.profile.repository.facade.TeamRepo;
+import com.oocl.workshop.intern.domain.profile.repository.facade.UserRepo;
 import com.oocl.workshop.intern.domain.profile.repository.po.TeamPo;
+import com.oocl.workshop.intern.domain.profile.repository.po.UserPo;
 import com.oocl.workshop.intern.domain.profile.service.impl.ProfileDomServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,10 +16,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,6 +41,8 @@ class ProfileDomServiceTest {
     private TeamRepo teamRepo;
     @Mock
     private ProfileFactory profileFactory;
+    @Mock
+    private UserRepo userRepo;
 
     public void given2TeamPos() {
         List<TeamPo> teamPoList = new ArrayList<>();
@@ -60,6 +75,41 @@ class ProfileDomServiceTest {
         assertAll(() -> assertThat(allTeams.size()).isEqualTo(2),
                 () -> assertThat(allTeams.get(0).getTeamId()).isEqualTo("T1"),
                 () -> assertThat(allTeams.get(1).getName()).isEqualTo("Team 2")
-                );
+        );
+    }
+
+    @Test
+    void findInterns() {
+        profileDomService.findInterns(null, null);
+        verify(userRepo, times(1)).findActiveInterns(any(), any());
+        verify(profileFactory, never()).getIntern(any());
+
+
+        reset(userRepo);
+        reset(profileFactory);
+
+        UserPo userPo = new UserPo();
+        when(userRepo.findActiveInterns(any(), any())).thenReturn(Lists.newArrayList(userPo));
+        Intern intern = new Intern();
+        when(profileFactory.getIntern(any())).thenReturn(intern);
+
+        List<Intern> interns = profileDomService.findInterns(new Date(), new Date());
+        assertEquals(1, interns.size());
+        assertEquals(intern, interns.get(0));
+        verify(userRepo, times(1)).findActiveInterns(any(Date.class), any(Date.class));
+        verify(profileFactory, times(1)).getIntern(userPo);
+    }
+
+    @Test
+    void deleteUser() {
+        String domainId = "testId";
+
+        UserPo userPo = spy(new UserPo());
+        when(userRepo.findById(domainId)).thenReturn(Optional.of(userPo));
+        boolean deleted = profileDomService.deleteUser(domainId);
+
+        assertEquals(true, deleted);
+        verify(userPo, times(1)).setActive(false);
+        verify(userRepo, times(1)).save(userPo);
     }
 }

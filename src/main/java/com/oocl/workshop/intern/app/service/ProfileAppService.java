@@ -21,5 +21,7 @@ public interface ProfileAppService {
 
     List<String> getRoles();
 
-    List<String> getActiveUsers();
+    List<Intern> getInterns(Date date);
+
+    boolean deleteUser(String domainId);
 }

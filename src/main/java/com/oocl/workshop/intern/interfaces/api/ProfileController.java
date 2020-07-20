@@ -1,23 +1,27 @@
 package com.oocl.workshop.intern.interfaces.api;
 
 import com.oocl.workshop.intern.app.service.ProfileAppService;
+import com.oocl.workshop.intern.domain.profile.entity.Intern;
 import com.oocl.workshop.intern.domain.profile.entity.Team;
 import com.oocl.workshop.intern.domain.profile.entity.User;
 import com.oocl.workshop.intern.interfaces.assembler.ProfileAssembler;
 import com.oocl.workshop.intern.interfaces.dto.profile.InternDTO;
 import com.oocl.workshop.intern.interfaces.dto.profile.TeamDTO;
 import com.oocl.workshop.intern.interfaces.dto.profile.UserDTO;
+import com.oocl.workshop.intern.support.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -52,5 +56,19 @@ public class ProfileController {
         return ProfileAssembler.toDTO(user);
     }
 
+    @GetMapping(value = "/getInterns", produces = APPLICATION_JSON_VALUE)
+    public List<InternDTO> getInterns(@RequestParam("date") String dateStr) throws ParseException {
+        List<Intern> interns = profileAppService.getInterns(DateUtil.parseDate(dateStr));
+        return interns.stream().map(ProfileAssembler::toInternDTO).collect(Collectors.toList());
+    }
 
+    @GetMapping(value = "/roles", produces = APPLICATION_JSON_VALUE)
+    public List<String> getRoles() throws ParseException {
+        return profileAppService.getRoles();
+    }
+
+    @PostMapping(value = "/deleteUser", produces = APPLICATION_JSON_VALUE)
+    public boolean deleteUser(@RequestParam("domainId") String domainId) {
+        return profileAppService.deleteUser(domainId);
+    }
 }

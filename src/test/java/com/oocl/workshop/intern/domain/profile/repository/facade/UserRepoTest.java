@@ -36,12 +36,6 @@ public class UserRepoTest {
         assertEquals(Role.SUPER_ADMIN.getFullName(), admin.getRole());
     }
 
-    @Test
-    public void findByUserType() {
-        List<UserPo> interns = userRepo.findByUserType(UserType.INTERN);
-        assertEquals(3, interns.size());
-    }
-
 
     @Test
     public void findByUserTypeAndRoleContains() {
@@ -62,5 +56,11 @@ public class UserRepoTest {
         List<UserPo> users = userRepo.findTeamActiveInterns("TMS-TEST", new Date(120,5,1), new Date(120,5,1));
         assertEquals(1, users.size());
         assertEquals("intern_1", users.get(0).getDomainId());
+    }
+
+    @Test
+    void findActiveInterns() {
+        List<UserPo> users = userRepo.findActiveInterns(new Date(120, 4, 21), new Date(120, 5, 20));
+        assertEquals(3, users.size());
     }
 }

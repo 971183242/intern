@@ -11,6 +11,8 @@ insert into t_user(domain_id,name,email,user_type,role,date_from, date_to,team_i
 values('teamLeader','teamLeader','teamLeader@oocl.com','EMPLOYEE','ROLE_TEAM_LEADER',null,null,null);
 
 -- INTERN
+insert into t_user(domain_id,name,email,user_type,role,date_from, date_to,team_id,is_active)
+values('intern','已删除用户','intern_0@oocl.com','INTERN','ROLE_INTERN','2020-01-01','2020-06-01',null, false);
 insert into t_user(domain_id,name,email,user_type,role,date_from, date_to,team_id)
 values('intern_0','实习生甲','intern_0@oocl.com','INTERN','ROLE_INTERN','2020-01-01','2020-06-01',null);
 insert into t_user(domain_id,name,email,user_type,role,date_from,date_to,team_id)

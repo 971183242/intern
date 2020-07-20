@@ -81,4 +81,22 @@ public class ProfileDomServiceImpl implements ProfileDomService {
         return internList;
     }
 
+    @Override
+    public List<Intern> findInterns(Date from, Date to) {
+        logger.info(String.format("findInterns. from:%s, to:%s", from, to));
+        List<UserPo> internPoList = userRepo.findActiveInterns(from, to);
+        logger.info(String.format("findInterns. size:%s", internPoList.size()));
+        return internPoList.stream().map(profileFactory::getIntern).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean deleteUser(String domainId) {
+        Optional<UserPo> user = userRepo.findById(domainId);
+        if (user.isPresent()) {
+            user.get().setActive(false);
+            userRepo.save(user.get());
+            return true;
+        }
+        return false;
+    }
 }

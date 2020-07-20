@@ -18,4 +18,8 @@ public interface ProfileDomService {
     Optional<User> findUserByDomainId(String domainId);
 
     List<Intern> findTeamInterns(String teamId, Date from, Date to);
+
+    List<Intern> findInterns(Date from, Date to);
+
+    boolean deleteUser(String domainId);
 }
