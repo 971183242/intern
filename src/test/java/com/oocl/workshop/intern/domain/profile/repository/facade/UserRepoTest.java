@@ -39,7 +39,7 @@ public class UserRepoTest {
     @Test
     public void findByUserType() {
         List<UserPo> interns = userRepo.findByUserType(UserType.INTERN);
-        assertEquals(2, interns.size());
+        assertEquals(3, interns.size());
     }
 
 
@@ -52,14 +52,14 @@ public class UserRepoTest {
 
     @Test
     public void findByUserTypeAndTeamId() {
-        List<UserPo> users = userRepo.findByUserTypeAndTeamId(UserType.INTERN, "TMS");
+        List<UserPo> users = userRepo.findByUserTypeAndTeamId(UserType.INTERN, "TMS-TEST");
         assertEquals(1, users.size());
         assertEquals("intern_1", users.get(0).getDomainId());
     }
 
     @Test
     void findTeamActiveInterns() {
-        List<UserPo> users = userRepo.findTeamActiveInterns("TMS", new Date(120,5,1), new Date(120,5,1));
+        List<UserPo> users = userRepo.findTeamActiveInterns("TMS-TEST", new Date(120,5,1), new Date(120,5,1));
         assertEquals(1, users.size());
         assertEquals("intern_1", users.get(0).getDomainId());
     }
