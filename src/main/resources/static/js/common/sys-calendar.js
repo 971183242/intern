@@ -1,12 +1,12 @@
 ﻿var currentMonth = new Date().getMonth() + 1;
+var currentYear = new Date().getFullYear();
 let attendanceList = [];
 let nowDateStr = '';
 let currentIntern = '';
-let checkInStr = '<div class="calendar-replenish" status="1">待审批</div>';
-let approvedStr = '<div class="calendar-sign" status="0">已签到</div>';
-let rejectedStr = '<div class="calendar-reject" status="2">拒批</div>';
+let checkInStr = '<span class="calendar-replenish" status="1">待审批</span>';
+let approvedStr = '<span class="calendar-sign" status="0">已签到</span>';
+let rejectedStr = '<span class="calendar-reject" status="2">拒批</span>';
 
-console.log("currentMonth:" + currentMonth);
 var Calendar = function (element, options) {
     this.el = $(element);
     this.options = $.extend(true, {}, this.options, options);
@@ -126,10 +126,14 @@ Calendar.prototype = {
         })
         //月份check事件
         $(document).on("click", ".last-month-item", function (e) {
-            console.log("点击了");
             e.stopPropagation();
             var monthText = $(this).text();
             // var monthNum = monthText.split("月")[0];
+            if (currentMonth === 1) {
+                currentMonth = 13;
+                opts.newDate.setFullYear(currentYear - 1);
+                currentYear --;
+            }
             var monthNum = --currentMonth;
             var beforeDate = opts.newDate.getDate();
             opts.newDate.setMonth(monthNum - 1);
@@ -139,17 +143,27 @@ Calendar.prototype = {
             if (beforeDate != afterDate) {
                 opts.newDate.setDate(opts.newDate.getDate() - 1);
             }
-            console.log(opts.newDate);
             nowDateStr = dateFormat("YYYY-mm-dd", opts.newDate);
             getAttendances(currentIntern, nowDateStr);
             initAttendance();
-            $('.date-text').text('2020年' + (currentMonth -1) + '月-' + currentMonth +'月');
+            let lastMonth = currentMonth - 1;
+            if (lastMonth === 0) {
+                lastMonth = 12;
+            }
+            $('.date-text').text(currentYear + '年' + lastMonth + '月-' + currentMonth +'月');
         })
         $(document).on("click", ".next-month-item", function (e) {
-            console.log("点击了");
             e.stopPropagation();
+            if (currentMonth ===  (new Date().getMonth() + 1) && currentYear === (new Date().getFullYear())) {
+                return
+            }
             var monthText = $(this).text();
             // var monthNum = monthText.split("月")[0];
+            if (currentMonth === 12) {
+                currentMonth = 0;
+                opts.newDate.setFullYear(currentYear + 1);
+                currentYear ++;
+            }
             var monthNum = ++currentMonth;
             var beforeDate = opts.newDate.getDate();
             opts.newDate.setMonth(monthNum - 1);
@@ -162,7 +176,11 @@ Calendar.prototype = {
             nowDateStr = dateFormat("YYYY-mm-dd", opts.newDate);
             getAttendances(currentIntern, nowDateStr);
             initAttendance();
-            $('.date-text').text('2020年' + (currentMonth -1) + '月-' + currentMonth +'月');
+            let lastMonth = currentMonth - 1;
+            if (lastMonth === 0) {
+                lastMonth = 12;
+            }
+            $('.date-text').text(currentYear + '年' + lastMonth  + '月-' + currentMonth +'月');
         })
     },
     //公开方法
@@ -544,7 +562,7 @@ Calendar.prototype = {
 	structure:function(date,X){
 		 var me=this;
             X.lines = 0;  
-            X.dateArray = new Array(62);
+            X.dateArray = new Array(82);
             var Y=function(a) {  
                 return (((a % 4 === 0) && (a % 100 !== 0)) || (a % 400 === 0))  
             }  
@@ -724,7 +742,6 @@ Calendar.prototype = {
         _newDate.setDate(1);
         
         var weekDay = _newDate.getDay() == 0 ? 7 : _newDate.getDay();
-        console.log("第几天:" + weekDay);
         let lessDay = 14;
         let rows = 6;
         if (weekDay > 4) {
@@ -748,14 +765,12 @@ Calendar.prototype = {
                 var month = renderDate.getMonth() + 1;
                 var date = renderDate.getDate();
                 var day = renderDate.getDay();
-                // console.log("Year: " + year);
-                // console.log("Month: " + month);
-                // console.log("date: " + date);
-                if (renderDate.getMonth() < newDate.getMonth() && date < 21) {
+
+                if ((renderDate.getMonth() < newDate.getMonth() && date < 21) || (newDate.getMonth()===0 && renderDate.getMonth() ===11 && date < 21)) {
                     s += '<td title="' + year + '年' + month + '月' + date + '日" class="calendar-cell calendar-last-month-cell">';
                     s += '<div class="calendar-date">';
                 }
-                else if (renderDate.getMonth() >= newDate.getMonth() && date > 20) {
+                else if (renderDate.getMonth() >= newDate.getMonth() && date > 20&&(renderDate.getMonth() !== 11)) {
                     s += '<td title="' + year + '年' + month + '月' + date + '日" class="calendar-cell calendar-next-month-cell">';
                     s += '<div class="calendar-date">';
                 }
@@ -866,11 +881,10 @@ let getAttendances = function(internId, date) {
         contentType: 'application/json;charset=UTF-8',
         async: false,
         success: function (data) {
-            console.log(data);
             if (data.code === 1) {
                 attendanceList = data.data;
             } else {
-
+                attendanceList = [];
             }
         },
         error: function (XMLHttpRequest) {
@@ -880,7 +894,6 @@ let getAttendances = function(internId, date) {
 let initAttendance = function() {
     for (let i = 0; i< attendanceList.length; i++) {
         let date = new Date(attendanceList[i].workDay);
-        console.log(date.getTime());
         let attendanceStatus = attendanceList[i].attendanceStatus;
         let id = '#' + (date.getMonth() + 1) + date.getDate();
         $(id).attr("attendanceId", attendanceList[i].attendanceId)
@@ -898,8 +911,8 @@ let removeAttendance = function () {
     for (let i = 0; i< attendanceList.length; i++) {
         let date = new Date(attendanceList[i].workDay);
         let id = '#' + (date.getMonth() + 1) + date.getDate();
-        $(id).attr("attendanceId", "")
-        $(id).find(":last-child").remove();
+        $(id).attr("attendanceId", "");
+        $(id).find("span").remove();
     }
 };
 
