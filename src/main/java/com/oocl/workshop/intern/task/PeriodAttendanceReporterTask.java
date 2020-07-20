@@ -1,8 +1,6 @@
 package com.oocl.workshop.intern.task;
 
 import com.google.gson.Gson;
-import com.oocl.workshop.intern.domain.profile.entity.Team;
-import com.oocl.workshop.intern.domain.profile.service.ProfileDomService;
 import com.oocl.workshop.intern.domain.report.repostitory.po.MonthlySettlementDayRule;
 import com.oocl.workshop.intern.support.ActiveMQConfig;
 import com.oocl.workshop.intern.support.common.event.DomainEvent;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 
@@ -27,7 +24,7 @@ public class PeriodAttendanceReporterTask {
     @Autowired
     private EventPublisher eventPublisher;
 
-//    @Scheduled(cron = "0/5 * * * * MON-FRI ")
+    //    @Scheduled(cron = "0/5 * * * * MON-FRI ")
     @Scheduled(cron = "0 45 8 * * MON-FRI ")
     public void execute() {
         if (Calendar.getInstance().getTime().getDate() > MonthlySettlementDayRule.DEFAULT_DAY) {

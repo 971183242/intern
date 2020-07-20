@@ -9,7 +9,6 @@ import com.oocl.workshop.intern.domain.profile.entity.Intern;
 import com.oocl.workshop.intern.domain.profile.entity.Team;
 import com.oocl.workshop.intern.domain.profile.service.ProfileDomService;
 import com.oocl.workshop.intern.domain.report.repostitory.po.MonthlySettlementDayRule;
-import com.oocl.workshop.intern.interfaces.dto.attendance.AttendanceDTO;
 import com.oocl.workshop.intern.interfaces.dto.email.AttendanceDTO4Email;
 import com.oocl.workshop.intern.interfaces.dto.email.MailSenderDTO;
 import freemarker.template.TemplateException;
@@ -25,7 +24,6 @@ import org.springframework.stereotype.Component;
 
 import javax.jms.Session;
 import javax.mail.MessagingException;
-
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
