@@ -7,13 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class UserDTO {
+public abstract class UserDTO {
     private UserType userType;
     private String domainId;
     private String email;
     private String name;
-    private String internPeriodFromDate;
-    private String internPeriodToDate;
-    private TeamDTO team;
+
     private List<String> roles = new ArrayList<>();
 }

@@ -4,7 +4,7 @@ import com.oocl.workshop.intern.app.service.AttendanceAppService;
 import com.oocl.workshop.intern.domain.attendance.entity.PeriodAttendance;
 import com.oocl.workshop.intern.domain.profile.entity.Intern;
 import com.oocl.workshop.intern.interfaces.assembler.AttendanceAssembler;
-import com.oocl.workshop.intern.interfaces.assembler.InternAssembler;
+import com.oocl.workshop.intern.interfaces.assembler.ProfileAssembler;
 import com.oocl.workshop.intern.interfaces.dto.ResultDto;
 import com.oocl.workshop.intern.interfaces.dto.attendance.AttendanceDTO;
 import com.oocl.workshop.intern.interfaces.dto.profile.UserDTO;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
 import java.util.List;
-import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -64,7 +63,7 @@ public class AttendanceController {
     @GetMapping(value = "/getInterns", produces = APPLICATION_JSON_VALUE)
     public ResultDto getTeamInterns(@RequestParam("teamId") String teamId, @RequestParam("date") String dateStr) throws ParseException {
         List<Intern> interns = attendanceAppService.getInternsActiveInDateContainedPeriod(teamId, DateUtil.parseDate(dateStr));
-        List<UserDTO> userDTOS = interns.stream().map(InternAssembler::toDTO).collect(toList());
+        List<UserDTO> userDTOS = interns.stream().map(ProfileAssembler::toDTO).collect(toList());
         return ResultDto.success(userDTOS);
     }
 }

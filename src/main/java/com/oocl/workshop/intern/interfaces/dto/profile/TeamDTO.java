@@ -6,5 +6,5 @@ import lombok.Data;
 public class TeamDTO {
     private String teamId;
     private String name;
-    private UserDTO teamLeader;
+    private EmployeeDTO teamLeader;
 }

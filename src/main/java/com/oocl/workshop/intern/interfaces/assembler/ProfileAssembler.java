@@ -8,6 +8,8 @@ import com.oocl.workshop.intern.domain.profile.entity.Team;
 import com.oocl.workshop.intern.domain.profile.entity.User;
 import com.oocl.workshop.intern.domain.profile.entity.UserType;
 import com.oocl.workshop.intern.domain.profile.entity.valueobject.InternPeriod;
+import com.oocl.workshop.intern.interfaces.dto.profile.EmployeeDTO;
+import com.oocl.workshop.intern.interfaces.dto.profile.InternDTO;
 import com.oocl.workshop.intern.interfaces.dto.profile.TeamDTO;
 import com.oocl.workshop.intern.interfaces.dto.profile.UserDTO;
 import com.oocl.workshop.intern.support.util.DateUtil;
@@ -35,8 +37,8 @@ public class ProfileAssembler {
     }
 
 
-    private static UserDTO toInternDTO(Intern intern) {
-        UserDTO dto = new UserDTO();
+    public static InternDTO toInternDTO(Intern intern) {
+        InternDTO dto = new InternDTO();
         setCommon(dto, intern);
 
         dto.setTeam(toTeamDTO(intern.getTeam()));
@@ -49,8 +51,8 @@ public class ProfileAssembler {
     }
 
 
-    private static UserDTO toEmployeeDTO(Employee employee) {
-        UserDTO dto = new UserDTO();
+    public static EmployeeDTO toEmployeeDTO(Employee employee) {
+        EmployeeDTO dto = new EmployeeDTO();
         setCommon(dto, employee);
         return dto;
     }
@@ -70,16 +72,16 @@ public class ProfileAssembler {
 
 
     public static User toDO(UserDTO dto) throws ParseException {
-        if (UserType.INTERN.equals(dto.getUserType())) {
-            return createIntern(dto);
-        } else if (UserType.EMPLOYEE.equals(dto.getUserType())) {
-
+        if (dto instanceof InternDTO) {
+            return createIntern((InternDTO) dto);
+        } else if (dto instanceof EmployeeDTO) {
+            return createEmployee((EmployeeDTO) dto);
         }
         return null;
     }
 
 
-    private static Intern createIntern(UserDTO dto) throws ParseException {
+    public static Intern createIntern(InternDTO dto) throws ParseException {
         Intern user = new Intern();
         setCommon(user, dto);
         user.setRoles(Lists.newArrayList(Role.INTERN));
@@ -96,7 +98,7 @@ public class ProfileAssembler {
     }
 
 
-    private static Employee createEmployee(UserDTO dto) {
+    public static Employee createEmployee(EmployeeDTO dto) {
         Employee employee = new Employee();
         setCommon(employee, dto);
         return employee;
@@ -129,7 +131,7 @@ public class ProfileAssembler {
         TeamDTO dto = new TeamDTO();
         dto.setTeamId(team.getTeamId());
         dto.setName(team.getName());
-        dto.setTeamLeader(toDTO(team.getTeamLeader()));
+        dto.setTeamLeader(toEmployeeDTO(team.getTeamLeader()));
         return dto;
     }
 }

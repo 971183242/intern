@@ -4,6 +4,7 @@ import com.oocl.workshop.intern.app.service.ProfileAppService;
 import com.oocl.workshop.intern.domain.profile.entity.Team;
 import com.oocl.workshop.intern.domain.profile.entity.User;
 import com.oocl.workshop.intern.interfaces.assembler.ProfileAssembler;
+import com.oocl.workshop.intern.interfaces.dto.profile.InternDTO;
 import com.oocl.workshop.intern.interfaces.dto.profile.TeamDTO;
 import com.oocl.workshop.intern.interfaces.dto.profile.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,14 +40,14 @@ public class ProfileController {
         return userOptional.isPresent() ? ProfileAssembler.toDTO(userOptional.get()) : null;
     }
 
-    @PostMapping(value = "/createUser")
-    public UserDTO createUser(@RequestBody UserDTO userDTO) throws ParseException {
+    @PostMapping(value = "/createIntern", produces = APPLICATION_JSON_VALUE)
+    public UserDTO createIntern(@RequestBody InternDTO userDTO) throws ParseException {
         User user = profileAppService.createUser(ProfileAssembler.toDO(userDTO));
         return ProfileAssembler.toDTO(user);
     }
 
-    @PostMapping(value = "/updateUser")
-    public UserDTO updateUser(@RequestBody UserDTO userDTO) throws ParseException {
+    @PostMapping(value = "/updateIntern", produces = APPLICATION_JSON_VALUE)
+    public UserDTO updateIntern(@RequestBody InternDTO userDTO) throws ParseException {
         User user = profileAppService.updateUser(ProfileAssembler.toDO(userDTO));
         return ProfileAssembler.toDTO(user);
     }
