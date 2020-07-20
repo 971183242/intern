@@ -96,7 +96,8 @@ public class DemoConsumer {
             internList.forEach(intern -> {
                 PeriodAttendance periodAttendance = attendanceDomService.getPeriodAttendance(intern.getDomainId(), dateFrom, dateTo);
                 AttendanceDTO4Email attendanceDTO = new AttendanceDTO4Email();
-                attendanceDTO.setInternId(periodAttendance.getInternId());
+                String internId = periodAttendance.getInternId();
+                attendanceDTO.setInternName(profileDomService.findUserByDomainId(internId).get().getName());
                 attendanceDTO.setApprovedDays(periodAttendance.getApprovedAttendanceCount());
                 attendanceDTO.setRejectedDays(periodAttendance.getRejectedAttendanceCount());
                 attendanceDTO.setCheckInDays(periodAttendance.getCheckedInAttendanceCount());

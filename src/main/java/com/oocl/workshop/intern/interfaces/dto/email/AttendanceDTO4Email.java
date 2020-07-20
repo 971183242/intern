@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class AttendanceDTO4Email extends AttendanceDTO {
+    private String internName;
     private int checkInDays;
     private int approvedDays;
     private int rejectedDays;
