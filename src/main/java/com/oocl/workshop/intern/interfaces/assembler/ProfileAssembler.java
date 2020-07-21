@@ -131,7 +131,9 @@ public class ProfileAssembler {
         TeamDTO dto = new TeamDTO();
         dto.setTeamId(team.getTeamId());
         dto.setName(team.getName());
-        dto.setTeamLeader(toEmployeeDTO(team.getTeamLeader()));
+        if (team.getTeamLeader() != null) {
+            dto.setTeamLeader(toEmployeeDTO(team.getTeamLeader()));
+        }
         return dto;
     }
 }

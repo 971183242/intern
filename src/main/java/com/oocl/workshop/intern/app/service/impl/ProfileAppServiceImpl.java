@@ -54,11 +54,6 @@ public class ProfileAppServiceImpl  implements ProfileAppService {
     }
 
     @Override
-    public List<String> getRoles() {
-        return Stream.of(Role.values()).map(Role::getFullName).collect(Collectors.toList());
-    }
-
-    @Override
     public List<Intern> getInterns(Date date) {
         List<Date> dateWindow = monthlySettlementDayRuleService.getMonthlySettlementDateWindow(date);
         return profileDomService.findInterns(dateWindow.get(0), dateWindow.get(1));
