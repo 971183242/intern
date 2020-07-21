@@ -109,13 +109,14 @@ let initUserList = function() {
     let activeFlag = 'active';
     for (let i = 0; i < internList.length; i++) {
         let domainId = internList[i].domainId;
+        let userName = internList[i].name;
         if (i > 0) {
             activeFlag = 'no-active';
         } else {
             currentIntern = internList[i].domainId;
         }
         userListStr += '<a href="#" class="list-group-item ' + activeFlag + '" domainId="'+ domainId +'">\n' +
-            domainId +
+            userName +
             '</a>'
     }
     userListBoxEl.append(userListStr);

@@ -18,14 +18,15 @@
                     <!--向右对齐-->
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" th:text="${domainId}" id = "domainId">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" th:text="${userName}" id = "userName">
                                 <b class="caret"></b>
                             </a>
                             <input type="hidden" id="teamId" th:value="${teamId}">
-                            <ul class="dropdown-menu">
-                                <li><a href="#">个人信息</a></li>
-                                <li><a href="#">登出</a></li>
-                            </ul>
+                            <input type="hidden" id="domainId" th:value="${domainId}">
+                            <!--<ul class="dropdown-menu">-->
+                                <!--<li><a href="#">个人信息</a></li>-->
+                                <!--<li><a href="#">登出</a></li>-->
+                            <!--</ul>-->
                         </li>
                     </ul>
                 </div>

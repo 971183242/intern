@@ -125,7 +125,7 @@ new SYSUI({
 });
 let nowDate = new Date();
 nowDateStr = dateFormat("YYYY-mm-dd", nowDate);
-currentIntern = $('#domainId').text();
+currentIntern = $('#domainId').val();
 getAttendances(currentIntern, nowDateStr);
 if (new Date().getDate() > 20) {
     $('.next-month-item').click();
