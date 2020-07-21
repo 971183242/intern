@@ -28,24 +28,24 @@
     <tr>
         <td>本期实习生签到记录报表如下：</td>
     </tr>
-    <div>
-        <table border="1">
+    <table border="1">
+        <tr>
+            <th style="background: #7af6e9">实习生</th>
+            <th style="background: #09ff74">已通过</th>
+            <th style="background: #f80101">已拒绝</th>
+            <th style="background: #ffff0d">待审批</th>
+        </tr>
+        <tbody id="report" align="left">
+        <#list attendance as item>
             <tr>
-                <th>Intern Name</th>
-                <th>已通过</th>
-                <th>已拒绝</th>
-                <th>待审批</th>
+                <td align="center">${item.internName}</td>
+                <td align="right">${item.approvedDays}</td>
+                <td align="right">${item.rejectedDays}</td>
+                <td align="right">${item.checkInDays}</td>
             </tr>
-            <#list attendance as item>
-                <tr>
-                    <td>${item.internName}</td>
-                    <td> ${item.approvedDays}</td>
-                    <td> ${item.rejectedDays}</td>
-                    <td>${item.checkInDays}</td>
-                </tr>
-            </#list>
-        </table>
-    </div>
+        </#list>
+        </tbody>
+    </table>
     <tr>&nbsp&nbsp系统审批入口↓↓↓</tr>
     <tr>&nbsp&nbsp http://shagit02-w10.corp.oocl.com:9080/leader#</tr>
     <tr>&nbsp;</tr>
@@ -57,6 +57,15 @@
         </td>
     </tr>
 </table>
-
+<script type="text/javascript">
+    var report = document.getElementById("report");
+    var tr = report.getElementsByTagName('tr');
+    for (var i = 0; i < tr.length; i++) {
+        var td = tr[i].getElementsByTagName('td')[3];
+        // if (td.innerText !== "0") {
+            td.style.color = "#f6050f";
+        // }
+    }
+</script>
 </body>
 </html>
