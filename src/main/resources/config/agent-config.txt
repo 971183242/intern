@@ -1,4 +1,4 @@
-password=SSO_AGENT_CONFIG_PASSWORD
+password=cGFzc3dvcmQ=
 cookie-path=/
 token-renewuntil=90000
 use-sunjce=false

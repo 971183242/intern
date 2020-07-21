@@ -32,7 +32,10 @@ public class CommonAuthenticationProvider implements AuthenticationProvider {
         }
         Set<String> authoritiesSet = new HashSet<>(16);
         Optional<User> userOptional = profileAppService.findUserByDomainId(username);
-        String teamId = "TMS";
+        String teamId = "";
+        if(profileAppService.findTeam(username) != null) {
+            teamId = profileAppService.findTeam(username).getTeamId();
+        }
         List<String> roles = new ArrayList<>();
         if(userOptional !=null) {
             for (Role role: userOptional.get().getRoles()) {
