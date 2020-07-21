@@ -3,12 +3,11 @@
 insert into T_SETTLEMENT_DAY(day) values(20);
 
 -- teams
-insert into T_TEAM(team_id,name, team_leader_id) values('TMS', 'tms', 'LUAL');
-insert into T_TEAM(team_id,name, team_leader_id) values('WMS', 'ips','yuanfr');
-insert into T_TEAM(team_id,name, team_leader_id) values('DCS', 'FW','yuanfr');
-insert into T_TEAM(team_id,name, team_leader_id) values('IPS', 'WMS','zhujo3');
-insert into T_TEAM(team_id,name, team_leader_id) values('GPS', 'GPS', 'gejo');
-insert into T_TEAM(team_id,name, team_leader_id) values('FWK', 'HR', 'dongja3');
+insert into T_TEAM(team_id,name, team_leader_id) values('TMS', 'TMS', 'LUAL');
+insert into T_TEAM(team_id,name, team_leader_id) values('WMS/DCS', 'WMS/DCS','YUANFR');
+insert into T_TEAM(team_id,name, team_leader_id) values('IPS', 'IPS','ZHUJO3');
+insert into T_TEAM(team_id,name, team_leader_id) values('GPS', 'GPS', 'GEJO');
+insert into T_TEAM(team_id,name, team_leader_id) values('FWK', 'FWK', 'DONGJA3');
 
 -- SuperAdmin
 insert into t_user(domain_id,name,email,user_type,role,date_from, date_to,team_id)
