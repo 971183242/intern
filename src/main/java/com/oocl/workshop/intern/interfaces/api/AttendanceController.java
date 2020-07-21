@@ -11,16 +11,9 @@ import com.oocl.workshop.intern.interfaces.dto.attendance.AttendanceDTO;
 import com.oocl.workshop.intern.interfaces.dto.profile.UserDTO;
 import com.oocl.workshop.intern.support.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
