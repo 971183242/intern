@@ -1,5 +1,6 @@
 ﻿var currentMonth = new Date().getMonth() + 1;
 var currentYear = new Date().getFullYear();
+var currentDate = new Date().getDate();
 let attendanceList = [];
 let nowDateStr = '';
 let currentIntern = '';
@@ -143,7 +144,11 @@ Calendar.prototype = {
             if (beforeDate != afterDate) {
                 opts.newDate.setDate(opts.newDate.getDate() - 1);
             }
-            nowDateStr = dateFormat("YYYY-mm-dd", opts.newDate);
+            if (currentDate > 20) {
+                nowDateStr = dateFormat("YYYY-mm-dd", new Date(new Date().setMonth(opts.newDate.getMonth()-1)));
+            } else {
+                nowDateStr = dateFormat("YYYY-mm-dd", opts.newDate);
+            }
             getAttendances(currentIntern, nowDateStr);
             initAttendance();
             let lastMonth = currentMonth - 1;
@@ -154,9 +159,16 @@ Calendar.prototype = {
         })
         $(document).on("click", ".next-month-item", function (e) {
             e.stopPropagation();
-            if (currentMonth ===  (new Date().getMonth() + 1) && currentYear === (new Date().getFullYear())) {
-                return
+            if (currentDate > 20) {
+                if ((currentMonth -1) ===  (new Date().getMonth() + 1) && currentYear === (new Date().getFullYear())) {
+                    return
+                }
+            } else {
+                if (currentMonth ===  (new Date().getMonth() + 1) && currentYear === (new Date().getFullYear())) {
+                    return
+                }
             }
+
             var monthText = $(this).text();
             // var monthNum = monthText.split("月")[0];
             if (currentMonth === 12) {
@@ -173,7 +185,12 @@ Calendar.prototype = {
             if (beforeDate != afterDate) {
                 opts.newDate.setDate(opts.newDate.getDate() - 1);
             }
-            nowDateStr = dateFormat("YYYY-mm-dd", opts.newDate);
+            if (currentDate > 20) {
+                nowDateStr = dateFormat("YYYY-mm-dd", new Date(new Date().setMonth(opts.newDate.getMonth()-1)));
+            } else {
+                nowDateStr = dateFormat("YYYY-mm-dd", opts.newDate);
+            }
+
             getAttendances(currentIntern, nowDateStr);
             initAttendance();
             let lastMonth = currentMonth - 1;

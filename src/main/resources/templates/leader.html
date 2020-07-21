@@ -35,14 +35,6 @@
     <div id="pageModule" class="pageModule">
         <div id="pagescroll" class="pagescroll">
             <div class="user-list-box">
-                <!--<a href="#" class="list-group-item no-active">-->
-                    <!--Oyang Miao-->
-                <!--</a>-->
-                <!--<a href="#" class="list-group-item active" >Crise Cheng</a>-->
-                <!--<a href="#" class="list-group-item no-active">Lorris Fu-->
-                <!--</a>-->
-                <!--<a href="#" class="list-group-item no-active" userId="Arron Peng">Arron Peng  <span class="point">&#xe62c;</span></a>-->
-                <!--<a href="#" class="list-group-item no-active">Obed Ouyang</a>-->
             </div>
             <div class="angle left-angle" style="width: 8%">
                 <span class="previous last-month-item">&#xe669;</span>
@@ -51,12 +43,13 @@
             <div class="angle right-angle" style="width: 8%">
                 <span class="previous next-month-item">&#xe65b;</span>
             </div>
+            <div class="footer-btns">
+                <button type="button"  class="btn btn-success btn-lg btn-action btn-approve" style="margin-left: 42%;">审批</button>
+                <button type="button"  class="btn btn-danger btn-lg btn-action btn-reject" style="margin-left: 10%;">拒批</button>
+            </div>
         </div>
     </div>
-    <div class="footer-btns">
-        <button type="button"  class="btn btn-success btn-lg btn-action btn-approve" style="margin-left: 42%;">审批</button>
-        <button type="button"  class="btn btn-danger btn-lg btn-action btn-reject" style="margin-left: 10%;">拒批</button>
-    </div>
+
 </body>
 <script type="module" th:src="@{js/leader.js}"></script>
 </html>

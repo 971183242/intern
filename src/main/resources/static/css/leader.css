@@ -5,6 +5,7 @@
     /*margin-left: -15px;*/
     position: relative;
     left: -15px;
+    z-index: 20;
 }
 #calendar {
     float: left;width: 70%;
@@ -18,11 +19,16 @@
     height: 60px;
     width: 100%;
     display: block;
-    margin-top: -9%;
+    position: relative;
+    top: 35px;
 }
 .pageModule{
     margin-left: auto;margin-right: auto;margin-top: -20px;
 }
 .active {
     background-color: #0885D1 !important;
+}
+.list-group-item {
+    float: right;
+    width: 90%;
 }
