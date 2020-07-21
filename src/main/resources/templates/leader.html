@@ -16,10 +16,13 @@
                     <a class="navbar-brand" href="#">Intern System</a>
                 </div>
                 <div>
-                    <ul sec:authorize="hasRole(SUPER_ADMIN)" class="nav navbar-nav" style="margin-left: 20px">
-                        <li><a href="/admin">Admin</a></li>
-                        <li class="li-active"><a href="/leader">Approve</a></li>
-                    </ul>
+                    <div sec:authorize="hasRole('SUPER_ADMIN')">
+                        <ul class="nav navbar-nav" style="margin-left: 20px">
+                            <li><a href="/admin">Admin</a></li>
+                            <li class="li-active"><a href="/leader">Approve</a></li>
+                        </ul>
+                    </div>
+
                     <!--向右对齐-->
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
