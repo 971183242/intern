@@ -100,14 +100,24 @@
 }
 .calendar-date-active:hover {
 	background: #e6f7ff;
-	position: absolute;
+	/*position: absolute;*/
+	/*width: 100%;*/
+	/*height: 100%;*/
+	/*z-index: -1;*/
+	/*top:0;*/
+	/*left: 0;*/
+	/*content: "";*/
+	border: 3px solid #F07102;
+}
+.calendar-date-active {
+	/*position: absolute;*/
 	width: 100%;
 	height: 100%;
 	z-index: -1;
-	top:0;
-	left: 0;
-	content: "";
-	border: 3px solid #F07102;
+	/*top:0;*/
+	/*left: 0;*/
+	/*content: "";*/
+	border: 3px solid transparent;
 }
 .calendar-holiday-bg{background: #EED3D7; position: absolute; z-index: -2; content: ''; width: 100%; height: 100%; left: 0px ; top:0px}
 .calendar-value {
@@ -268,7 +278,7 @@
 	color: rgba(0, 0, 0, 0.25);
 }
 .calendar-tbody>tr{
-	line-height: 2;
+	line-height: 1.8;
 }
 
 .btn {

@@ -9,7 +9,7 @@ $(document).on("click", ".calendar-cell-active", function (e) {
         $(this).children(":first").css("border", "3px solid #FF6633");
         $(this).attr("choose", "true");
     } else {
-        $(this).children(":first").css("border", "0");
+        $(this).children(":first").css("border", "3px solid transparent");
         $(this).attr("choose", "false");
     }
 });
@@ -66,7 +66,6 @@ let confirmAttendances = function(operation) {
             contentType: 'application/json;charset=UTF-8',
             async: false,
             success: function (data) {
-                console.log(data);
                 if (data) {
                     if (operation === 'Approved') {
                         Alert.approveSuccess();
@@ -92,7 +91,6 @@ let getTeamUsers = function(teamId, dateStr) {
         contentType: 'application/json;charset=UTF-8',
         async: false,
         success: function (data) {
-            console.log(data);
             if (data.code === 1) {
                 internList = data.data;
             } else {
@@ -155,4 +153,7 @@ let teamId = $('#teamId').val();
 getTeamUsers(teamId, nowDateStr);
 initUserList();
 getAttendances(currentIntern, nowDateStr);
+if (new Date().getDate() > 20) {
+    $('.next-month-item').click();
+}
 initAttendance();
