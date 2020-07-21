@@ -4,7 +4,7 @@
     margin-right: auto;
 }
 .bootstrap-table{
-    margin-top: -45px;
+    margin-top: 15px;
 }
 .btn-delete, .btn-edit {
     border: 0;
@@ -22,4 +22,7 @@
 .glyphicon-trash:hover {
     color: #337ab7;
 
+}
+.col-sm-10>span {
+    color: #a94442;
 }

@@ -123,6 +123,7 @@ new SYSUI({
         }
     }]
 });
+//初始化
 let nowDate = new Date();
 nowDateStr = dateFormat("YYYY-mm-dd", nowDate);
 currentIntern = $('#domainId').val();

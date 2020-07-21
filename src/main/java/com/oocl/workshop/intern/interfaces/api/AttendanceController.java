@@ -1,6 +1,7 @@
 package com.oocl.workshop.intern.interfaces.api;
 
 import com.oocl.workshop.intern.app.service.AttendanceAppService;
+import com.oocl.workshop.intern.app.service.ProfileAppService;
 import com.oocl.workshop.intern.domain.attendance.entity.PeriodAttendance;
 import com.oocl.workshop.intern.domain.profile.entity.Intern;
 import com.oocl.workshop.intern.interfaces.assembler.AttendanceAssembler;
@@ -16,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import sun.java2d.cmm.Profile;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -27,7 +30,14 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("/attendance")
 public class AttendanceController {
 
+    private final ProfileAppService profileAppService;
+
     private AttendanceAppService attendanceAppService;
+
+    @Autowired
+    public AttendanceController(ProfileAppService profileAppService) {
+        this.profileAppService = profileAppService;
+    }
 
     @Autowired
     public void setAttendanceAppService(AttendanceAppService attendanceAppService) {
@@ -62,7 +72,12 @@ public class AttendanceController {
 
     @GetMapping(value = "/getInterns", produces = APPLICATION_JSON_VALUE)
     public ResultDto getTeamInterns(@RequestParam("teamId") String teamId, @RequestParam("date") String dateStr) throws ParseException {
-        List<Intern> interns = attendanceAppService.getInternsActiveInDateContainedPeriod(teamId, DateUtil.parseDate(dateStr));
+        List<Intern> interns;
+        if ("all".equals(teamId)) {
+            interns = profileAppService.getInterns(DateUtil.parseDate(dateStr));
+        } else {
+            interns = attendanceAppService.getInternsActiveInDateContainedPeriod(teamId, DateUtil.parseDate(dateStr));
+        }
         List<UserDTO> userDTOS = interns.stream().map(ProfileAssembler::toDTO).collect(toList());
         return ResultDto.success(userDTOS);
     }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -15,6 +16,10 @@
                     <a class="navbar-brand" href="#">Intern System</a>
                 </div>
                 <div>
+                    <ul sec:authorize="hasRole(SUPER_ADMIN)" class="nav navbar-nav" style="margin-left: 20px">
+                        <li><a href="/admin">Admin</a></li>
+                        <li class="li-active"><a href="/leader">Approve</a></li>
+                    </ul>
                     <!--向右对齐-->
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
@@ -23,6 +28,7 @@
                             </a>
                             <input type="hidden" id="teamId" th:value="${teamId}">
                             <input type="hidden" id="domainId" th:value="${domainId}">
+                            <input type="hidden" th:value="${role}" id="role">
                             <!--<ul class="dropdown-menu">-->
                                 <!--<li><a href="#">个人信息</a></li>-->
                                 <!--<li><a href="#">登出</a></li>-->
