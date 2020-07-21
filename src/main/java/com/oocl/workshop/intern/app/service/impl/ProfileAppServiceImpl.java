@@ -63,4 +63,9 @@ public class ProfileAppServiceImpl  implements ProfileAppService {
     public boolean deleteUser(String domainId) {
         return profileDomService.deleteUser(domainId);
     }
+
+    @Override
+    public Team findTeam(String userDomainId) {
+        return profileDomService.findTeamByUserId(userDomainId);
+    }
 }

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.oocl.workshop.intern.domain.profile.entity.Intern;
 import com.oocl.workshop.intern.domain.profile.entity.Team;
 import com.oocl.workshop.intern.domain.profile.entity.User;
+import com.oocl.workshop.intern.domain.profile.entity.UserType;
 import com.oocl.workshop.intern.domain.profile.repository.facade.TeamRepo;
 import com.oocl.workshop.intern.domain.profile.repository.facade.UserRepo;
 import com.oocl.workshop.intern.domain.profile.repository.po.TeamPo;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -98,5 +100,21 @@ public class ProfileDomServiceImpl implements ProfileDomService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Team findTeamByUserId(String domainId) {
+        Optional<UserPo> userPo = userRepo.findById(domainId);
+        if (!userPo.isPresent()) {
+            return null;
+        }
+        Optional<TeamPo> teamPoOptional = Optional.empty();
+        if (UserType.INTERN.equals(userPo.get().getUserType()) && !StringUtils.isEmpty(userPo.get().getTeamId())) {
+            teamPoOptional = teamRepo.findById(userPo.get().getTeamId());
+
+        } else if (UserType.EMPLOYEE.equals(userPo.get().getUserType())) {
+            teamPoOptional = teamRepo.findFirstByTeamLeaderId(userPo.get().getDomainId());
+        }
+        return teamPoOptional.isPresent() ? profileFactory.getTeam(teamPoOptional.get()) : null;
     }
 }

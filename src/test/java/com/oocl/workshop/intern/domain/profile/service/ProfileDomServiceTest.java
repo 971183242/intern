@@ -3,6 +3,7 @@ package com.oocl.workshop.intern.domain.profile.service;
 import com.google.common.collect.Lists;
 import com.oocl.workshop.intern.domain.profile.entity.Intern;
 import com.oocl.workshop.intern.domain.profile.entity.Team;
+import com.oocl.workshop.intern.domain.profile.entity.UserType;
 import com.oocl.workshop.intern.domain.profile.repository.facade.TeamRepo;
 import com.oocl.workshop.intern.domain.profile.repository.facade.UserRepo;
 import com.oocl.workshop.intern.domain.profile.repository.po.TeamPo;
@@ -23,6 +24,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
@@ -111,5 +113,29 @@ class ProfileDomServiceTest {
         assertEquals(true, deleted);
         verify(userPo, times(1)).setActive(false);
         verify(userRepo, times(1)).save(userPo);
+    }
+
+    @Test
+    void findTeamByUserId() {
+        UserPo intern = new UserPo();
+        intern.setUserType(UserType.INTERN);
+
+        when(userRepo.findById(any())).thenReturn(Optional.of(intern));
+        profileDomService.findTeamByUserId("test");
+
+        intern.setTeamId("teamId");
+        when(teamRepo.findById(any())).thenReturn(Optional.of(new TeamPo()));
+        when(profileFactory.getTeam(any())).thenReturn(new Team());
+        Team team = profileDomService.findTeamByUserId("test");
+        assertNotNull(team);
+
+        UserPo leader = new UserPo();
+        leader.setDomainId("leaderId");
+        leader.setUserType(UserType.EMPLOYEE);
+        when(userRepo.findById(any())).thenReturn(Optional.of(leader));
+        when(teamRepo.findFirstByTeamLeaderId("leaderId")).thenReturn(Optional.of(new TeamPo()));
+        when(profileFactory.getTeam(any())).thenReturn(new Team());
+        Team team2 = profileDomService.findTeamByUserId("leaderId");
+        assertNotNull(team2);
     }
 }
