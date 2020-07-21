@@ -14,6 +14,8 @@ import java.util.Set;
 @AllArgsConstructor
 public class CurrentUser implements Serializable, UserDetails {
 
+    private String domainId;
+
     private String username;
 
     private String password;
@@ -38,7 +40,8 @@ public class CurrentUser implements Serializable, UserDetails {
     }
 
 
-    public CurrentUser(String username, String password, String teamId, Set<String> roles, boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired, boolean enabled) {
+    public CurrentUser(String domainId,String username, String password, String teamId, Set<String> roles, boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired, boolean enabled) {
+        this.domainId = domainId;
         this.username = username;
         this.password = password;
         this.teamId = teamId;

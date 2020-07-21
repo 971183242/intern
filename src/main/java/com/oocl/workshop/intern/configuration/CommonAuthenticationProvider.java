@@ -25,25 +25,27 @@ public class CommonAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String username = authentication.getName();
+        String domainId = authentication.getName();
         String password = (String) authentication.getCredentials();
-        if(username == null){
+        if(domainId == null){
             throw new UsernameNotFoundException("用户名为空");
         }
         Set<String> authoritiesSet = new HashSet<>(16);
-        Optional<User> userOptional = profileAppService.findUserByDomainId(username);
+        Optional<User> userOptional = profileAppService.findUserByDomainId(domainId);
         String teamId = "";
-        if(profileAppService.findTeam(username) != null) {
-            teamId = profileAppService.findTeam(username).getTeamId();
+        String username ="";
+        if(profileAppService.findTeam(domainId) != null) {
+            teamId = profileAppService.findTeam(domainId).getTeamId();
         }
         List<String> roles = new ArrayList<>();
         if(userOptional !=null) {
             for (Role role: userOptional.get().getRoles()) {
                 roles.add(role.getFullName());
             }
+            username = userOptional.get().getName();
         }
         authoritiesSet.addAll(roles);
-        CurrentUser userInfo = new CurrentUser(username, password, teamId ,authoritiesSet,true, true, true, true);
+        CurrentUser userInfo = new CurrentUser(domainId,username, password, teamId ,authoritiesSet,true, true, true, true);
         userInfo.setAuthorities(authoritiesSet.parallelStream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
         return new UsernamePasswordAuthenticationToken(userInfo, password, userInfo.getAuthorities());
     }
