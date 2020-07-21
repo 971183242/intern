@@ -44,7 +44,6 @@ let createAttendance = function(date) {
         contentType: 'application/json;charset=UTF-8',
         async: false,
         success: function (data) {
-            console.log(data);
             if (data.code === 1) {
                 newAttendance =  data.data;
             } else {
@@ -87,7 +86,6 @@ let confirmAttendances = function(needConfirmedAttendanceList) {
         contentType: 'application/json;charset=UTF-8',
         async: false,
         success: function (data) {
-            console.log(data);
             if (data.code === 1) {
             } else {
 
@@ -127,7 +125,10 @@ new SYSUI({
 });
 let nowDate = new Date();
 nowDateStr = dateFormat("YYYY-mm-dd", nowDate);
-currentIntern = $('#domainId').text();
+currentIntern = $('#domainId').val();
 getAttendances(currentIntern, nowDateStr);
+if (new Date().getDate() > 20) {
+    $('.next-month-item').click();
+}
 initAttendance();
 

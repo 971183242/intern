@@ -32,7 +32,7 @@ public class ProfileController {
     @Autowired
     private ProfileAppService profileAppService;
 
-    @PostMapping(value = "/teams", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/teams", produces = APPLICATION_JSON_VALUE)
     public List<TeamDTO> findAllTeams() {
         List<Team> allTeams = profileAppService.findAllTeams();
         return allTeams.stream().map(ProfileAssembler::toTeamDTO).collect(toList());
@@ -62,10 +62,6 @@ public class ProfileController {
         return interns.stream().map(ProfileAssembler::toInternDTO).collect(Collectors.toList());
     }
 
-    @GetMapping(value = "/roles", produces = APPLICATION_JSON_VALUE)
-    public List<String> getRoles() throws ParseException {
-        return profileAppService.getRoles();
-    }
 
     @PostMapping(value = "/deleteUser", produces = APPLICATION_JSON_VALUE)
     public boolean deleteUser(@RequestParam("domainId") String domainId) {

@@ -110,13 +110,6 @@ class ProfileAppServiceImplTest {
     }
 
     @Test
-    void getRoles() {
-        List<String> roles = profileAppServiceImpl.getRoles();
-        log.info(roles.toString());
-        assertEquals(4, roles.size());
-    }
-
-    @Test
     void getInterns() {
         Date date = new Date();
         when(monthlySettlementDayRuleService.getMonthlySettlementDateWindow(date)).thenReturn(Lists.newArrayList(new Date(), new Date()));

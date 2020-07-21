@@ -54,11 +54,6 @@ public class ProfileAppServiceImpl  implements ProfileAppService {
     }
 
     @Override
-    public List<String> getRoles() {
-        return Stream.of(Role.values()).map(Role::getFullName).collect(Collectors.toList());
-    }
-
-    @Override
     public List<Intern> getInterns(Date date) {
         List<Date> dateWindow = monthlySettlementDayRuleService.getMonthlySettlementDateWindow(date);
         return profileDomService.findInterns(dateWindow.get(0), dateWindow.get(1));
@@ -67,5 +62,10 @@ public class ProfileAppServiceImpl  implements ProfileAppService {
     @Override
     public boolean deleteUser(String domainId) {
         return profileDomService.deleteUser(domainId);
+    }
+
+    @Override
+    public Team findTeam(String userDomainId) {
+        return profileDomService.findTeamByUserId(userDomainId);
     }
 }

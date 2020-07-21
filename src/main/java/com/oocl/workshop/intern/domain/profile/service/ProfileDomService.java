@@ -22,4 +22,6 @@ public interface ProfileDomService {
     List<Intern> findInterns(Date from, Date to);
 
     boolean deleteUser(String domainId);
+
+    Team findTeamByUserId(String domainId);
 }

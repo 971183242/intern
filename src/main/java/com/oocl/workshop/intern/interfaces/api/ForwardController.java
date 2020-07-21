@@ -46,7 +46,8 @@ public class ForwardController {
     }
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
-    public String toAdmin() {
+    public String toAdmin(ModelMap modelMap) {
+        setAttributes(modelMap);
         return "admin";
     }
 
@@ -99,8 +100,9 @@ public class ForwardController {
     }
 
     private void setAttributes(ModelMap modelMap) {
-        modelMap.addAttribute("domainId", UserInfoUtil.getUserDetails().getUsername());
+        modelMap.addAttribute("domainId", UserInfoUtil.getUserDetails().getDomainId());
         modelMap.addAttribute("teamId", UserInfoUtil.getUserDetails().getTeamId());
+        modelMap.addAttribute("userName", UserInfoUtil.getUserDetails().getUsername());
     }
 
 }

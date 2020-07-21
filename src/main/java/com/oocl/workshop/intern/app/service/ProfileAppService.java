@@ -19,9 +19,9 @@ public interface ProfileAppService {
 
     List<Intern> findTeamInterns(String teamId, Date date);
 
-    List<String> getRoles();
-
     List<Intern> getInterns(Date date);
 
     boolean deleteUser(String domainId);
+
+    Team findTeam(String userDomainId);
 }
