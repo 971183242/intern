@@ -47,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/toLogout",
                         "/h2-console/**").permitAll()
                 .antMatchers(
-                        "/admin").hasAuthority(Role.SUPER_ADMIN.getFullName())
+                        "/admin", "/swagger-ui.html", "/event/**").hasAuthority(Role.SUPER_ADMIN.getFullName())
                 .antMatchers(
                         "/intern").hasAuthority(Role.INTERN.getFullName())
                 .antMatchers(
