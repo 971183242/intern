@@ -5,7 +5,7 @@ let attendanceList = [];
 let nowDateStr = '';
 let currentIntern = '';
 let checkInStr = '<span class="calendar-replenish" status="1">待审批</span>';
-let approvedStr = '<span class="calendar-sign" status="0">已签到</span>';
+let approvedStr = '<span class="calendar-sign" status="0">已审批</span>';
 let rejectedStr = '<span class="calendar-reject" status="2">拒批</span>';
 
 var Calendar = function (element, options) {
@@ -129,7 +129,6 @@ Calendar.prototype = {
         $(document).on("click", ".last-month-item", function (e) {
             e.stopPropagation();
             var monthText = $(this).text();
-            // var monthNum = monthText.split("月")[0];
             if (currentMonth === 1) {
                 currentMonth = 13;
                 opts.newDate.setFullYear(currentYear - 1);
@@ -145,7 +144,7 @@ Calendar.prototype = {
                 opts.newDate.setDate(opts.newDate.getDate() - 1);
             }
             if (currentDate > 20) {
-                nowDateStr = dateFormat("YYYY-mm-dd", new Date(new Date().setMonth(opts.newDate.getMonth()-1)));
+                nowDateStr = dateFormat("YYYY-mm-dd", new Date(opts.newDate.setMonth(opts.newDate.getMonth()-1)));
             } else {
                 nowDateStr = dateFormat("YYYY-mm-dd", opts.newDate);
             }
@@ -170,7 +169,6 @@ Calendar.prototype = {
             }
 
             var monthText = $(this).text();
-            // var monthNum = monthText.split("月")[0];
             if (currentMonth === 12) {
                 currentMonth = 0;
                 opts.newDate.setFullYear(currentYear + 1);
@@ -186,11 +184,13 @@ Calendar.prototype = {
                 opts.newDate.setDate(opts.newDate.getDate() - 1);
             }
             if (currentDate > 20) {
-                nowDateStr = dateFormat("YYYY-mm-dd", new Date(new Date().setMonth(opts.newDate.getMonth()-1)));
+                let date = new Date();
+                date.setFullYear(currentYear);
+                date.setMonth(opts.newDate.getMonth()-1);
+                nowDateStr = dateFormat("YYYY-mm-dd", date);
             } else {
                 nowDateStr = dateFormat("YYYY-mm-dd", opts.newDate);
             }
-
             getAttendances(currentIntern, nowDateStr);
             initAttendance();
             let lastMonth = currentMonth - 1;
@@ -932,23 +932,3 @@ let removeAttendance = function () {
         $(id).find("span").remove();
     }
 };
-
-function dateFormat(fmt, date) {
-    let ret;
-    const opt = {
-        "Y+": date.getFullYear().toString(),        // 年
-        "m+": (date.getMonth() + 1).toString(),     // 月
-        "d+": date.getDate().toString(),            // 日
-        "H+": date.getHours().toString(),           // 时
-        "M+": date.getMinutes().toString(),         // 分
-        "S+": date.getSeconds().toString()          // 秒
-        // 有其他格式化字符需求可以继续添加，必须转化成字符串
-    };
-    for (let k in opt) {
-        ret = new RegExp("(" + k + ")").exec(fmt);
-        if (ret) {
-            fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
-        };
-    };
-    return fmt;
-}

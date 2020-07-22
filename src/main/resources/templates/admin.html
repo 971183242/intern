@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" th:href="@{css/common/bootstrap-3.3.7.css}">
     <link rel="stylesheet" th:href="@{css/common/bootstrap-table.css}" />
-    <link rel="stylesheet" th:href="@{css/admin.css}" />
+    <link rel="stylesheet" th:href="@{css/common/bootstrap-datetimepicker.min.css}">
+    <link th:href="@{css/common/sweetalert2.min.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{css/admin.css}"/>
     <title>User admin</title>
     <style>
     </style>
@@ -18,12 +20,17 @@
                     <a class="navbar-brand" href="#">Intern System</a>
                 </div>
                 <div>
+                    <ul class="nav navbar-nav" style="margin-left: 20px">
+                        <li class="active"><a href="#">Admin</a></li>
+                        <li><a href="/leader">Approve</a></li>
+                    </ul>
                     <!--向右对齐-->
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" th:text="${userName}" id="userName">
                                 <b class="caret"></b>
                             </a>
+                            <input type="hidden" th:value="${role}" id="role">
                             <!--<ul class="dropdown-menu">-->
                                 <!--<li><a href="#">个人信息</a></li>-->
                                 <!--<li><a href="#">登出</a></li>-->
@@ -36,8 +43,8 @@
     </div>
     <div class="mo" style="width: 80%;margin-left: auto;margin-right: auto">
         <!-- 按钮触发模态框 -->
-        <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-            <i class="glyphicon glyphicon-plus"></i> Crate User
+        <button class="btn btn-primary btn-create">
+            <i class="glyphicon glyphicon-plus"></i> Crate Intern
         </button>
         <!-- 模态框（Modal） -->
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -54,42 +61,46 @@
                     <div class="modal-body">
                         <form class="form-horizontal" role="form" style="width: 95%;margin-left: auto;margin-right: auto">
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">DomainId</label>
+                                <label class="col-sm-2 control-label">DomainId:</label>
                                 <div class="col-sm-10">
                                     <input class="form-control" id="domainId" type="text" value="">
+                                    <span></span>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">Name</label>
+                                <label class="col-sm-2 control-label">Name:</label>
                                 <div class="col-sm-10">
                                     <input class="form-control" id="name" type="text" value="">
+                                    <span></span>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">Email</label>
+                                <label class="col-sm-2 control-label">Email:</label>
                                 <div class="col-sm-10">
-                                    <input class="form-control" id="email" type="text" value="">
+                                    <input class="form-control" id="email" type="email" value="">
+                                    <span></span>
                                 </div>
                             </div>
-                            <!--<div class="form-group">-->
-                                <!--<label class="col-sm-2 control-label">Roles</label>-->
-                                <!--<div class="col-sm-10">-->
-                                    <!--<label class="checkbox-inline">-->
-                                        <!--<input type="checkbox" id="inlineCheckbox1" value="admin"> admin-->
-                                    <!--</label>-->
-                                    <!--<label class="checkbox-inline">-->
-                                        <!--<input type="checkbox" id="inlineCheckbox2" value="leader"> leader-->
-                                    <!--</label>-->
-                                    <!--<label class="checkbox-inline">-->
-                                        <!--<input type="checkbox" id="internCheckBox" value="intern"> intern-->
-                                    <!--</label>-->
-                                    <!--<label class="checkbox-inline">-->
-                                        <!--<input type="checkbox" id="inlineCheckbox4" value="option3"> hr-->
-                                    <!--</label>-->
-                                <!--</div>-->
-                            <!--</div>-->
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Period:</label>
+                                <div class="col-sm-10">
+                                    <div class='input-group date' id='startTime'style="width: 45%;float: left">
+                                        <input type='text' class="form-control" id="fromTime" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                    <!--<span style="float: left">TO</span>-->
+                                    <div class='input-group date' id='endTime' style="width: 45%;float: left;margin-left: 5%">
+                                        <input type='text' class="form-control" id="toTime" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-group leader-select">
-                                <label class="col-sm-2 control-label">Leader</label>
+                                <label class="col-sm-2 control-label">Team:</label>
                                 <div class="col-sm-10">
                                     <select class="form-control" id="teamId">
                                         <option value="team1">team1</option>
@@ -106,7 +117,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel
                         </button>
-                        <button type="button" class="btn btn-primary save-user">
+                        <button type="button" class="btn btn-primary edit-user">
                             Submit
                         </button>
                     </div>
@@ -119,6 +130,11 @@
     <script type="text/javascript" th:src="@{js/common/jquery-2.1.1.min.js}"></script>
     <script type="text/javascript" th:src="@{js/common/bootstrap-3.3.7.min.js}"></script>
     <script type="text/javascript" th:src="@{js/common/bootstrap-table.min.js}"></script>
-    <script type="text/javascript" th:src="@{js/admin.js}"></script>
+    <script type="text/javascript" th:src="@{js/common/moment.js}"></script>
+    <script type="text/javascript" th:src="@{js/common/moment-with-locales.min.js}"></script>
+    <script type="text/javascript" th:src="@{js/common/bootstrap-datetimepicker.min.js}"></script>
+    <script th:src="@{js/common/sweetalert2.min.js}"></script>
+    <script type="text/javascript" th:src="@{js/common.js}"></script>
+    <script type="module" th:src="@{js/admin.js}"></script>
 </body>
 </html>

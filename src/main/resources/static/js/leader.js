@@ -148,9 +148,14 @@ new SYSUI({
         }
     }]
 });
+//初始化
 let nowDate = new Date();
 nowDateStr = dateFormat("YYYY-mm-dd", nowDate);
 let teamId = $('#teamId').val();
+let role = $('#role').val();
+if (role.indexOf('ROLE_SUPER_ADMIN') > 0) {
+    teamId = 'all';
+}
 getTeamUsers(teamId, nowDateStr);
 initUserList();
 getAttendances(currentIntern, nowDateStr);

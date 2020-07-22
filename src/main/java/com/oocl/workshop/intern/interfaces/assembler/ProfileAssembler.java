@@ -94,6 +94,10 @@ public class ProfileAssembler {
             internPeriod.setDateTo(DateUtil.parseDate(dto.getInternPeriodToDate()));
         }
         user.setPeriod(internPeriod);
+
+        if (dto.getTeam() != null) {
+            user.setTeam(toTeamDO(dto.getTeam()));
+        }
         return user;
     }
 
@@ -135,5 +139,18 @@ public class ProfileAssembler {
             dto.setTeamLeader(toEmployeeDTO(team.getTeamLeader()));
         }
         return dto;
+    }
+
+    public static Team toTeamDO(TeamDTO teamDTO) {
+        if (Objects.isNull(teamDTO)) {
+            return null;
+        }
+        Team team = new Team();
+        team.setTeamId(teamDTO.getTeamId());
+        team.setName(teamDTO.getName());
+        if (teamDTO.getTeamLeader() != null) {
+            team.setTeamLeader(createEmployee(teamDTO.getTeamLeader()));
+        }
+        return team;
     }
 }

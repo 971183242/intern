@@ -51,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         "/intern").hasAuthority(Role.INTERN.getFullName())
                 .antMatchers(
-                        "/leader").hasAuthority(Role.TEAM_LEADER.getFullName())
+                        "/leader").hasAnyAuthority(Role.TEAM_LEADER.getFullName(),Role.SUPER_ADMIN.getFullName())
                 .and()
                 .formLogin()
                 .loginPage("/login").loginProcessingUrl("/login/form")

@@ -103,6 +103,7 @@ public class ForwardController {
         modelMap.addAttribute("domainId", UserInfoUtil.getUserDetails().getDomainId());
         modelMap.addAttribute("teamId", UserInfoUtil.getUserDetails().getTeamId());
         modelMap.addAttribute("userName", UserInfoUtil.getUserDetails().getUsername());
+        modelMap.addAttribute("role", UserInfoUtil.getUserDetails().getRoles());
     }
 
 }
