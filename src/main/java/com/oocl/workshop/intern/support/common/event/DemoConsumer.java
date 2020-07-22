@@ -70,10 +70,10 @@ public class DemoConsumer {
         Date dateTo = getToDate();
         List<Team> teamList = profileDomService.findAllTeams();
         MailSenderDTO mailDto = new MailSenderDTO();
-        mailDto.setFrom("will.l.y.wang@oocl.com");
-        mailDto.setTo("will.l.y.wang@oocl.com");
+        mailDto.setFrom("grace.w.j.chen@oocl.com");
+        mailDto.setTo("grace.w.j.chen@oocl.com");
         mailDto.setSubject("实习生管理系统-审批报表");
-        mailDto.setCc("zack.tang@oocl.com");
+        mailDto.setCc("grace.w.j.chen@oocl.com");
         mailDto.setTemplateName("email-template-reporter.ftl");
         Map<String, Object> context = new HashMap<>();
         List<AttendanceDTO4Email> attendanceDTOList = getAttendanceDTO4Emails(dateFrom, dateTo, teamList);

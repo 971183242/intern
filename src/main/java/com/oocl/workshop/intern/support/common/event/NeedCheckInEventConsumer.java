@@ -28,10 +28,10 @@ public class NeedCheckInEventConsumer {
     @JmsListener(destination = INTERN_NEED_CHECKIN_QUEUE)
     public void receiveMessage(@Payload NeedCheckInEvent event) throws MessagingException, IOException, TemplateException {
         MailSenderDTO mailDto = new MailSenderDTO();
-        mailDto.setFrom("will.l.y.wang@oocl.com");
-        mailDto.setTo("will.l.y.wang@oocl.com");
+        mailDto.setFrom("grace.w.j.chen@oocl.com");
+        mailDto.setTo("grace.w.j.chen@oocl.com");
         mailDto.setSubject("实习生管理系统-签到提醒");
-        mailDto.setCc("zack.tang@oocl.com");
+        mailDto.setCc("grace.w.j.chen@oocl.com");
         mailDto.setTemplateName("email-template-checkIn-reminder.ftl");
         Map<String, Object> context = new HashMap<>();
         context.put("internId", event.getName());
