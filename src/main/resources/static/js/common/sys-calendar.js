@@ -792,14 +792,14 @@ Calendar.prototype = {
                     s += '<div class="calendar-date">';
                 }
                 else if (date == nowNum) {
-                    s += '<td title="' + year + '年' + month + '月' + date + '日" class="calendar-cell calendar-today calendar-cell-active" attendanceId="" relTime="'+ renderDate +'" id="'+ year + month + date +'">';
+                    s += '<td title="' + year + '年' + month + '月' + date + '日" class="calendar-cell calendar-today calendar-cell-active" attendanceId="" relTime="'+ renderDate +'" id="'+ month + date +'">';
                     s += '<div class="calendar-date-active calendar-date">';
                 }
                 // else if(day==week[0] || day==week[1]){
                 // 	   s += '<td title="' + year + '年' + month + '月' + date + '日" class="calendar-cell calendar-weekend">';
                 // }
                 else {
-                    s += '<td title="' + year + '年' + month + '月' + date + '日" class="calendar-cell calendar-cell-active" attendanceId="" relTime="'+ renderDate +'" id="'+ year + month + date + '">';
+                    s += '<td title="' + year + '年' + month + '月' + date + '日" class="calendar-cell calendar-cell-active" attendanceId="" relTime="'+ renderDate +'" id="'+ month + date + '">';
                     s += '<div class="calendar-date-active calendar-date">';
                 }
                 s += '<div class="calendar-value">' + date + '</div>';
@@ -912,7 +912,7 @@ let initAttendance = function() {
     for (let i = 0; i< attendanceList.length; i++) {
         let date = new Date(attendanceList[i].workDay);
         let attendanceStatus = attendanceList[i].attendanceStatus;
-        let id = '#' + date.getFullYear() + (date.getMonth() + 1) + date.getDate();
+        let id = '#' + (date.getMonth() + 1) + date.getDate();
         $(id).attr("attendanceId", attendanceList[i].attendanceId)
         if (attendanceStatus === "CheckedIn"){
             $(id).append(checkInStr);
@@ -927,7 +927,7 @@ let initAttendance = function() {
 let removeAttendance = function () {
     for (let i = 0; i< attendanceList.length; i++) {
         let date = new Date(attendanceList[i].workDay);
-        let id = '#'+ date.getFullYear() + (date.getMonth() + 1) + date.getDate();
+        let id = '#' + (date.getMonth() + 1) + date.getDate();
         $(id).attr("attendanceId", "");
         $(id).find("span").remove();
     }
