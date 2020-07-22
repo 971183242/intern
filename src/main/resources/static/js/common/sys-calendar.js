@@ -129,7 +129,6 @@ Calendar.prototype = {
         $(document).on("click", ".last-month-item", function (e) {
             e.stopPropagation();
             var monthText = $(this).text();
-            // var monthNum = monthText.split("月")[0];
             if (currentMonth === 1) {
                 currentMonth = 13;
                 opts.newDate.setFullYear(currentYear - 1);
@@ -145,7 +144,7 @@ Calendar.prototype = {
                 opts.newDate.setDate(opts.newDate.getDate() - 1);
             }
             if (currentDate > 20) {
-                nowDateStr = dateFormat("YYYY-mm-dd", new Date(new Date().setMonth(opts.newDate.getMonth()-1)));
+                nowDateStr = dateFormat("YYYY-mm-dd", new Date(opts.newDate.setMonth(opts.newDate.getMonth()-1)));
             } else {
                 nowDateStr = dateFormat("YYYY-mm-dd", opts.newDate);
             }
@@ -170,7 +169,6 @@ Calendar.prototype = {
             }
 
             var monthText = $(this).text();
-            // var monthNum = monthText.split("月")[0];
             if (currentMonth === 12) {
                 currentMonth = 0;
                 opts.newDate.setFullYear(currentYear + 1);
@@ -186,11 +184,13 @@ Calendar.prototype = {
                 opts.newDate.setDate(opts.newDate.getDate() - 1);
             }
             if (currentDate > 20) {
-                nowDateStr = dateFormat("YYYY-mm-dd", new Date(new Date().setMonth(opts.newDate.getMonth()-1)));
+                let date = new Date();
+                date.setFullYear(currentYear);
+                date.setMonth(opts.newDate.getMonth()-1);
+                nowDateStr = dateFormat("YYYY-mm-dd", date);
             } else {
                 nowDateStr = dateFormat("YYYY-mm-dd", opts.newDate);
             }
-
             getAttendances(currentIntern, nowDateStr);
             initAttendance();
             let lastMonth = currentMonth - 1;
