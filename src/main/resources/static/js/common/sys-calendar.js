@@ -5,7 +5,7 @@ let attendanceList = [];
 let nowDateStr = '';
 let currentIntern = '';
 let checkInStr = '<span class="calendar-replenish" status="1">待审批</span>';
-let approvedStr = '<span class="calendar-sign" status="0">已签到</span>';
+let approvedStr = '<span class="calendar-sign" status="0">已审批</span>';
 let rejectedStr = '<span class="calendar-reject" status="2">拒批</span>';
 
 var Calendar = function (element, options) {
