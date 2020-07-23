@@ -26,7 +26,7 @@
     </tr>
     <tr>&nbsp;</tr>
     <tr>&nbsp&nbsp您今日尚未签到，点击下方URL↓↓↓前往签到</tr>
-    <tr>&nbsp&nbsp http://shagit02-w10.corp.oocl.com:9080/intern#</tr>
+    <tr>&nbsp&nbsp ${checkInUrl}</tr>
     <tr>&nbsp;</tr>
     <tr>
         <td>

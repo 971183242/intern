@@ -47,7 +47,7 @@
         </tbody>
     </table>
     <tr>&nbsp&nbsp系统审批入口↓↓↓</tr>
-    <tr>&nbsp&nbsp http://shagit02-w10.corp.oocl.com:9080/leader#</tr>
+    <tr>&nbsp&nbsp ${approveUrl}#</tr>
     <tr>&nbsp;</tr>
     <tr>
         <td>

@@ -15,6 +15,7 @@ import freemarker.template.TemplateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
@@ -25,16 +26,20 @@ import org.springframework.stereotype.Component;
 import javax.jms.Session;
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import static com.oocl.workshop.intern.support.ActiveMQConfig.INTERN_QUEUE;
 import static com.oocl.workshop.intern.support.ActiveMQConfig.REPORT_QUEUE;
 
 @Component
-public class DemoConsumer {
+public class PeriodAttendanceEventConsumer {
+
+    @Value("${spring.mail.username}")
+    private String emailFrom;
 
     @Autowired
     private ProfileDomService profileDomService;
@@ -45,22 +50,10 @@ public class DemoConsumer {
     @Autowired
     private EmailService emailService;
 
-    private final Logger logger = LoggerFactory.getLogger(DemoConsumer.class);
+    private final Logger logger = LoggerFactory.getLogger(PeriodAttendanceEventConsumer.class);
 
-    @JmsListener(destination = INTERN_QUEUE)
-    public void receiveMessage(@Payload DomainEvent event,
-                               @Headers MessageHeaders headers,
-                               Message message, Session session) {
-        System.out.println("received <" + event + ">");
-
-        System.out.println("- - - - - - - - - - - - - - - - - - - - - - - -");
-        System.out.println("######          Message Details           #####");
-        System.out.println("- - - - - - - - - - - - - - - - - - - - - - - -");
-        System.out.println("headers: " + headers);
-        System.out.println("message: " + message);
-        System.out.println("session: " + session);
-        System.out.println("- - - - - - - - - - - - - - - - - - - - - - - -");
-    }
+    @Value("${intern.system.url}")
+    private String internSystemUrl;
 
     @JmsListener(destination = REPORT_QUEUE)
     public void receiveReportMessage(@Payload DomainEvent event,
@@ -70,14 +63,15 @@ public class DemoConsumer {
         Date dateTo = getToDate();
         List<Team> teamList = profileDomService.findAllTeams();
         MailSenderDTO mailDto = new MailSenderDTO();
-        mailDto.setFrom("grace.w.j.chen@oocl.com");
-        mailDto.setTo("grace.w.j.chen@oocl.com");
+        mailDto.setFrom(emailFrom);
+        String emailTo = String.join(";", teamList.stream().filter(team -> team.getTeamLeader() != null).map(team -> team.getTeamLeader().getEmail()).collect(Collectors.toList()));
+        mailDto.setTo(emailTo);
         mailDto.setSubject("实习生管理系统-审批报表");
-        mailDto.setCc("grace.w.j.chen@oocl.com");
         mailDto.setTemplateName("email-template-reporter.ftl");
         Map<String, Object> context = new HashMap<>();
         List<AttendanceDTO4Email> attendanceDTOList = getAttendanceDTO4Emails(dateFrom, dateTo, teamList);
         context.put("attendance", attendanceDTOList);
+        context.put("approveUrl", internSystemUrl + "leader");
         mailDto.setModel(context);
         emailService.sendEmailWithTemplate(mailDto);
         logger.info(new Gson().toJson(mailDto));
