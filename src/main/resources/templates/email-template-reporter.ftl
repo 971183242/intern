@@ -21,7 +21,7 @@
 <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
     <tr>
         <td>
-            <p><b>Dear Wendy, Leonard, Jacky:</b></p>
+            <p><b>Dear Wendy, Leonard, Jacky,</b></p>
         </td>
     </tr>
     <tr>&nbsp;</tr>

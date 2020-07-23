@@ -21,7 +21,7 @@
 <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
     <tr>
         <td>
-            <p>Dear ${internId}</p>
+            <p>Dear ${internId},</p>
         </td>
     </tr>
     <tr>&nbsp;</tr>
