@@ -21,7 +21,7 @@
 <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
     <tr>
         <td>
-            <p><b>Dear Wendy, Leonard, Jacky,</b></p>
+            <p><b>Dear HR,Team Leaders</b></p>
         </td>
     </tr>
     <tr>&nbsp;</tr>
@@ -29,19 +29,21 @@
         <td>本期实习生签到记录报表如下：</td>
     </tr>
     <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
-    <tr>
+        <tr>
+            <th style="background: #fffd9c">&nbspTEAM&nbsp</th>
             <th style="background: #7af6e9">实习生</th>
-            <th style="background: #09ff74">已审批</th>
-            <th style="background: #f80101">已拒绝</th>
-            <th style="background: #ffff0d">待审批</th>
+            <th style="background: #09ff74">&nbsp已审批&nbsp</th>
+            <th style="background: #f80101">&nbsp已拒绝&nbsp</th>
+            <th style="background: #ffff0d">&nbsp待审批&nbsp</th>
         </tr>
         <tbody id="report" align="left">
         <#list attendance as item>
             <tr>
+                <td align="center">${item.team}</td>
                 <td align="center">${item.internName}</td>
-                <td align="right">${item.approvedDays}</td>
-                <td align="right">${item.rejectedDays}</td>
-                <td align="right">${item.checkInDays}</td>
+                <td align="center">${item.approvedDays}</td>
+                <td align="center">${item.rejectedDays}</td>
+                <td align="center">${item.checkInDays}</td>
             </tr>
         </#list>
         </tbody>
@@ -62,9 +64,9 @@
     var tr = report.getElementsByTagName('tr');
     for (var i = 0; i < tr.length; i++) {
         var td = tr[i].getElementsByTagName('td')[3];
-        // if (td.innerText !== "0") {
+        if (td.innerText !== "0") {
             td.style.color = "#f6050f";
-        // }
+        }
     }
 </script>
 </body>

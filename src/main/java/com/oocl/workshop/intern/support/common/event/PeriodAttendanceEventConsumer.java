@@ -8,7 +8,7 @@ import com.oocl.workshop.intern.domain.attendance.service.AttendanceDomService;
 import com.oocl.workshop.intern.domain.profile.entity.Intern;
 import com.oocl.workshop.intern.domain.profile.entity.Team;
 import com.oocl.workshop.intern.domain.profile.service.ProfileDomService;
-import com.oocl.workshop.intern.domain.report.repostitory.po.MonthlySettlementDayRule;
+import com.oocl.workshop.intern.domain.report.repostitory.facade.MonthlySettlementDayRuleRepo;
 import com.oocl.workshop.intern.interfaces.dto.email.AttendanceDTO4Email;
 import com.oocl.workshop.intern.interfaces.dto.email.MailSenderDTO;
 import freemarker.template.TemplateException;
@@ -26,10 +26,7 @@ import org.springframework.stereotype.Component;
 import javax.jms.Session;
 import javax.mail.MessagingException;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.oocl.workshop.intern.support.ActiveMQConfig.REPORT_QUEUE;
@@ -51,6 +48,9 @@ public class PeriodAttendanceEventConsumer {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private MonthlySettlementDayRuleRepo ruleRepo;
 
     private final Logger logger = LoggerFactory.getLogger(PeriodAttendanceEventConsumer.class);
 
@@ -92,6 +92,7 @@ public class PeriodAttendanceEventConsumer {
                 attendanceDTO.setApprovedDays(periodAttendance.getApprovedAttendanceCount());
                 attendanceDTO.setRejectedDays(periodAttendance.getRejectedAttendanceCount());
                 attendanceDTO.setCheckInDays(periodAttendance.getCheckedInAttendanceCount());
+                attendanceDTO.setTeam(intern.getTeam().getName().toUpperCase());
                 attendanceDTOList.add(attendanceDTO);
             });
         });
@@ -99,15 +100,15 @@ public class PeriodAttendanceEventConsumer {
     }
 
     private Date getToDate() {
-        Date dateTo = new Date();
-        dateTo.setDate(MonthlySettlementDayRule.DEFAULT_DAY);
+        Date dateTo = Calendar.getInstance().getTime();
+        dateTo.setDate(ruleRepo.getMonthlySettlementDay());
         return dateTo;
     }
 
     private Date getFromDate() {
-        Date dateFrom = new Date();
+        Date dateFrom = Calendar.getInstance().getTime();
         dateFrom.setMonth(dateFrom.getMonth() - 1);
-        dateFrom.setTime(MonthlySettlementDayRule.DEFAULT_DAY);
+        dateFrom.setDate(ruleRepo.getMonthlySettlementDay());
         return dateFrom;
     }
 }
