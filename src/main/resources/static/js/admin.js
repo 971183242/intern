@@ -14,7 +14,7 @@ $('#internCheckBox').change(function () {
 });
 $(document).on("click", ".btn-edit", function () {
     $('.edit-user').addClass('update-user').removeClass("create-ser");
-    $("#myModalLabel").text("Edit User");
+    $("#myModalLabel").text("Edit Intern");
     getInternByDomainId($(this).attr("domainId"));
     $('#domainId').val(currentUser.domainId);
     $('#domainId').attr('disabled', 'disabled');
@@ -41,14 +41,27 @@ $(document).on("click", ".btn-create", function () {
     $('#name').val('');
     $('#email').val('');
     $("#fromTime").val(nowDateStr);
-    $("#myModalLabel").text("Create User");
+    $("#myModalLabel").text("Create Intern");
     $("#myModal").modal("show");
 
 });
 $('#domainId, #name, #email').focus(function () {
     $(this).parent().parent().removeClass("has-error");
     $(this).next().text('');
-})
+});
+$('#fromTime').blur(function () {
+    let fromTime = $('#fromTime').val();
+    if (fromTime === '' || fromTime === null) {
+        $("#fromTime").val($("#toTime").val());
+    }
+});
+$('#toTime').blur(function () {
+    let toTime = $('#toTime').val();
+    if (toTime === '' || toTime === null) {
+        $("#toTime").val($("#fromTime").val());
+    }
+});
+
 
 $(document).on("click", ".create-user", function () {
     if (generateUser()) {
@@ -66,7 +79,7 @@ let generateUser = function () {
     let domainId = domainIdEl.val();
     if (domainId === '' || domainId === null) {
         domainIdEl.parent().parent().addClass("has-error");
-        domainIdEl.next().text("Domain Id can not be null !");
+        domainIdEl.next().text("请填写domain id");
         return false;
     }
 
@@ -74,7 +87,7 @@ let generateUser = function () {
     let name = nameEl.val();
     if (name === '' || name === null) {
         nameEl.parent().parent().addClass("has-error");
-        nameEl.next().text("Name can not be null !")
+        nameEl.next().text("请填写名字");
         return false;
     }
 
@@ -82,16 +95,17 @@ let generateUser = function () {
     let email = emailEl.val();
     if (email === '' || email === null) {
         emailEl.parent().parent().addClass("has-error");
-        emailEl.next().text("Email can not be null !")
+        emailEl.next().text("请填写邮箱");
         return false;
     }
     if (!reg.test(email)) {
         emailEl.parent().parent().addClass("has-error");
-        emailEl.next().text("The email format is not correct !")
+        emailEl.next().text("邮箱格式不正确");
         return false;
     }
     let teamIdIndex = $('#teamId').val();
-    let fromTime = $('#fromTime').val();
+    let fromTimeEl = $('#fromTime');
+    let fromTime = fromTimeEl.val();
     let toTime = $('#toTime').val();
     user.type = 'EMPLOYEE';
     user.domainId = domainId;
@@ -244,7 +258,7 @@ $(function () {
     var picker1 = $('#startTime').datetimepicker({
         format: 'YYYY-MM-DD',
         locale: moment.locale('zh-cn'),
-        defaultDate: nowDateStr
+        defaultDate: nowDateStr,
         //minDate: '2016-7-1'
     });
     var picker2 = $('#endTime').datetimepicker({
