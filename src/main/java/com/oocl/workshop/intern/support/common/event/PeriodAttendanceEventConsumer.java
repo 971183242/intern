@@ -83,9 +83,6 @@ public class PeriodAttendanceEventConsumer {
         List<AttendanceDTO4Email> attendanceDTOList = Lists.newArrayList();
 
         teamList.forEach(team -> {
-            if (team.getTeamLeader() != null) {
-                logger.info("TeamLeader: " + team.getTeamLeader().getName() + " Email: " + team.getTeamLeader().getEmail());
-            }
             List<Intern> internList = profileDomService.findTeamInterns(team.getTeamId(), dateFrom, dateTo);
             internList.forEach(intern -> {
                 PeriodAttendance periodAttendance = attendanceDomService.getPeriodAttendance(intern.getDomainId(), dateFrom, dateTo);
