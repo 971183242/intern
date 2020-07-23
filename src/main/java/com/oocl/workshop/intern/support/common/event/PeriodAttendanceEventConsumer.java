@@ -26,7 +26,6 @@ import org.springframework.stereotype.Component;
 import javax.jms.Session;
 import javax.mail.MessagingException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +39,9 @@ public class PeriodAttendanceEventConsumer {
 
     @Value("${spring.mail.username}")
     private String emailFrom;
+
+    @Value("${intern.system.environment}")
+    private String environment;
 
     @Autowired
     private ProfileDomService profileDomService;
@@ -66,7 +68,7 @@ public class PeriodAttendanceEventConsumer {
         mailDto.setFrom(emailFrom);
         String emailTo = String.join(";", teamList.stream().filter(team -> team.getTeamLeader() != null).map(team -> team.getTeamLeader().getEmail()).collect(Collectors.toList()));
         mailDto.setTo(emailTo);
-        mailDto.setSubject("实习生管理系统-审批报表");
+        mailDto.setSubject(environment.equals("prd") ? "实习生管理系统-审批报表" : "测试-实习生管理系统-审批报表");
         mailDto.setTemplateName("email-template-reporter.ftl");
         Map<String, Object> context = new HashMap<>();
         List<AttendanceDTO4Email> attendanceDTOList = getAttendanceDTO4Emails(dateFrom, dateTo, teamList);

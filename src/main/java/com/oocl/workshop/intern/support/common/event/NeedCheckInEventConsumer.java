@@ -31,6 +31,9 @@ public class NeedCheckInEventConsumer {
     @Value("${intern.system.url}")
     private String internSystemUrl;
 
+    @Value("${intern.system.environment}")
+    private String environment;
+
     @Autowired
     private EmailService emailService;
 
@@ -40,7 +43,7 @@ public class NeedCheckInEventConsumer {
         SpringApplication.run(InternApplication.class, "").getEnvironment();
         mailDto.setFrom(emailFrom);
         mailDto.setTo(event.getEmail());
-        mailDto.setSubject("实习生管理系统-签到提醒");
+        mailDto.setSubject(environment.equals("prd") ? "实习生管理系统-签到提醒" : "测试-实习生管理系统-签到提醒");
         mailDto.setTemplateName("email-template-checkIn-reminder.ftl");
         Map<String, Object> context = new HashMap<>();
         context.put("internId", event.getName());
