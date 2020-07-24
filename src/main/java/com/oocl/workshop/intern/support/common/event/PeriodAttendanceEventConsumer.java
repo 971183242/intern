@@ -39,8 +39,8 @@ public class PeriodAttendanceEventConsumer {
     @Value("${spring.mail.username}")
     private String emailFrom;
 
-    @Value("${intern.system.environment}")
-    private String environment;
+    @Value("${spring.mail.properties.mail.subject}")
+    private String emailSubject;
 
     @Autowired
     private ProfileDomService profileDomService;
@@ -68,7 +68,7 @@ public class PeriodAttendanceEventConsumer {
         mailDto.setFrom(emailFrom);
         String emailTo = String.join(";", teamList.stream().filter(team -> team.getTeamLeader() != null).map(team -> team.getTeamLeader().getEmail()).collect(Collectors.toList()));
         mailDto.setTo(emailTo);
-        mailDto.setSubject(environment.equals("prd") ? "实习生管理系统-审批报表" : "测试-实习生管理系统-审批报表");
+        mailDto.setSubject(emailSubject);
         mailDto.setTemplateName("email-template-reporter.ftl");
         Map<String, Object> context = new HashMap<>();
         Date baseDay = Calendar.getInstance().getTime();
