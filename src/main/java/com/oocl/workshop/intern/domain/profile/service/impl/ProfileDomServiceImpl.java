@@ -1,10 +1,7 @@
 package com.oocl.workshop.intern.domain.profile.service.impl;
 
 import com.google.gson.Gson;
-import com.oocl.workshop.intern.domain.profile.entity.Intern;
-import com.oocl.workshop.intern.domain.profile.entity.Team;
-import com.oocl.workshop.intern.domain.profile.entity.User;
-import com.oocl.workshop.intern.domain.profile.entity.UserType;
+import com.oocl.workshop.intern.domain.profile.entity.*;
 import com.oocl.workshop.intern.domain.profile.repository.facade.TeamRepo;
 import com.oocl.workshop.intern.domain.profile.repository.facade.UserRepo;
 import com.oocl.workshop.intern.domain.profile.repository.po.TeamPo;
@@ -116,5 +113,11 @@ public class ProfileDomServiceImpl implements ProfileDomService {
             teamPoOptional = teamRepo.findFirstByTeamLeaderId(userPo.get().getDomainId());
         }
         return teamPoOptional.isPresent() ? profileFactory.getTeam(teamPoOptional.get()) : null;
+    }
+
+    @Override
+    public List<User> findUserByUserTypeAndRole(UserType userType, Role role) {
+        List<UserPo> userPoList = userRepo.findByUserTypeAndRoleContains(UserType.EMPLOYEE, role.getFullName());
+        return userPoList.stream().map(profileFactory::getUser).collect(Collectors.toList());
     }
 }

@@ -1,9 +1,7 @@
 package com.oocl.workshop.intern.domain.profile.service;
 
 import com.google.common.collect.Lists;
-import com.oocl.workshop.intern.domain.profile.entity.Intern;
-import com.oocl.workshop.intern.domain.profile.entity.Team;
-import com.oocl.workshop.intern.domain.profile.entity.UserType;
+import com.oocl.workshop.intern.domain.profile.entity.*;
 import com.oocl.workshop.intern.domain.profile.repository.facade.TeamRepo;
 import com.oocl.workshop.intern.domain.profile.repository.facade.UserRepo;
 import com.oocl.workshop.intern.domain.profile.repository.po.TeamPo;
@@ -15,23 +13,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ProfileDomServiceTest {
@@ -137,5 +126,29 @@ class ProfileDomServiceTest {
         when(profileFactory.getTeam(any())).thenReturn(new Team());
         Team team2 = profileDomService.findTeamByUserId("leaderId");
         assertNotNull(team2);
+    }
+
+    @Test
+    void findUserByUserTypeAndRoleEmptyTest() {
+        when(userRepo.findByUserTypeAndRoleContains(UserType.EMPLOYEE, Role.TEAM_LEADER.getFullName())).thenReturn(Lists.newArrayList());
+        List<User> users = profileDomService.findUserByUserTypeAndRole(UserType.EMPLOYEE, Role.TEAM_LEADER);
+        assertTrue(CollectionUtils.isEmpty(users));
+    }
+
+    @Test
+    void findUserByUserTypeAndRoleTest() {
+        UserPo userPo = new UserPo();
+        userPo.setDomainId("leader");
+        userPo.setUserType(UserType.EMPLOYEE);
+        userPo.setRole(Role.TEAM_LEADER.getFullName());
+        Employee employee = new Employee();
+        employee.setRoles(Collections.singletonList(Role.TEAM_LEADER));
+        employee.setDomainId("leader");
+        when(userRepo.findByUserTypeAndRoleContains(UserType.EMPLOYEE, Role.TEAM_LEADER.getFullName())).thenReturn(Collections.singletonList(userPo));
+        when(profileFactory.getUser(userPo)).thenReturn(employee);
+        List<User> users = profileDomService.findUserByUserTypeAndRole(UserType.EMPLOYEE, Role.TEAM_LEADER);
+        User result = users.get(0);
+        assertAll(() -> result.getDomainId().equals("leader"),
+                () -> result.getRoles().get(0).getFullName().equals(Role.TEAM_LEADER.getFullName()));
     }
 }

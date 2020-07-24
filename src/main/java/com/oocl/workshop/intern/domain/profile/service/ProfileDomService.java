@@ -1,8 +1,6 @@
 package com.oocl.workshop.intern.domain.profile.service;
 
-import com.oocl.workshop.intern.domain.profile.entity.Intern;
-import com.oocl.workshop.intern.domain.profile.entity.Team;
-import com.oocl.workshop.intern.domain.profile.entity.User;
+import com.oocl.workshop.intern.domain.profile.entity.*;
 
 import java.util.Date;
 import java.util.List;
@@ -24,4 +22,6 @@ public interface ProfileDomService {
     boolean deleteUser(String domainId);
 
     Team findTeamByUserId(String domainId);
+
+    List<User> findUserByUserTypeAndRole(UserType userType, Role role);
 }

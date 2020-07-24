@@ -5,8 +5,7 @@ import com.google.gson.Gson;
 import com.oocl.workshop.intern.app.service.EmailService;
 import com.oocl.workshop.intern.domain.attendance.entity.PeriodAttendance;
 import com.oocl.workshop.intern.domain.attendance.service.AttendanceDomService;
-import com.oocl.workshop.intern.domain.profile.entity.Intern;
-import com.oocl.workshop.intern.domain.profile.entity.Team;
+import com.oocl.workshop.intern.domain.profile.entity.*;
 import com.oocl.workshop.intern.domain.profile.service.ProfileDomService;
 import com.oocl.workshop.intern.domain.report.service.MonthlySettlementDayRuleService;
 import com.oocl.workshop.intern.interfaces.dto.email.AttendanceDTO4Email;
@@ -66,8 +65,8 @@ public class PeriodAttendanceEventConsumer {
         List<Team> teamList = profileDomService.findAllTeams();
         MailSenderDTO mailDto = new MailSenderDTO();
         mailDto.setFrom(emailFrom);
-        String emailTo = String.join(";", teamList.stream().filter(team -> team.getTeamLeader() != null).map(team -> team.getTeamLeader().getEmail()).collect(Collectors.toList()));
-        mailDto.setTo(emailTo);
+        mailDto.setTo(getEmailTo());
+        mailDto.setCc(getAdminEmail());
         mailDto.setSubject(emailSubject);
         mailDto.setTemplateName("email-template-reporter.ftl");
         Map<String, Object> context = new HashMap<>();
@@ -80,6 +79,19 @@ public class PeriodAttendanceEventConsumer {
         mailDto.setModel(context);
         emailService.sendEmailWithTemplate(mailDto);
         logger.info(new Gson().toJson(mailDto));
+    }
+
+    private String getAdminEmail() {
+        return String.join(";", profileDomService.findUserByUserTypeAndRole(UserType.EMPLOYEE, Role.SUPER_ADMIN).stream().
+                    map(User::getEmail).collect(Collectors.toList()));
+    }
+
+    private String getEmailTo() {
+        String teamLeaderEmails = String.join(";", profileDomService.findUserByUserTypeAndRole(UserType.EMPLOYEE, Role.TEAM_LEADER).stream().
+                map(User::getEmail).collect(Collectors.toList()));
+        String hrEmails = String.join(";", profileDomService.findUserByUserTypeAndRole(UserType.EMPLOYEE, Role.HR).stream().
+                map(User::getEmail).collect(Collectors.toList()));
+        return teamLeaderEmails + ";" + hrEmails;
     }
 
     private List<AttendanceDTO4Email> getAttendanceDTO4Emails(Date dateFrom, Date dateTo, List<Team> teamList) {
