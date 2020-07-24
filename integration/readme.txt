@@ -17,3 +17,7 @@ for qa patch email
 update t_user
 set email = 'chengr2@oocl.com';
 commit;
+
+
+QA http://sha-svp-w7.corp.oocl.com:9086/login
+PRD  http://shagit02-w10.corp.oocl.com:9088/login
