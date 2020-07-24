@@ -40,7 +40,6 @@ public class NeedCheckInEventConsumer {
     @JmsListener(destination = INTERN_NEED_CHECKIN_QUEUE)
     public void receiveMessage(@Payload NeedCheckInEvent event) throws MessagingException, IOException, TemplateException {
         MailSenderDTO mailDto = new MailSenderDTO();
-        SpringApplication.run(InternApplication.class, "").getEnvironment();
         mailDto.setFrom(emailFrom);
         mailDto.setTo(event.getEmail());
         mailDto.setSubject(environment.equals("prd") ? "实习生管理系统-签到提醒" : "测试-实习生管理系统-签到提醒");

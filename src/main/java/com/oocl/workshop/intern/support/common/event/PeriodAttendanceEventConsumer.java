@@ -8,7 +8,7 @@ import com.oocl.workshop.intern.domain.attendance.service.AttendanceDomService;
 import com.oocl.workshop.intern.domain.profile.entity.Intern;
 import com.oocl.workshop.intern.domain.profile.entity.Team;
 import com.oocl.workshop.intern.domain.profile.service.ProfileDomService;
-import com.oocl.workshop.intern.domain.report.repostitory.facade.MonthlySettlementDayRuleRepo;
+import com.oocl.workshop.intern.domain.report.service.MonthlySettlementDayRuleService;
 import com.oocl.workshop.intern.interfaces.dto.email.AttendanceDTO4Email;
 import com.oocl.workshop.intern.interfaces.dto.email.MailSenderDTO;
 import freemarker.template.TemplateException;
@@ -26,7 +26,10 @@ import org.springframework.stereotype.Component;
 import javax.jms.Session;
 import javax.mail.MessagingException;
 import java.io.IOException;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.oocl.workshop.intern.support.ActiveMQConfig.REPORT_QUEUE;
@@ -50,7 +53,7 @@ public class PeriodAttendanceEventConsumer {
     private EmailService emailService;
 
     @Autowired
-    private MonthlySettlementDayRuleRepo ruleRepo;
+    private MonthlySettlementDayRuleService monthlySettlementDayRuleService;
 
     private final Logger logger = LoggerFactory.getLogger(PeriodAttendanceEventConsumer.class);
 
@@ -61,8 +64,6 @@ public class PeriodAttendanceEventConsumer {
     public void receiveReportMessage(@Payload DomainEvent event,
                                      @Headers MessageHeaders headers,
                                      Message message, Session session) throws MessagingException, IOException, TemplateException {
-        Date dateFrom = getFromDate();
-        Date dateTo = getToDate();
         List<Team> teamList = profileDomService.findAllTeams();
         MailSenderDTO mailDto = new MailSenderDTO();
         mailDto.setFrom(emailFrom);
@@ -71,7 +72,10 @@ public class PeriodAttendanceEventConsumer {
         mailDto.setSubject(environment.equals("prd") ? "实习生管理系统-审批报表" : "测试-实习生管理系统-审批报表");
         mailDto.setTemplateName("email-template-reporter.ftl");
         Map<String, Object> context = new HashMap<>();
-        List<AttendanceDTO4Email> attendanceDTOList = getAttendanceDTO4Emails(dateFrom, dateTo, teamList);
+        Date today = new Date();
+        today.setMonth(today.getMonth() - 1);
+        List<Date> timeWindow = monthlySettlementDayRuleService.getMonthlySettlementDateWindow(today);
+        List<AttendanceDTO4Email> attendanceDTOList = getAttendanceDTO4Emails(timeWindow.get(0), timeWindow.get(1), teamList);
         context.put("attendance", attendanceDTOList);
         context.put("approveUrl", internSystemUrl + "leader");
         mailDto.setModel(context);
@@ -97,18 +101,5 @@ public class PeriodAttendanceEventConsumer {
             });
         });
         return attendanceDTOList;
-    }
-
-    private Date getToDate() {
-        Date dateTo = Calendar.getInstance().getTime();
-        dateTo.setDate(ruleRepo.getMonthlySettlementDay() + 1);
-        return dateTo;
-    }
-
-    private Date getFromDate() {
-        Date dateFrom = Calendar.getInstance().getTime();
-        dateFrom.setMonth(dateFrom.getMonth() - 1);
-        dateFrom.setDate(ruleRepo.getMonthlySettlementDay());
-        return dateFrom;
     }
 }
