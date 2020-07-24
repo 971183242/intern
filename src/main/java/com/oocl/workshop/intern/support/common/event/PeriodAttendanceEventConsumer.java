@@ -5,13 +5,13 @@ import com.google.gson.Gson;
 import com.oocl.workshop.intern.app.service.EmailService;
 import com.oocl.workshop.intern.domain.attendance.entity.PeriodAttendance;
 import com.oocl.workshop.intern.domain.attendance.service.AttendanceDomService;
-import com.oocl.workshop.intern.domain.profile.entity.Intern;
-import com.oocl.workshop.intern.domain.profile.entity.Team;
+import com.oocl.workshop.intern.domain.profile.entity.*;
 import com.oocl.workshop.intern.domain.profile.service.ProfileDomService;
 import com.oocl.workshop.intern.domain.report.service.MonthlySettlementDayRuleService;
 import com.oocl.workshop.intern.interfaces.dto.email.AttendanceDTO4Email;
 import com.oocl.workshop.intern.interfaces.dto.email.MailSenderDTO;
 import freemarker.template.TemplateException;
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +26,8 @@ import org.springframework.stereotype.Component;
 import javax.jms.Session;
 import javax.mail.MessagingException;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.oocl.workshop.intern.support.ActiveMQConfig.REPORT_QUEUE;
@@ -40,8 +38,8 @@ public class PeriodAttendanceEventConsumer {
     @Value("${spring.mail.username}")
     private String emailFrom;
 
-    @Value("${intern.system.environment}")
-    private String environment;
+    @Value("${spring.mail.properties.mail.subject}")
+    private String emailSubject;
 
     @Autowired
     private ProfileDomService profileDomService;
@@ -67,20 +65,33 @@ public class PeriodAttendanceEventConsumer {
         List<Team> teamList = profileDomService.findAllTeams();
         MailSenderDTO mailDto = new MailSenderDTO();
         mailDto.setFrom(emailFrom);
-        String emailTo = String.join(";", teamList.stream().filter(team -> team.getTeamLeader() != null).map(team -> team.getTeamLeader().getEmail()).collect(Collectors.toList()));
-        mailDto.setTo(emailTo);
-        mailDto.setSubject(environment.equals("prd") ? "实习生管理系统-审批报表" : "测试-实习生管理系统-审批报表");
+        mailDto.setTo(getEmailTo());
+        mailDto.setCc(getAdminEmail());
+        mailDto.setSubject(emailSubject);
         mailDto.setTemplateName("email-template-reporter.ftl");
         Map<String, Object> context = new HashMap<>();
-        Date today = new Date();
-        today.setMonth(today.getMonth() - 1);
-        List<Date> timeWindow = monthlySettlementDayRuleService.getMonthlySettlementDateWindow(today);
+        Date baseDay = Calendar.getInstance().getTime();
+        DateUtils.setMonths(baseDay, LocalDateTime.now().getMonthValue() - 2);
+        List<Date> timeWindow = monthlySettlementDayRuleService.getMonthlySettlementDateWindow(baseDay);
         List<AttendanceDTO4Email> attendanceDTOList = getAttendanceDTO4Emails(timeWindow.get(0), timeWindow.get(1), teamList);
         context.put("attendance", attendanceDTOList);
         context.put("approveUrl", internSystemUrl + "leader");
         mailDto.setModel(context);
         emailService.sendEmailWithTemplate(mailDto);
         logger.info(new Gson().toJson(mailDto));
+    }
+
+    private String getAdminEmail() {
+        return String.join(";", profileDomService.findUserByUserTypeAndRole(UserType.EMPLOYEE, Role.SUPER_ADMIN).stream().
+                    map(User::getEmail).collect(Collectors.toList()));
+    }
+
+    private String getEmailTo() {
+        String teamLeaderEmails = String.join(";", profileDomService.findUserByUserTypeAndRole(UserType.EMPLOYEE, Role.TEAM_LEADER).stream().
+                map(User::getEmail).collect(Collectors.toList()));
+        String hrEmails = String.join(";", profileDomService.findUserByUserTypeAndRole(UserType.EMPLOYEE, Role.HR).stream().
+                map(User::getEmail).collect(Collectors.toList()));
+        return teamLeaderEmails + ";" + hrEmails;
     }
 
     private List<AttendanceDTO4Email> getAttendanceDTO4Emails(Date dateFrom, Date dateTo, List<Team> teamList) {
