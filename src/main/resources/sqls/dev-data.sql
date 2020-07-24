@@ -11,7 +11,7 @@ insert into T_TEAM(team_id,name, team_leader_id) values('HR', 'HR', 'GUDA');
 
 -- SuperAdmin
 insert into t_user(domain_id,name,email,user_type,role,date_from, date_to,team_id)
-values('WUHO','HONG WU','test@oocl.com@oocl.com','EMPLOYEE','ROLE_SUPER_ADMIN',null,null,null);
+values('WUHO','HONG WU','test@oocl.com','EMPLOYEE','ROLE_SUPER_ADMIN',null,null,null);
 
 -- HR
 insert into t_user(domain_id,name,email,user_type,role,date_from, date_to,team_id)
