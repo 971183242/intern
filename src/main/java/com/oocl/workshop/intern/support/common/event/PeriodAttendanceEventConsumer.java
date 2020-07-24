@@ -101,7 +101,7 @@ public class PeriodAttendanceEventConsumer {
 
     private Date getToDate() {
         Date dateTo = Calendar.getInstance().getTime();
-        dateTo.setDate(ruleRepo.getMonthlySettlementDay());
+        dateTo.setDate(ruleRepo.getMonthlySettlementDay() + 1);
         return dateTo;
     }
 
