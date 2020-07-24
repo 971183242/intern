@@ -12,6 +12,7 @@ import com.oocl.workshop.intern.domain.report.service.MonthlySettlementDayRuleSe
 import com.oocl.workshop.intern.interfaces.dto.email.AttendanceDTO4Email;
 import com.oocl.workshop.intern.interfaces.dto.email.MailSenderDTO;
 import freemarker.template.TemplateException;
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +27,8 @@ import org.springframework.stereotype.Component;
 import javax.jms.Session;
 import javax.mail.MessagingException;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.oocl.workshop.intern.support.ActiveMQConfig.REPORT_QUEUE;
@@ -72,9 +71,9 @@ public class PeriodAttendanceEventConsumer {
         mailDto.setSubject(environment.equals("prd") ? "实习生管理系统-审批报表" : "测试-实习生管理系统-审批报表");
         mailDto.setTemplateName("email-template-reporter.ftl");
         Map<String, Object> context = new HashMap<>();
-        Date today = new Date();
-        today.setMonth(today.getMonth() - 1);
-        List<Date> timeWindow = monthlySettlementDayRuleService.getMonthlySettlementDateWindow(today);
+        Date baseDay = Calendar.getInstance().getTime();
+        DateUtils.setMonths(baseDay, LocalDateTime.now().getMonthValue() - 2);
+        List<Date> timeWindow = monthlySettlementDayRuleService.getMonthlySettlementDateWindow(baseDay);
         List<AttendanceDTO4Email> attendanceDTOList = getAttendanceDTO4Emails(timeWindow.get(0), timeWindow.get(1), teamList);
         context.put("attendance", attendanceDTOList);
         context.put("approveUrl", internSystemUrl + "leader");
