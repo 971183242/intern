@@ -21,8 +21,8 @@
                 </div>
                 <div>
                     <ul class="nav navbar-nav" style="margin-left: 20px">
-                        <li class="active"><a href="#">Admin</a></li>
-                        <li><a href="/leader">Approve</a></li>
+                        <li class="active"><a href="#">Profile</a></li>
+                        <li><a href="/leader">Attendance</a></li>
                     </ul>
                     <!--向右对齐-->
                     <ul class="nav navbar-nav navbar-right">
@@ -44,7 +44,7 @@
     <div class="mo" style="width: 80%;margin-left: auto;margin-right: auto">
         <!-- 按钮触发模态框 -->
         <button class="btn btn-primary btn-create">
-            <i class="glyphicon glyphicon-plus"></i> Crate Intern
+            <i class="glyphicon glyphicon-plus"></i> Create Intern
         </button>
         <!-- 模态框（Modal） -->
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -55,15 +55,15 @@
                             &times;
                         </button>
                         <h4 class="modal-title" id="myModalLabel">
-                            Create User
+                            Create Intern
                         </h4>
                     </div>
                     <div class="modal-body">
                         <form class="form-horizontal" role="form" style="width: 95%;margin-left: auto;margin-right: auto">
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">DomainId:</label>
+                                <label class="col-sm-2 control-label">Domain Id:</label>
                                 <div class="col-sm-10">
-                                    <input class="form-control" id="domainId" type="text" value="">
+                                    <input class="form-control" id="domainId" type="text" value="" style="text-transform:uppercase">
                                     <span></span>
                                 </div>
                             </div>
@@ -86,6 +86,7 @@
                                 <div class="col-sm-10">
                                     <div class='input-group date' id='startTime'style="width: 45%;float: left">
                                         <input type='text' class="form-control" id="fromTime" />
+                                        <span></span>
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>

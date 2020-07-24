@@ -6,6 +6,7 @@ import com.oocl.workshop.intern.support.util.EmailUtil;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -44,10 +45,12 @@ public class EmailServiceImpl implements EmailService {
 
         helper.setFrom(mail.getFrom());
         helper.setTo(EmailUtil.parseEmailAddresses(mail.getTo()));
-        helper.setCc(EmailUtil.parseEmailAddresses(mail.getCc()));
+        if (StringUtils.isNotEmpty(mail.getCc())) {
+            helper.setCc(EmailUtil.parseEmailAddresses(mail.getCc()));
+        }
         helper.setText(html, true);
         helper.setSubject(mail.getSubject());
-        if(mail.getAttachments() != null) {
+        if (mail.getAttachments() != null) {
             for (Object o : mail.getAttachments()) {
                 if (o instanceof File) {
                     File file = (File) o;

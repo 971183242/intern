@@ -8,6 +8,10 @@ $(document).on("click", ".calendar-cell-active", function (e) {
     let that = $(this);
     if (status === undefined) {
         let date = new Date(that.attr('relTime'));
+        if (date > new Date()) {
+            Alert.rejectFutureSign();
+            return;
+        }
         let attendanceId = createAttendance(date).attendanceId;
         that.attr('attendanceId', attendanceId)
         tipStr = checkInStr;

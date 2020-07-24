@@ -26,3 +26,12 @@
 .col-sm-10>span {
     color: #a94442;
 }
+
+@media (min-width: 768px){
+    .col-sm-10 {
+        width: 81.33333333% !important;
+    }
+    .col-sm-2 {
+        width: 18.66666667% !important;
+    }
+}

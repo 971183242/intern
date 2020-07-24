@@ -9,4 +9,5 @@ public class AttendanceDTO4Email extends AttendanceDTO {
     private int checkInDays;
     private int approvedDays;
     private int rejectedDays;
+    private String team;
 }

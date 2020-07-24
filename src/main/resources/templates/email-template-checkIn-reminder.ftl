@@ -21,12 +21,12 @@
 <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
     <tr>
         <td>
-            <p>Dear ${internId}</p>
+            <p>Dear ${internId},</p>
         </td>
     </tr>
     <tr>&nbsp;</tr>
     <tr>&nbsp&nbsp您今日尚未签到，点击下方URL↓↓↓前往签到</tr>
-    <tr>&nbsp&nbsp http://shagit02-w10.corp.oocl.com:9080/intern#</tr>
+    <tr>&nbsp&nbsp ${checkInUrl}</tr>
     <tr>&nbsp;</tr>
     <tr>
         <td>

@@ -24,11 +24,14 @@ let Alert = {
         Swal.fire("创建失败!", "", "error");
     },
     updateFail: function () {
-        Swal.fire("更新失败!", "", "error");
+        Swal.fire("修改失败!", "", "error");
     },
     updateSuccess: function () {
-        Swal.fire("更新成功!", "", "success");
+        Swal.fire("修改成功!", "", "success");
     },
+    rejectFutureSign :function () {
+        Swal.fire("不能对未来的日期签到!","", "error")
+    }
 };
 
 export {Alert};
