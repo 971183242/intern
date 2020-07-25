@@ -124,8 +124,8 @@ class ProfileFactoryTest {
         assertEquals(teamLeaderPo.getName(), intern0.getTeam().getTeamLeader().getName());
         assertEquals(teamLeaderPo.getEmail(), intern0.getTeam().getTeamLeader().getEmail());
 
-        verify(teamRepo, times(1)).findById(any());
-        verify(userRepo, times(1)).findById(any());
+        verify(teamRepo).findById(any());
+        verify(userRepo).findById(any());
 
 
         reset(teamRepo);
@@ -184,7 +184,7 @@ class ProfileFactoryTest {
         assertEquals("XX项目负责人", team01.getTeamLeader().getName());
         assertEquals("teamLeader_01@oocl.com", team01.getTeamLeader().getEmail());
 
-        verify(userRepo, times(1)).findById(stringCaptor.capture());
+        verify(userRepo).findById(stringCaptor.capture());
         assertEquals(teamLeaderPo.getDomainId(), stringCaptor.getValue());
         reset(userRepo);
 

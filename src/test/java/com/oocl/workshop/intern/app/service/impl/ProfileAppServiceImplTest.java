@@ -45,7 +45,7 @@ class ProfileAppServiceImplTest {
 
         List<Team> allTeams = profileAppServiceImpl.findAllTeams();
         assertArrayEquals(teams.toArray(), allTeams.toArray());
-        verify(profileDomService, times(1)).findAllTeams();
+        verify(profileDomService).findAllTeams();
     }
 
     @Test
@@ -60,7 +60,7 @@ class ProfileAppServiceImplTest {
 
         assertEquals(user.getDomainId(), savedUser.getDomainId());
         assertEquals(user.getName(), savedUser.getName());
-        verify(profileDomService, times(1)).createUser(user);
+        verify(profileDomService).createUser(user);
     }
 
     @Test
@@ -75,7 +75,7 @@ class ProfileAppServiceImplTest {
 
         assertEquals(user.getDomainId(), savedUser.getDomainId());
         assertEquals(user.getName(), savedUser.getName());
-        verify(profileDomService, times(1)).updateUser(user);
+        verify(profileDomService).updateUser(user);
     }
 
     @Test
@@ -90,7 +90,7 @@ class ProfileAppServiceImplTest {
         Optional<User> userByDomainId = profileAppServiceImpl.findUserByDomainId(domainId);
         assertEquals(employee.getDomainId(), userByDomainId.get().getDomainId());
         assertEquals(employee.getName(), userByDomainId.get().getName());
-        verify(profileDomService, times(1)).findUserByDomainId(any());
+        verify(profileDomService).findUserByDomainId(any());
     }
 
 
@@ -102,6 +102,6 @@ class ProfileAppServiceImplTest {
 
         List<Intern> interns = profileAppServiceImpl.getInterns(date);
         assertEquals(1, interns.size());
-        verify(profileDomService, times(1)).findInterns(any(Date.class), any(Date.class));
+        verify(profileDomService).findInterns(any(Date.class), any(Date.class));
     }
 }
