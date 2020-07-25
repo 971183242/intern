@@ -17,11 +17,7 @@ public interface ProfileAppService {
 
     Optional<User> findUserByDomainId(String domainId);
 
-    List<Intern> findTeamInterns(String teamId, Date date);
-
     List<Intern> getInterns(Date date);
-
-    boolean deleteUser(String domainId);
 
     Team findTeam(String userDomainId);
 }

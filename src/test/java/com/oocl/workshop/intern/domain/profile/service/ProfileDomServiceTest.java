@@ -92,22 +92,9 @@ class ProfileDomServiceTest {
     }
 
     @Test
-    void deleteUser() {
-        String domainId = "testId";
-
-        UserPo userPo = spy(new UserPo());
-        when(userRepo.findById(domainId)).thenReturn(Optional.of(userPo));
-        boolean deleted = profileDomService.deleteUser(domainId);
-
-        assertEquals(true, deleted);
-        verify(userPo, times(1)).setActive(false);
-        verify(userRepo, times(1)).save(userPo);
-    }
-
-    @Test
     void findTeamByUserId() {
         UserPo intern = new UserPo();
-        intern.setUserType(UserType.INTERN);
+        intern.setRole(Role.INTERN.getFullName());
 
         when(userRepo.findById(any())).thenReturn(Optional.of(intern));
         profileDomService.findTeamByUserId("test");
@@ -120,7 +107,7 @@ class ProfileDomServiceTest {
 
         UserPo leader = new UserPo();
         leader.setDomainId("leaderId");
-        leader.setUserType(UserType.EMPLOYEE);
+        leader.setRole(Role.TEAM_LEADER.getFullName());
         when(userRepo.findById(any())).thenReturn(Optional.of(leader));
         when(teamRepo.findFirstByTeamLeaderId("leaderId")).thenReturn(Optional.of(new TeamPo()));
         when(profileFactory.getTeam(any())).thenReturn(new Team());
@@ -130,8 +117,8 @@ class ProfileDomServiceTest {
 
     @Test
     void findUserByUserTypeAndRoleEmptyTest() {
-        when(userRepo.findByUserTypeAndRoleContains(UserType.EMPLOYEE, Role.TEAM_LEADER.getFullName())).thenReturn(Lists.newArrayList());
-        List<User> users = profileDomService.findUserByUserTypeAndRole(UserType.EMPLOYEE, Role.TEAM_LEADER);
+        when(userRepo.findByRoleContains(Role.TEAM_LEADER.getFullName())).thenReturn(Lists.newArrayList());
+        List<User> users = profileDomService.findUserByRole(Role.TEAM_LEADER);
         assertTrue(CollectionUtils.isEmpty(users));
     }
 
@@ -139,14 +126,13 @@ class ProfileDomServiceTest {
     void findUserByUserTypeAndRoleTest() {
         UserPo userPo = new UserPo();
         userPo.setDomainId("leader");
-        userPo.setUserType(UserType.EMPLOYEE);
         userPo.setRole(Role.TEAM_LEADER.getFullName());
         Employee employee = new Employee();
         employee.setRoles(Collections.singletonList(Role.TEAM_LEADER));
         employee.setDomainId("leader");
-        when(userRepo.findByUserTypeAndRoleContains(UserType.EMPLOYEE, Role.TEAM_LEADER.getFullName())).thenReturn(Collections.singletonList(userPo));
+        when(userRepo.findByRoleContains(Role.TEAM_LEADER.getFullName())).thenReturn(Collections.singletonList(userPo));
         when(profileFactory.getUser(userPo)).thenReturn(employee);
-        List<User> users = profileDomService.findUserByUserTypeAndRole(UserType.EMPLOYEE, Role.TEAM_LEADER);
+        List<User> users = profileDomService.findUserByRole(Role.TEAM_LEADER);
         User result = users.get(0);
         assertAll(() -> result.getDomainId().equals("leader"),
                 () -> result.getRoles().get(0).getFullName().equals(Role.TEAM_LEADER.getFullName()));

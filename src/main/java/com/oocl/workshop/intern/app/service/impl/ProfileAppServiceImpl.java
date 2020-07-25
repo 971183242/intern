@@ -48,20 +48,9 @@ public class ProfileAppServiceImpl  implements ProfileAppService {
     }
 
     @Override
-    public List<Intern> findTeamInterns(String teamId, Date date) {
-        List<Date> dateWindow = monthlySettlementDayRuleService.getMonthlySettlementDateWindow(date);
-        return profileDomService.findTeamInterns(teamId, dateWindow.get(0), dateWindow.get(1));
-    }
-
-    @Override
     public List<Intern> getInterns(Date date) {
         List<Date> dateWindow = monthlySettlementDayRuleService.getMonthlySettlementDateWindow(date);
         return profileDomService.findInterns(dateWindow.get(0), dateWindow.get(1));
-    }
-
-    @Override
-    public boolean deleteUser(String domainId) {
-        return profileDomService.deleteUser(domainId);
     }
 
     @Override

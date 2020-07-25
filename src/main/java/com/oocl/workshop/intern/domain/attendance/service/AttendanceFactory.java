@@ -26,6 +26,8 @@ public class AttendanceFactory {
         attendancePo.setInternId(attendance.getInternId());
         attendancePo.setWorkDay(attendance.getWorkDay());
         attendancePo.setVersion(attendance.getVersion());
+        attendancePo.setCreatedBy(attendance.getCreatedBy());
+        attendancePo.setCreatedDate(attendance.getCreatedDate());
     }
 
     public DailyAttendance getAttendance(AttendancePo attendancePo) {
@@ -36,6 +38,10 @@ public class AttendanceFactory {
         attendance.setWorkDay(attendancePo.getWorkDay());
         attendance.setAttendanceStatus(attendancePo.getAttendanceStatus());
         attendance.setVersion(attendancePo.getVersion());
+        attendance.setCreatedBy(attendancePo.getCreatedBy());
+        attendance.setCreatedDate(attendancePo.getCreatedDate());
+        attendance.setLastModifiedBy(attendancePo.getLastModifiedBy());
+        attendance.setLastModifiedDate(attendancePo.getLastModifiedDate());
         logger.info("getAttendance DailyAttendance:" + new Gson().toJson(attendance));
         return attendance;
     }

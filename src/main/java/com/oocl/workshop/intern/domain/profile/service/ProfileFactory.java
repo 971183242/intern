@@ -1,7 +1,11 @@
 package com.oocl.workshop.intern.domain.profile.service;
 
 import com.google.gson.Gson;
-import com.oocl.workshop.intern.domain.profile.entity.*;
+import com.oocl.workshop.intern.domain.profile.entity.Employee;
+import com.oocl.workshop.intern.domain.profile.entity.Intern;
+import com.oocl.workshop.intern.domain.profile.entity.Role;
+import com.oocl.workshop.intern.domain.profile.entity.Team;
+import com.oocl.workshop.intern.domain.profile.entity.User;
 import com.oocl.workshop.intern.domain.profile.repository.facade.TeamRepo;
 import com.oocl.workshop.intern.domain.profile.repository.facade.UserRepo;
 import com.oocl.workshop.intern.domain.profile.repository.po.TeamPo;
@@ -41,35 +45,34 @@ public class ProfileFactory {
         return userPo;
     }
 
-    private UserPo createUserPo(User user, UserType userType) {
+    private UserPo createCommonUserPo(User user) {
         UserPo userPo = new UserPo();
         userPo.setDomainId(user.getDomainId());
         userPo.setName(user.getName());
         userPo.setEmail(user.getEmail());
-        userPo.setUserType(userType);
         userPo.setRole(user.getRoles().stream().map(r -> r.getFullName()).collect(Collectors.joining(SYMBOL_ROLE_SEPARATOR)));
         return userPo;
     }
 
 
     private UserPo createUserPo(Intern intern) {
-        UserPo userPo = createUserPo(intern, UserType.INTERN);
+        UserPo userPo = createCommonUserPo(intern);
         userPo.setInternPeriod(intern.getPeriod());
         userPo.setTeamId(intern.getTeam() != null ? intern.getTeam().getTeamId() : null);
         return userPo;
     }
 
     private UserPo createUserPo(Employee employee) {
-        return createUserPo(employee, UserType.EMPLOYEE);
+        return createCommonUserPo(employee);
     }
 
 
     public User getUser(UserPo userPo) {
         logger.info("getUser.userPo:" + new Gson().toJson(userPo));
-        User user = null;
-        if (UserType.INTERN.equals(userPo.getUserType())) {
+        User user;
+        if (Role.isIntern(userPo.getRole())) {
             user = getIntern(userPo);
-        } else if (UserType.EMPLOYEE.equals(userPo.getUserType())) {
+        } else {
             user = getEmployee(userPo);
         }
         logger.info("getUser:" + new Gson().toJson(user));
@@ -78,7 +81,7 @@ public class ProfileFactory {
 
 
     public Intern getIntern(UserPo userPo) {
-        if (!UserType.INTERN.equals(userPo.getUserType())) {
+        if (!Role.isIntern(userPo.getRole())) {
             return null;
         }
         Intern intern = new Intern();
@@ -91,7 +94,7 @@ public class ProfileFactory {
     }
 
     public Employee getEmployee(UserPo userPo) {
-        if (!UserType.EMPLOYEE.equals(userPo.getUserType())) {
+        if (Role.isIntern(userPo.getRole())) {
             return null;
         }
         Employee employee = new Employee();

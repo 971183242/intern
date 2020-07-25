@@ -82,14 +82,14 @@ public class PeriodAttendanceEventConsumer {
     }
 
     private String getAdminEmail() {
-        return String.join(";", profileDomService.findUserByUserTypeAndRole(UserType.EMPLOYEE, Role.SUPER_ADMIN).stream().
+        return String.join(";", profileDomService.findUserByRole(Role.SUPER_ADMIN).stream().
                     map(User::getEmail).collect(Collectors.toList()));
     }
 
     private String getEmailTo() {
-        String teamLeaderEmails = String.join(";", profileDomService.findUserByUserTypeAndRole(UserType.EMPLOYEE, Role.TEAM_LEADER).stream().
+        String teamLeaderEmails = String.join(";", profileDomService.findUserByRole(Role.TEAM_LEADER).stream().
                 map(User::getEmail).collect(Collectors.toList()));
-        String hrEmails = String.join(";", profileDomService.findUserByUserTypeAndRole(UserType.EMPLOYEE, Role.HR).stream().
+        String hrEmails = String.join(";", profileDomService.findUserByRole(Role.HR).stream().
                 map(User::getEmail).collect(Collectors.toList()));
         return teamLeaderEmails + ";" + hrEmails;
     }

@@ -12,14 +12,12 @@ CREATE TABLE t_team (
 
 CREATE TABLE t_user (
     domain_id VARCHAR(255) NOT NULL,
-    is_active BIT DEFAULT TRUE,
     email VARCHAR(255),
     date_from DATE,
     date_to DATE,
     name VARCHAR(255),
     role VARCHAR(255),
     team_id VARCHAR(255),
-    user_type VARCHAR(255),
     PRIMARY KEY (domain_id)
 );
 

@@ -61,10 +61,4 @@ public class ProfileController {
         List<Intern> interns = profileAppService.getInterns(DateUtil.parseDate(dateStr));
         return interns.stream().map(ProfileAssembler::toInternDTO).collect(Collectors.toList());
     }
-
-
-    @PostMapping(value = "/deleteUser", produces = APPLICATION_JSON_VALUE)
-    public boolean deleteUser(@RequestParam("domainId") String domainId) {
-        return profileAppService.deleteUser(domainId);
-    }
 }

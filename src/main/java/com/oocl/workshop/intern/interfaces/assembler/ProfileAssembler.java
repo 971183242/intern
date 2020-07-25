@@ -6,7 +6,6 @@ import com.oocl.workshop.intern.domain.profile.entity.Intern;
 import com.oocl.workshop.intern.domain.profile.entity.Role;
 import com.oocl.workshop.intern.domain.profile.entity.Team;
 import com.oocl.workshop.intern.domain.profile.entity.User;
-import com.oocl.workshop.intern.domain.profile.entity.UserType;
 import com.oocl.workshop.intern.domain.profile.entity.valueobject.InternPeriod;
 import com.oocl.workshop.intern.interfaces.dto.profile.EmployeeDTO;
 import com.oocl.workshop.intern.interfaces.dto.profile.InternDTO;
@@ -18,10 +17,8 @@ import org.springframework.util.StringUtils;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -62,7 +59,6 @@ public class ProfileAssembler {
         userDTO.setDomainId(user.getDomainId());
         userDTO.setName(user.getName());
         userDTO.setEmail(user.getEmail());
-        userDTO.setUserType(UserType.EMPLOYEE);
 
         userDTO.getRoles().addAll(user.getRoles()
                 .stream()

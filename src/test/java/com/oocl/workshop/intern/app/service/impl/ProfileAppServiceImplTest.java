@@ -93,21 +93,6 @@ class ProfileAppServiceImplTest {
         verify(profileDomService, times(1)).findUserByDomainId(any());
     }
 
-    @Test
-    void findTeamInterns() {
-        Date date = new Date();
-        Date from = new Date(120, 0, 21);
-        Date to = new Date(120, 1, 20);
-
-        when(monthlySettlementDayRuleService.getMonthlySettlementDateWindow(date)).thenReturn(Lists.newArrayList(from, to));
-        when(profileDomService.findTeamInterns(anyString(), any(), any())).thenReturn(Lists.newArrayList(new Intern()));
-
-        List<Intern> teamInterns = profileAppServiceImpl.findTeamInterns("teamId", date);
-        assertEquals(1, teamInterns.size());
-
-        verify(profileDomService, times(1)).findTeamInterns("teamId", from, to);
-        verify(monthlySettlementDayRuleService, times(1)).getMonthlySettlementDateWindow(any());
-    }
 
     @Test
     void getInterns() {

@@ -21,9 +21,9 @@ class TeamRepoTest {
 
     @Test
     void findByTeamLeaderId() {
-        Optional<TeamPo> team = teamRepo.findFirstByTeamLeaderId("test_user_02");
+        Optional<TeamPo> team = teamRepo.findFirstByTeamLeaderId("DONGJA3");
         assertTrue(team.isPresent());
-        assertEquals("test team", team.get().getName());
-        assertEquals("test_team", team.get().getTeamId());
+        assertEquals("FWK", team.get().getName());
+        assertEquals("FWK", team.get().getTeamId());
     }
 }

@@ -19,4 +19,8 @@ public enum Role {
         }
         return null;
     }
+
+    public static boolean isIntern(String fullRoleName) {
+        return INTERN.getFullName().equals(fullRoleName);
+    }
 }

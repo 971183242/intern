@@ -89,35 +89,24 @@ public class ProfileDomServiceImpl implements ProfileDomService {
     }
 
     @Override
-    public boolean deleteUser(String domainId) {
-        Optional<UserPo> user = userRepo.findById(domainId);
-        if (user.isPresent()) {
-            user.get().setActive(false);
-            userRepo.save(user.get());
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public Team findTeamByUserId(String domainId) {
         Optional<UserPo> userPo = userRepo.findById(domainId);
         if (!userPo.isPresent()) {
             return null;
         }
-        Optional<TeamPo> teamPoOptional = Optional.empty();
-        if (UserType.INTERN.equals(userPo.get().getUserType()) && !StringUtils.isEmpty(userPo.get().getTeamId())) {
+        Optional<TeamPo> teamPoOptional;
+        if (Role.isIntern(userPo.get().getRole()) && !StringUtils.isEmpty(userPo.get().getTeamId())) {
             teamPoOptional = teamRepo.findById(userPo.get().getTeamId());
 
-        } else if (UserType.EMPLOYEE.equals(userPo.get().getUserType())) {
+        } else {
             teamPoOptional = teamRepo.findFirstByTeamLeaderId(userPo.get().getDomainId());
         }
         return teamPoOptional.isPresent() ? profileFactory.getTeam(teamPoOptional.get()) : null;
     }
 
     @Override
-    public List<User> findUserByUserTypeAndRole(UserType userType, Role role) {
-        List<UserPo> userPoList = userRepo.findByUserTypeAndRoleContains(UserType.EMPLOYEE, role.getFullName());
+    public List<User> findUserByRole(Role role) {
+        List<UserPo> userPoList = userRepo.findByRoleContains(role.getFullName());
         return userPoList.stream().map(profileFactory::getUser).collect(Collectors.toList());
     }
 }

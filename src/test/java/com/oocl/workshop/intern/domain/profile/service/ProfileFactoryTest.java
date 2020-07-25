@@ -46,7 +46,6 @@ class ProfileFactoryTest {
         assertEquals(leader.getName(), leaderPo.getName());
         assertEquals(leader.getDomainId(), leaderPo.getDomainId());
         assertEquals(leader.getEmail(), leaderPo.getEmail());
-        assertEquals(UserType.EMPLOYEE, leaderPo.getUserType());
         assertEquals(Role.TEAM_LEADER.getFullName(), leaderPo.getRole());
 
 
@@ -68,7 +67,6 @@ class ProfileFactoryTest {
         assertEquals(intern.getName(), userPo.getName());
         assertEquals(intern.getEmail(), userPo.getEmail());
         assertEquals(Role.INTERN.getFullName(), userPo.getRole());
-        assertEquals(UserType.INTERN, userPo.getUserType());
         assertEquals(intern.getPeriod().getDateFrom(), userPo.getInternPeriod().getDateFrom());
         assertEquals(team.getTeamId(), userPo.getTeamId());
     }
@@ -79,7 +77,6 @@ class ProfileFactoryTest {
         teamLeaderPo.setDomainId("teamLeader_01");
         teamLeaderPo.setEmail("teamLeader_01@oocl.com");
         teamLeaderPo.setName("XX项目负责人");
-        teamLeaderPo.setUserType(UserType.EMPLOYEE);
         teamLeaderPo.setRole(Role.TEAM_LEADER.getFullName());
 
         TeamPo teamPo01 = new TeamPo();
@@ -92,7 +89,6 @@ class ProfileFactoryTest {
         internPo0.setDomainId("intern_0");
         internPo0.setEmail("intern_0@oocl.com");
         internPo0.setName("实习生甲");
-        internPo0.setUserType(UserType.INTERN);
         internPo0.setRole(Role.INTERN.getFullName());
         internPo0.setInternPeriod(new InternPeriod(new Date(120, 0, 1), new Date(120, 5, 1)));
         internPo0.setTeamId(teamPo01.getTeamId());
@@ -102,7 +98,6 @@ class ProfileFactoryTest {
         internPo1.setDomainId("intern_1");
         internPo1.setEmail("intern_1@oocl.com");
         internPo1.setName("实习生乙");
-        internPo1.setUserType(UserType.INTERN);
         internPo1.setRole(Role.INTERN.getFullName());
         internPo1.setInternPeriod(new InternPeriod(new Date(120, 0, 1), new Date(120, 5, 1)));
 
@@ -173,7 +168,6 @@ class ProfileFactoryTest {
         teamLeaderPo.setDomainId("teamLeader_01");
         teamLeaderPo.setEmail("teamLeader_01@oocl.com");
         teamLeaderPo.setName("XX项目负责人");
-        teamLeaderPo.setUserType(UserType.EMPLOYEE);
         teamLeaderPo.setRole(Role.TEAM_LEADER.getFullName());
 
         TeamPo teamPo01 = new TeamPo();
