@@ -1,26 +1,27 @@
 package com.oocl.workshop.intern.app.service.impl;
 
+import com.google.gson.Gson;
 import com.oocl.workshop.intern.app.service.ProfileAppService;
 import com.oocl.workshop.intern.domain.profile.entity.Intern;
-import com.oocl.workshop.intern.domain.profile.entity.Role;
 import com.oocl.workshop.intern.domain.profile.entity.Team;
 import com.oocl.workshop.intern.domain.profile.entity.User;
 import com.oocl.workshop.intern.domain.profile.service.ProfileDomService;
-import com.oocl.workshop.intern.domain.report.repostitory.facade.MonthlySettlementDayRuleRepo;
 import com.oocl.workshop.intern.domain.report.service.MonthlySettlementDayRuleService;
 import lombok.Data;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Data
 @Service
-public class ProfileAppServiceImpl  implements ProfileAppService {
+public class ProfileAppServiceImpl implements ProfileAppService {
+    static Logger logger = LoggerFactory.getLogger(ProfileAppServiceImpl.class);
+
     @Autowired
     private ProfileDomService profileDomService;
 
@@ -34,11 +35,13 @@ public class ProfileAppServiceImpl  implements ProfileAppService {
 
     @Override
     public User createUser(User user) {
+        logger.info("createUser. user:" + new Gson().toJson(user));
         return profileDomService.createUser(user);
     }
 
     @Override
     public User updateUser(User user) {
+        logger.info("updateUser. user:" + new Gson().toJson(user));
         return profileDomService.updateUser(user);
     }
 
