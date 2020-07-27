@@ -1,7 +1,7 @@
 import {Alert} from "./alert.js";
 let teams = [];
 let nowDateStr =  dateFormat("YYYY-mm-dd", new Date());
-let reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
+let reg = new RegExp("^[a-zA-Z0-9]+([._\\-]*[a-zA-Z0-9])*@([a-zA-Z0-9]+[-a-zA-Z0-9]*[a-zA-Z0-9]+.){1,63}[a-zA-Z0-9]+$");
 let user = {};
 let currentUser = [];
 
@@ -82,6 +82,7 @@ let generateUser = function () {
         domainIdEl.next().text("请填写domain id");
         return false;
     }
+    domainId = domainId.toUpperCase();
 
     let nameEl = $('#name');
     let name = nameEl.val();
