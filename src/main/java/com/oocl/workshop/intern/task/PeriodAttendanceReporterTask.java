@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.Calendar;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -24,10 +24,10 @@ public class PeriodAttendanceReporterTask {
     @Autowired
     private EventPublisher eventPublisher;
 
-    //    @Scheduled(cron = "0/5 * * * * MON-FRI ")
+//        @Scheduled(cron = "0/5 * * * * MON-FRI ")
     @Scheduled(cron = "0 45 8 * * MON-FRI ")
     public void execute() {
-        if (Calendar.getInstance().getTime().getDate() > MonthlySettlementDayRule.DEFAULT_DAY) {
+        if (LocalDate.now().getDayOfMonth() - MonthlySettlementDayRule.DEFAULT_DAY > 3) {
             DomainEvent event = new DomainEvent();
             event.setId(UUID.randomUUID().toString());
             event.setTimestamp(new Date());
