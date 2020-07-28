@@ -34,6 +34,9 @@ let Alert = {
     },
     error: function (error) {
         Swal.fire(error, "", "error");
+    },
+    loginError: function () {
+        Swal.fire("用户名或密码错误", "", "error")
     }
 };
 

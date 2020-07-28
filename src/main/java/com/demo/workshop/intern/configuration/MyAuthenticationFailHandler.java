@@ -1,5 +1,6 @@
 package com.demo.workshop.intern.configuration;
 
+import com.demo.workshop.intern.interfaces.dto.ResultDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.transform.Result;
 import java.io.IOException;
 
 @Component("MyAuthenticationFailHandler")
@@ -21,6 +23,6 @@ public class MyAuthenticationFailHandler extends SimpleUrlAuthenticationFailureH
                                         AuthenticationException exception) throws IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(objectMapper.writeValueAsString("登录失败"));
+        response.getWriter().write(objectMapper.writeValueAsString(ResultDto.fail(exception.getMessage())));
     }
 }

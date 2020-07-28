@@ -1,36 +1,40 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Login</title>
-    <link rel="icon" type="image/x-icon" th:href="@{img/favicon.ico}" />
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>登录</title>
+	<link rel="icon" type="image/x-icon" th:href="@{/img/favicon.ico}">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/common/bootstrap-3.3.7.css}">
+	<link th:href="@{css/common/sweetalert2.min.css}" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/login.css}">
 </head>
-<body class="sidebar-fixed">
-                        <form name="loginForm" style="display: none">
-                            <div class="content-layout-small">
-                                <div class="dataflow-alert dataflow-alert-info" th:action="@{/login/form}" method="post">
-                                    <p> Please sign in </p>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label" for="username">Username</label>
-                                    <div class="input-wrapper">
-                                        <input class="form-control" readonly="readonly" th:value="${username}" id="username" name="username" placeholder="Username" autocomplete="off" required="required" type="text"/>
-                                        <span class="help-block"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label" for="password">Password</label>
-                                    <div class="input-wrapper">
-                                        <input class="form-control" readonly="readonly" value="default" id="password" name="password" placeholder="Password" autocomplete="off" required="required" type="password"/>
-                                        <span class="help-block"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="dataflow-page-actions">
-                                    <button class="btn btn-primary" disabled="disabled" id="loginButton" type="button" > Login in ......</button>
-                                </div>
-                            </div>
-                        </form>
-<script th:src="@{js/common/jquery-2.1.1.min.js}"></script>
-<script type="text/javascript" th:src="@{js/login.js}"></script>
-</body></html>
+<body class="login-body" >
+		        <div class="container">
+		            <div class="row">
+		                <div class="col-md-offset-3 col-md-6">
+		                    <form id="login-form" class="form-horizontal" th:action="@{/login/form}" method="post">
+								
+		                        <span class="heading">Intern System</span>
+		                        <div class="form-group">
+		                            <input type="text" class="form-control" name="username" id="username" placeholder="">
+		                            <i class="glyphicon glyphicon-user"></i>
+		                        </div>
+		                        <div class="form-group help">
+		                            <input type="password" class="form-control" name="password" id="password" placeholder="">
+		                            <i class="glyphicon glyphicon-lock"></i>
+		                        </div>
+		                        <div class="form-group">
+		                            <button type="button" class="btn btn-default login-btn">Sign In</button>
+		                        </div>
+		                    </form>
+		                </div>
+		            </div>
+		        </div>
+	<script type="text/javascript" th:src="@{/js/common/jquery-2.1.1.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/common/bootstrap-3.3.7.min.js}"></script>
+	<script type="text/javascript" th:src="@{js/common/sweetalert2.min.js}"></script>
+	<script type="module" th:src="@{/js/login.js}"></script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 package com.demo.workshop.intern.configuration;
 
+import com.demo.workshop.intern.interfaces.dto.ResultDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
@@ -19,7 +20,7 @@ public class MyAuthenticationSuccessHandler extends SavedRequestAwareAuthenticat
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException {
         response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(objectMapper.writeValueAsString(0));
+        response.getWriter().write(objectMapper.writeValueAsString(ResultDto.success()));
     }
 }
 

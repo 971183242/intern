@@ -63,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .rememberMe()
                 .and()
                 .logout()
-                .logoutUrl("toLogout")
+                .logoutUrl("/logout")
                 .deleteCookies("JSESSIONID")
                 .permitAll()
                 .and().headers().frameOptions().sameOrigin()
