@@ -8,45 +8,16 @@
     <link rel="stylesheet" th:href="@{css/common/bootstrap-datetimepicker.min.css}">
     <link th:href="@{css/common/sweetalert2.min.css}" rel="stylesheet">
     <link rel="stylesheet" th:href="@{css/admin.css}"/>
-    <title>User admin</title>
+    <title>Intern admin</title>
     <style>
     </style>
 </head>
 <body>
-    <div>
-        <nav class="navbar navbar-default" role="navigation">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#">Intern System</a>
-                </div>
-                <div>
-                    <ul class="nav navbar-nav" style="margin-left: 20px">
-                        <li class="active"><a href="#">Profile</a></li>
-                        <li><a href="/leader">Attendance</a></li>
-                    </ul>
-                    <!--向右对齐-->
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" th:text="${userName}" id="userName">
-                                <b class="caret"></b>
-                            </a>
-                            <input type="hidden" th:value="${role}" id="role">
-                            <!--<ul class="dropdown-menu">-->
-                                <!--<li><a href="#">个人信息</a></li>-->
-                                <!--<li><a href="#">登出</a></li>-->
-                            <!--</ul>-->
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </div>
-    <div class="mo" style="width: 80%;margin-left: auto;margin-right: auto">
-        <!-- 按钮触发模态框 -->
+    <div th:include="common/navbar::navbar"></div>
+    <div class="mo">
         <button class="btn btn-primary btn-create">
             <i class="glyphicon glyphicon-plus"></i> Create Intern
         </button>
-        <!-- 模态框（Modal） -->
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -59,11 +30,11 @@
                         </h4>
                     </div>
                     <div class="modal-body">
-                        <form class="form-horizontal" role="form" style="width: 95%;margin-left: auto;margin-right: auto">
+                        <form class="form-horizontal" role="form">
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Domain Id:</label>
                                 <div class="col-sm-10">
-                                    <input class="form-control" id="domainId" type="text" value="" style="text-transform:uppercase">
+                                    <input class="form-control" id="domainIdInput" type="text" value="" style="text-transform:uppercase">
                                     <span></span>
                                 </div>
                             </div>
@@ -84,14 +55,13 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Period:</label>
                                 <div class="col-sm-10">
-                                    <div class='input-group date' id='startTime'style="width: 45%;float: left">
+                                    <div class='input-group date' id='startTime' style="width: 45%;float: left">
                                         <input type='text' class="form-control" id="fromTime" />
                                         <span></span>
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
                                     </div>
-                                    <!--<span style="float: left">TO</span>-->
                                     <div class='input-group date' id='endTime' style="width: 45%;float: left;margin-left: 5%">
                                         <input type='text' class="form-control" id="toTime" />
                                         <span class="input-group-addon">
@@ -103,12 +73,7 @@
                             <div class="form-group leader-select">
                                 <label class="col-sm-2 control-label">Team:</label>
                                 <div class="col-sm-10">
-                                    <select class="form-control" id="teamId">
-                                        <option value="team1">team1</option>
-                                        <option value="team2">team2</option>
-                                        <option value="team3">team3</option>
-                                        <option value="team4">team4</option>
-                                        <option value="team5">team5</option>
+                                    <select class="form-control" id="teamIdSelector">
                                     </select>
                                 </div>
 

@@ -36,3 +36,9 @@
     color: #555;
     background-color: #e7e7e7
 }
+.btn-approve{
+    margin-left: 42%;
+}
+.btn-reject{
+    margin-left: 10%;
+}

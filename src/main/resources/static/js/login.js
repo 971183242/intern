@@ -37,7 +37,6 @@ function submitLoginForm() {
             type: "POST",
             dataType: "json",
             success: function (data) {
-                console.log(data);
                 if (data === 0) {
                     window.location.href ="/index";
                 } else {

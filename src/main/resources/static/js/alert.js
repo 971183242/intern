@@ -31,6 +31,9 @@ let Alert = {
     },
     rejectFutureSign :function () {
         Swal.fire("不能对未来的日期签到!","", "error")
+    },
+    error: function (error) {
+        Swal.fire(error, "", "error");
     }
 };
 

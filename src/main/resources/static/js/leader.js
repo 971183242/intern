@@ -2,6 +2,9 @@ import {Alert} from "./alert.js";
 
 let internList = [];
 
+/**
+ * 点击日期按钮触发
+ */
 $(document).on("click", ".calendar-cell-active", function (e) {
     e.stopPropagation();
     let chooseFlag = $(this).attr("choose");
@@ -14,6 +17,9 @@ $(document).on("click", ".calendar-cell-active", function (e) {
     }
 });
 
+/**
+ * 点击no-active用户触发
+ */
 $(document).on("click", ".no-active", function () {
     currentIntern = $(this).attr("domainId");
     $('.active').removeClass("active").addClass("no-active");
@@ -23,15 +29,22 @@ $(document).on("click", ".no-active", function () {
     initAttendance();
 });
 
+/**
+ * 审批
+ */
 $(document).on('click', '.btn-approve', function () {
     confirmAttendances("Approved")
 });
-
+/**
+ * 拒批
+ */
 $(document).on('click', '.btn-reject', function () {
     confirmAttendances("Rejected");
 });
 
-
+/**
+ *  审批/拒批 已选择日期数据
+ */
 let confirmAttendances = function(operation) {
     let choosedAttendanceList = $('*[choose="true"]');
     let needConfirmedAttendanceList = [];
@@ -74,15 +87,19 @@ let confirmAttendances = function(operation) {
                         Alert.rejectSuccess();
                     }
                 } else {
-
+                    Alert.error();
                 }
             },
             error: function (XMLHttpRequest) {
+                Alert.error(XMLHttpRequest.status);
             }
         })
     }
 };
 
+/**
+ *  根据teamId获得所有用户
+ */
 let getTeamUsers = function(teamId, dateStr) {
     $.ajax({
         url: '/attendance/getInterns?teamId=' + teamId + '&date=' + dateStr,
@@ -94,14 +111,18 @@ let getTeamUsers = function(teamId, dateStr) {
             if (data.code === 1) {
                 internList = data.data;
             } else {
-
+                Alert.error(data.msg);
             }
         },
         error: function (XMLHttpRequest) {
+            Alert.error(XMLHttpRequest.status);
         }
     })
 };
 
+/**
+ * 初始化用户列表
+ */
 let initUserList = function() {
     let userListBoxEl = $('.user-list-box');
     userListBoxEl.empty();
@@ -122,6 +143,9 @@ let initUserList = function() {
     userListBoxEl.append(userListStr);
 };
 
+/**
+ * 加载日历
+ */
 SyntaxHighlighter.all();
 new SYSUI({
     Module: '#pageModule',
@@ -148,6 +172,7 @@ new SYSUI({
         }
     }]
 });
+
 //初始化
 let nowDate = new Date();
 nowDateStr = dateFormat("YYYY-mm-dd", nowDate);
@@ -158,8 +183,10 @@ if (role.indexOf('ROLE_SUPER_ADMIN') > 0) {
 }
 getTeamUsers(teamId, nowDateStr);
 initUserList();
+//获得签到信息
 getAttendances(currentIntern, nowDateStr);
 if (new Date().getDate() > 20) {
     $('.next-month-item').click();
 }
+//初始化签到信息
 initAttendance();

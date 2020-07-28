@@ -759,12 +759,6 @@ Calendar.prototype = {
         _newDate.setDate(1);
         
         var weekDay = _newDate.getDay() == 0 ? 7 : _newDate.getDay();
-        let lessDay = 14;
-        let rows = 6;
-        if (weekDay > 4) {
-            lessDay = 7;
-            rows = 5;
-        }
         //视图第一天
         var viewDate = me._cloneDate(_newDate);
         viewDate.setDate(viewDate.getDate() - weekDay + 1 - 14);
@@ -889,7 +883,9 @@ $.fn.calendar = function (options) {
 		return ary;
 	};
 })(window);
-
+/**
+ *  根据internId获得签到信息
+ */
 let getAttendances = function(internId, date) {
     $.ajax({
         url: '/attendance/searchPeriod?userId=' + internId + '&date=' + date,
@@ -908,6 +904,10 @@ let getAttendances = function(internId, date) {
         }
     })
 };
+
+/**
+ *  初始化签到信息
+ */
 let initAttendance = function() {
     for (let i = 0; i< attendanceList.length; i++) {
         let date = new Date(attendanceList[i].workDay);
@@ -924,6 +924,9 @@ let initAttendance = function() {
     }
 };
 
+/**
+ *  移除签到信息
+ */
 let removeAttendance = function () {
     for (let i = 0; i< attendanceList.length; i++) {
         let date = new Date(attendanceList[i].workDay);

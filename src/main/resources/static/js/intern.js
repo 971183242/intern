@@ -1,6 +1,8 @@
 import {Alert} from "./alert.js";
 
-
+/**
+ * 点击日期按钮触发
+ */
 $(document).on("click", ".calendar-cell-active", function (e) {
     e.stopPropagation();
     let tipStr = '';
@@ -35,6 +37,9 @@ $(document).on("click", ".calendar-cell-active", function (e) {
     that.append(tipStr);
 });
 
+/**
+ *  提交签到请求
+ */
 let createAttendance = function(date) {
     let newAttendance = {};
     let attendance = {};
@@ -51,14 +56,19 @@ let createAttendance = function(date) {
             if (data.code === 1) {
                 newAttendance =  data.data;
             } else {
-
+                Alert.error(data.msg);
             }
         },
         error: function (XMLHttpRequest) {
+            Alert.error(XMLHttpRequest.status);
         }
     });
     return newAttendance;
 };
+
+/**
+ *  移除签到请求
+ */
 let removeAttendance = function(attendanceId) {
     let attendance = {};
     attendance.attendanceId = attendanceId;
@@ -70,17 +80,20 @@ let removeAttendance = function(attendanceId) {
         contentType: 'application/json;charset=UTF-8',
         async: false,
         success: function (data) {
-            console.log(data);
             if (data.code === 1) {
             } else {
-
+                Alert.error(data.msg);
             }
         },
         error: function (XMLHttpRequest) {
+            Alert.error(XMLHttpRequest.status);
         }
     })
 };
 
+/**
+ *  重新提交签到
+ */
 let confirmAttendances = function(needConfirmedAttendanceList) {
     $.ajax({
         url: '/attendance/confirm',
@@ -92,15 +105,18 @@ let confirmAttendances = function(needConfirmedAttendanceList) {
         success: function (data) {
             if (data.code === 1) {
             } else {
-
+                Alert.error(data.msg);
             }
         },
         error: function (XMLHttpRequest) {
+            Alert.error(XMLHttpRequest.status);
         }
     })
 };
 
-
+/**
+ * 初始化日历
+ */
 SyntaxHighlighter.all();
 new SYSUI({
     Module: '#pageModule',
@@ -131,9 +147,11 @@ new SYSUI({
 let nowDate = new Date();
 nowDateStr = dateFormat("YYYY-mm-dd", nowDate);
 currentIntern = $('#domainId').val();
+//获得签到信息
 getAttendances(currentIntern, nowDateStr);
 if (new Date().getDate() > 20) {
     $('.next-month-item').click();
 }
+//初始化签到信息
 initAttendance();
 
