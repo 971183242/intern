@@ -2,6 +2,7 @@ package com.demo.workshop.intern.support.common.event;
 
 import com.demo.workshop.intern.app.service.EmailService;
 import com.demo.workshop.intern.domain.attendance.entity.PeriodAttendance;
+import com.demo.workshop.intern.domain.attendance.service.AttendanceDomService;
 import com.demo.workshop.intern.domain.profile.entity.Intern;
 import com.demo.workshop.intern.domain.profile.entity.Role;
 import com.demo.workshop.intern.domain.profile.entity.Team;
@@ -12,8 +13,6 @@ import com.demo.workshop.intern.interfaces.dto.email.AttendanceDTO4Email;
 import com.demo.workshop.intern.interfaces.dto.email.MailSenderDTO;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
-import com.demo.workshop.intern.domain.attendance.service.AttendanceDomService;
-import com.oocl.workshop.intern.domain.profile.entity.*;
 import freemarker.template.TemplateException;
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;

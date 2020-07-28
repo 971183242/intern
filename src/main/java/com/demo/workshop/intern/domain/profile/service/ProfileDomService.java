@@ -4,7 +4,6 @@ import com.demo.workshop.intern.domain.profile.entity.Intern;
 import com.demo.workshop.intern.domain.profile.entity.Role;
 import com.demo.workshop.intern.domain.profile.entity.Team;
 import com.demo.workshop.intern.domain.profile.entity.User;
-import com.oocl.workshop.intern.domain.profile.entity.*;
 
 import java.util.Date;
 import java.util.List;

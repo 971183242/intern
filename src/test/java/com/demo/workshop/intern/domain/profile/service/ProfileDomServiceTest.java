@@ -7,7 +7,6 @@ import com.demo.workshop.intern.domain.profile.repository.po.TeamPo;
 import com.demo.workshop.intern.domain.profile.repository.po.UserPo;
 import com.demo.workshop.intern.domain.profile.service.impl.ProfileDomServiceImpl;
 import com.google.common.collect.Lists;
-import com.oocl.workshop.intern.domain.profile.entity.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
