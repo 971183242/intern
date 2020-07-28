@@ -1,4 +1,0 @@
-package com.oocl.workshop.intern.domain.profile.entity;
-
-public class Employee extends User {
-}
