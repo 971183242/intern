@@ -14,7 +14,7 @@ import com.demo.workshop.intern.interfaces.dto.email.MailSenderDTO;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import freemarker.template.TemplateException;
-import org.apache.commons.lang.time.DateUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

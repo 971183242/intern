@@ -16,7 +16,7 @@
         <appender-ref ref="Console" />
     </root>
 
-    <logger name="com.oocl.workshop.intern" level="debug" additivity="false">
+    <logger name="com.demo.workshop.intern" level="debug" additivity="false">
         <appender-ref ref="Console" />
     </logger>
 

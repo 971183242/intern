@@ -40,7 +40,7 @@ class ProfileFactoryTest {
     public void createUserPo() {
         Employee leader = new Employee();
         leader.setDomainId("leader");
-        leader.setEmail("leader@oocl.com");
+        leader.setEmail("leader@demo.com");
         leader.setName("leader name");
         leader.setRoles(Lists.newArrayList(Role.TEAM_LEADER));
         UserPo leaderPo = profileFactory.createUserPo(leader);
@@ -53,7 +53,7 @@ class ProfileFactoryTest {
         Intern intern = new Intern();
         intern.setDomainId("intern_1");
         intern.setName("实习生乙");
-        intern.setEmail("intern_1@oocl.com");
+        intern.setEmail("intern_1@demo.com");
         intern.setRoles(Lists.newArrayList(Role.INTERN));
         InternPeriod period = new InternPeriod();
         period.setDateFrom(new Date(120, 1, 1));
@@ -76,7 +76,7 @@ class ProfileFactoryTest {
     void getUser() {
         UserPo teamLeaderPo = new UserPo();
         teamLeaderPo.setDomainId("teamLeader_01");
-        teamLeaderPo.setEmail("teamLeader_01@oocl.com");
+        teamLeaderPo.setEmail("teamLeader_01@demo.com");
         teamLeaderPo.setName("XX项目负责人");
         teamLeaderPo.setRole(Role.TEAM_LEADER.getFullName());
 
@@ -88,7 +88,7 @@ class ProfileFactoryTest {
         // Intern - 指定了Team
         UserPo internPo0 = new UserPo();
         internPo0.setDomainId("intern_0");
-        internPo0.setEmail("intern_0@oocl.com");
+        internPo0.setEmail("intern_0@demo.com");
         internPo0.setName("实习生甲");
         internPo0.setRole(Role.INTERN.getFullName());
         internPo0.setInternPeriod(new InternPeriod(new Date(120, 0, 1), new Date(120, 5, 1)));
@@ -97,7 +97,7 @@ class ProfileFactoryTest {
         // Intern - 未指定了Team
         UserPo internPo1 = new UserPo();
         internPo1.setDomainId("intern_1");
-        internPo1.setEmail("intern_1@oocl.com");
+        internPo1.setEmail("intern_1@demo.com");
         internPo1.setName("实习生乙");
         internPo1.setRole(Role.INTERN.getFullName());
         internPo1.setInternPeriod(new InternPeriod(new Date(120, 0, 1), new Date(120, 5, 1)));
@@ -167,7 +167,7 @@ class ProfileFactoryTest {
     void getTeam() {
         UserPo teamLeaderPo = new UserPo();
         teamLeaderPo.setDomainId("teamLeader_01");
-        teamLeaderPo.setEmail("teamLeader_01@oocl.com");
+        teamLeaderPo.setEmail("teamLeader_01@demo.com");
         teamLeaderPo.setName("XX项目负责人");
         teamLeaderPo.setRole(Role.TEAM_LEADER.getFullName());
 
@@ -183,7 +183,7 @@ class ProfileFactoryTest {
         assertEquals("team_name_01", team01.getName());
         assertEquals("teamLeader_01", team01.getTeamLeader().getDomainId());
         assertEquals("XX项目负责人", team01.getTeamLeader().getName());
-        assertEquals("teamLeader_01@oocl.com", team01.getTeamLeader().getEmail());
+        assertEquals("teamLeader_01@demo.com", team01.getTeamLeader().getEmail());
 
         verify(userRepo).findById(stringCaptor.capture());
         assertEquals(teamLeaderPo.getDomainId(), stringCaptor.getValue());
