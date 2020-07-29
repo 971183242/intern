@@ -14,11 +14,9 @@
 ###UI Operation
 >1、Mananger：The mananger can view, create and update all interns' information. 
 >
->2、HR: A HR can view all interns' information. 
+>2、Team leader：A Team leader can approve or reject the sign-in records of interns who belongs to the leader's department.
 >
->3、Team leader：A Team leader can approve or reject the sign-in records of interns who belongs to the leader's department.
->
->4、Intern：Interns can complete their check-in today or earlier.
+>3、Intern：Interns can complete their check-in today or earlier.
 ---
 ###System Event
 >1、Daily Check In Reminder:
