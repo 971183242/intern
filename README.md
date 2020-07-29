@@ -20,11 +20,11 @@ Intern Management System
 ---
 ###System Event
 >1) Daily Check-in Reminder:
->If today is workday but  intern has not checked in by 4:00.pm, System will send an email to reminder her/he to check in.
+>If today is workday but  intern has not checked in by 4:00.pm, System will send email to remind her/he to check in.
 >
 >2) Period Attendance Reporter: 
->If today is within three days after the settlement date, which is define By rule, the system will send an attenance 
->report email to HRs and Team Leaders, and copy to manager on 8:45.am.
+>If today is within three days after the settlement date, which is define By rule, the system will send an attendance 
+>report email to HRs and team leaders, and copy to manager on 8:45.am.
 
 ---
 ###Our DDD Flow
