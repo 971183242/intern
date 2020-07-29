@@ -24,7 +24,7 @@ public class UserRepoTest {
     @Test
     public void testSuperAdmin() {
         UserPo admin = userRepo.findById("OLIVER").get();
-        assertEquals("oliver@oocl1.com", admin.getEmail());
+        assertEquals("oliver@demo1.com", admin.getEmail());
         assertEquals("Oliver", admin.getName());
         assertEquals("OLIVER", admin.getDomainId());
         Assertions.assertEquals(Role.SUPER_ADMIN.getFullName(), admin.getRole());

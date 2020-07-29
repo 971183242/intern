@@ -7,7 +7,7 @@ Intern Management System
 >2、Sign in with inital data:
 >When the system starts, we provide the following data for initialization.
 
-![avatar](src/main/resources/system_example_pictures/initialData.png)
+![avatar](src/main/resources/system_example_pictures/initialDataUser.png)
 
 >You can sign in system with domain_id and default Password: 123456
 ---

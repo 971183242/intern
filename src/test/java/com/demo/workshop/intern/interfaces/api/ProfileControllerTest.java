@@ -72,7 +72,7 @@ class ProfileControllerTest {
         Intern intern = new Intern();
         intern.setDomainId("INTERN007");
         intern.setName("INTERN_007");
-        intern.setEmail("intern007@oocl.com");
+        intern.setEmail("intern007@demo.com");
         intern.setRoles(Lists.newArrayList(Role.INTERN));
         intern.setPeriod(new InternPeriod(new Date(), new Date()));
         intern.setTeam(team);
@@ -95,7 +95,7 @@ class ProfileControllerTest {
         InternDTO param = new InternDTO();
         param.setDomainId("intern007");
         param.setName("intern007");
-        param.setEmail("test@oocl.com");
+        param.setEmail("test@demo.com");
 
         Intern intern = new Intern();
         intern.setDomainId(param.getDomainId());
@@ -121,7 +121,7 @@ class ProfileControllerTest {
         InternDTO param = new InternDTO();
         param.setDomainId("intern007");
         param.setName("intern007");
-        param.setEmail("test@oocl.com");
+        param.setEmail("test@demo.com");
 
         Intern intern = new Intern();
         intern.setDomainId(param.getDomainId());
@@ -147,7 +147,7 @@ class ProfileControllerTest {
         Intern intern = new Intern();
         intern.setDomainId("intern007");
         intern.setName("INTERN007");
-        intern.setEmail("intern007@oocl.com");
+        intern.setEmail("intern007@demo.com");
         intern.setPeriod(new InternPeriod(new Date(), new Date()));
         intern.setTeam(new Team());
         given(profileAppService.getInterns(any())).willReturn(Lists.newArrayList(intern));

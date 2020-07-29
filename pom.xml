@@ -8,7 +8,7 @@
         <version>2.3.1.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.oocl.workshop</groupId>
+    <groupId>com.demo.workshop</groupId>
     <artifactId>intern</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>intern</name>
@@ -144,25 +144,6 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.oocl.frm</groupId>
-            <artifactId>sfp2-sso</artifactId>
-            <version>0.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>log4j</groupId>
-                    <artifactId>log4j</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>commons-collections</groupId>
-                    <artifactId>commons-collections</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
             <version>2.3.27-incubating</version>
@@ -179,8 +160,8 @@
             <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
         </repository>
         <repository>
-            <id>OOCLCentral</id>
-            <name>OOCL Central</name>
+            <id>DEMOCentral</id>
+            <name>DEMO Central</name>
             <url>http://artifact:8081/artifactory/repo</url>
         </repository>
     </repositories>
