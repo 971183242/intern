@@ -4,6 +4,7 @@ import com.demo.workshop.intern.app.service.AttendanceAppService;
 import com.demo.workshop.intern.domain.attendance.entity.AttendanceStatus;
 import com.demo.workshop.intern.domain.attendance.entity.DailyAttendance;
 import com.demo.workshop.intern.domain.attendance.entity.PeriodAttendance;
+import com.demo.workshop.intern.interfaces.dto.ResultDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.demo.workshop.intern.interfaces.dto.attendance.AttendanceDTO;
 import com.demo.workshop.intern.interfaces.dto.profile.UserDTO;
@@ -56,10 +57,9 @@ public class AttendanceControllerTest {
         int attendanceCount = 3;
         String internId = "guda";
         when(attendanceAppService.findAttendances(internId, DateUtil.parseDate("2020-07-08"))).thenReturn(getMockPeriodAttendanceWithNAttendance(internId, attendanceCount));
-        List<AttendanceDTO> attendanceDTOs = new ObjectMapper().readerForListOf(AttendanceDTO.class).readValue(getSearchPeriodResultAction());
-
-        assertEquals(attendanceCount, attendanceDTOs.size());
-        attendanceDTOs.forEach(dto -> assertEquals(internId, dto.getInternId()));
+        ResultDto resultDto = new ObjectMapper().readerFor(ResultDto.class).readValue(getSearchPeriodResultAction());
+        List<AttendanceDTO> attendanceDTOS = (List<AttendanceDTO>) resultDto.getData();
+        assertEquals(attendanceCount, attendanceDTOS.size());
     }
 
     @Test
@@ -68,7 +68,7 @@ public class AttendanceControllerTest {
         String result = getCheckInResultActions().andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
-        Assertions.assertTrue(Boolean.parseBoolean(result));
+        Assertions.assertTrue(result.contains("success"));
     }
 
     @Test
@@ -81,7 +81,7 @@ public class AttendanceControllerTest {
                 .content(new ObjectMapper().writeValueAsString(dto)))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
-        Assertions.assertTrue(Boolean.parseBoolean(result));
+        Assertions.assertTrue(result.contains("success"));
     }
 
     @Test
@@ -102,8 +102,8 @@ public class AttendanceControllerTest {
         String result = mockMvc.perform(get("/attendance/getInterns").param("teamId", "fwk").param("date", "2020-07-17"))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
-        List<UserDTO> interns = new ObjectMapper().readerForListOf(UserDTO.class).readValue(result);
-        assertEquals(0, interns.size());
+        ResultDto resultDto = new ObjectMapper().readerFor(ResultDto.class).readValue(result);
+        assertEquals(0, resultDto.getCount());
     }
 
     private PeriodAttendance getMockPeriodAttendanceWithNAttendance(String interId, int attendanceCount) {
