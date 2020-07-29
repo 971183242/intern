@@ -1,4 +1,4 @@
-#Intern Intern Management System
+Intern Management System
 ---
 ###Make the project running & Sign in
 >1、Run it: 
@@ -7,7 +7,7 @@
 >2、Sign in with inital data:
 >When the system starts, we provide the following data for initialization.
 
-![avatar](system_example_pictures/initialData.png)
+![avatar](src/main/resources/system_example_pictures/initialData.png)
 
 >You can sign in system with domain_id and default Password: 123456
 ---
@@ -26,4 +26,13 @@
 >If today is within three days after the settlement date, which is define By rule, the system will send an attenance 
 >report email to HRs and Team Leaders, and Copy to Mananger on 8:45.am.
 
+---
+###Our DDD Flow
+>At the first event storming meeting, we list all the actions in the system and divide them into different domains, as follow:
+![avatar](src/main/resources/system_example_pictures/eventstorming/intern_ddd_domain_miro.jpg)
 
+>Then sort out the functions, provided by domain, using for app level. 
+>To realize functions with domains has no connection with each other,
+> we arrange methods from different domains in app level like below.
+>
+![avatar](src/main/resources/system_example_pictures/eventstorming/intern_ddd_app_miro.jpg)
