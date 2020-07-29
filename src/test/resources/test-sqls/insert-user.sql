@@ -1,28 +1,25 @@
--- Super Admin
+
+-- SuperAdmin
 insert into t_user(domain_id,name,email,role,date_from, date_to,team_id)
-values('superadmin','超级管理员','superadmin@oocl.com','ROLE_SUPER_ADMIN',null,null,null);
+values('OLIVER','Oliver','oliver@oocl1.com','ROLE_SUPER_ADMIN',null,null,null);
 
 -- HR
 insert into t_user(domain_id,name,email,role,date_from, date_to,team_id)
-values('hr','人事经理','hr@oocl.com','ROLE_HR',null,null,null);
+values('WINDY','Windy','windy@oocl1.com','ROLE_HR',null,null,null);
 
 -- TeamLeader
 insert into t_user(domain_id,name,email,role,date_from, date_to,team_id)
-values('DONGJA3','JACKIE DONG','zhangco2@oocl.com','ROLE_TEAM_LEADER',null,null,null);
+values('AMY','Amy','amy@oocl1.com','ROLE_TEAM_LEADER',null,null,null);
 insert into t_user(domain_id,name,email,role,date_from, date_to,team_id)
-values('LUAL','LUAL','zhangco2@oocl.com','ROLE_TEAM_LEADER',null,null,null);
-insert into t_user(domain_id,name,email,role,date_from, date_to,team_id)
-values('ZHUJO3','ZHUJO3','zhangco2@oocl.com','ROLE_TEAM_LEADER',null,null,null);
-insert into t_user(domain_id,name,email,role,date_from, date_to,team_id)
-values('GEJO','GEJO','zhangco2@oocl.com','ROLE_TEAM_LEADER',null,null,null);
-insert into t_user(domain_id,name,email,role,date_from, date_to,team_id)
-values('YUANFR','YUANFR','zhangco2@oocl.com','ROLE_TEAM_LEADER',null,null,null);
-
+values('BOB','Bob','bob@oocl1.com','ROLE_TEAM_LEADER',null,null,null);
 
 -- INTERN
 insert into t_user(domain_id,name,email,role,date_from, date_to,team_id)
-values('intern_0','实习生甲','intern_0@oocl.com','ROLE_INTERN','2020-01-01','2020-06-01',null);
+values('TOM','Tom','tom@oocl1.com','ROLE_INTERN','2020-07-01','2020-9-01','TeamA');
 insert into t_user(domain_id,name,email,role,date_from,date_to,team_id)
-values('intern_1','实习生乙','intern_1@oocl.com','ROLE_INTERN','2020-02-01','2020-06-01','TMS-TEST');
+values('JERRY','Jerry','jerry@oocl1.com','ROLE_INTERN','2020-07-01','2020-10-01','TeamA');
 insert into t_user(domain_id,name,email,role,date_from,date_to,team_id)
-values('ouyanob','欧阳俊','intern_1@oocl.com','ROLE_INTERN','2020-02-01','2020-06-01','TMS');
+values('DAVID','David','david@oocl1.com','ROLE_INTERN','2020-07-01','2020-11-01','TeamB');
+insert into t_user(domain_id,name,email,role,date_from,date_to,team_id)
+values('GARY','Gray','gary@oocl1.com','ROLE_INTERN','2020-07-01','2020-12-01','TeamB');
+

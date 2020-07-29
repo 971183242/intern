@@ -114,7 +114,7 @@ class AttendanceDomServiceTest {
 
     @Test
     void confirmPeriodAttendance() {
-        String internId = "testId";
+        String internId = "1";
         LocalDateTime localDateTime = LocalDateTime.of(2020, Month.JUNE, 20, 10, 0);
         Date workDay = Date.from(localDateTime.toInstant(ZoneOffset.UTC));
 
