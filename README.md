@@ -7,7 +7,7 @@ Intern Management System
 >2) Sign in:
 >Following initialized data was auto loaded during system startup.
 
-![avatar](src/main/resources/system_example_pictures/initialDataUser.png)
+![avatar](src/main/resources/system_example_pictures/initialUser.png)
 
 >You can sign in system with user-id and default password: 123456
 ---
