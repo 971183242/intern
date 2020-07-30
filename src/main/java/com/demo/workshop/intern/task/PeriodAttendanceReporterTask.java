@@ -27,10 +27,11 @@ public class PeriodAttendanceReporterTask {
     @Autowired
     private MonthlySettlementDayRuleRepo ruleRepo;
 
-//        @Scheduled(cron = "0/5 * * * * MON-FRI ")
-    @Scheduled(cron = "0 45 8 * * MON-FRI ")
+        @Scheduled(cron = "0/5 * * * * MON-FRI ")
+//    @Scheduled(cron = "0 45 8 * * MON-FRI ")
     public void execute() {
-        if (LocalDate.now().getDayOfMonth() - ruleRepo.getMonthlySettlementDay() > 3) {
+        if (0 < LocalDate.now().getDayOfMonth() - ruleRepo.getMonthlySettlementDay()
+                && LocalDate.now().getDayOfMonth() - ruleRepo.getMonthlySettlementDay() <= 3) {
             DomainEvent event = new DomainEvent();
             event.setId(UUID.randomUUID().toString());
             event.setTimestamp(new Date());
